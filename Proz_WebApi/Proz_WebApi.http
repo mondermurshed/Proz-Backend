@@ -1,0 +1,6 @@
+@Proz_WebApi_HostAddress = http://localhost:5209
+
+GET {{Proz_WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
