@@ -1,0 +1,399 @@
+2025-03-14 03:59:35.074 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-14 03:59:35.671 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-14 03:59:35.673 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-14 03:59:35.750 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-14 03:59:35.752 +03:00 [INF] Hosting environment: Development
+2025-03-14 03:59:35.754 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-14 03:59:36.896 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger - null null
+2025-03-14 03:59:37.539 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger - 301 0 null 644.5099ms
+2025-03-14 03:59:37.566 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 03:59:37.625 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 58.7347ms
+2025-03-14 03:59:37.734 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/swagger-ui.css - null null
+2025-03-14 03:59:37.734 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/swagger-ui-bundle.js - null null
+2025-03-14 03:59:37.734 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/swagger-ui-standalone-preset.js - null null
+2025-03-14 03:59:37.734 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 03:59:37.734 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 03:59:37.814 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 79.683ms
+2025-03-14 03:59:37.820 +03:00 [INF] Sending file. Request path: '/swagger-ui.css'. Physical path: 'N/A'
+2025-03-14 03:59:37.820 +03:00 [INF] Sending file. Request path: '/swagger-ui-standalone-preset.js'. Physical path: 'N/A'
+2025-03-14 03:59:37.854 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/swagger-ui.css - 200 152034 text/css 120.4699ms
+2025-03-14 03:59:37.854 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/swagger-ui-standalone-preset.js - 200 230280 text/javascript 120.2379ms
+2025-03-14 03:59:37.894 +03:00 [INF] Sending file. Request path: '/swagger-ui-bundle.js'. Physical path: 'N/A'
+2025-03-14 03:59:37.931 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/swagger-ui-bundle.js - 200 1456926 text/javascript 196.8806ms
+2025-03-14 03:59:38.021 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 286.9303ms
+2025-03-14 03:59:38.223 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 03:59:38.250 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 27.3114ms
+2025-03-14 03:59:44.780 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games - null null
+2025-03-14 03:59:44.796 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 03:59:44.816 +03:00 [INF] Route matched with {action = "get_games", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] get_games() on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 03:59:47.159 +03:00 [INF] Executed DbCommand (202ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-14 03:59:47.241 +03:00 [INF] A list of games have been fetched
+2025-03-14 03:59:47.281 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-14 03:59:47.518 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi) in 2666.6554ms
+2025-03-14 03:59:47.520 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 03:59:47.526 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games - 200 520 application/json; charset=utf-8 2746.3043ms
+2025-03-14 03:59:54.596 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games - null null
+2025-03-14 03:59:54.599 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 03:59:54.600 +03:00 [INF] Route matched with {action = "get_games", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] get_games() on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 03:59:54.624 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-14 03:59:54.627 +03:00 [INF] A list of games have been fetched
+2025-03-14 03:59:54.629 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-14 03:59:54.631 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi) in 28.4464ms
+2025-03-14 03:59:54.632 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 03:59:54.634 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games - 200 520 application/json; charset=utf-8 38.3465ms
+2025-03-14 05:44:03.874 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-14 05:44:03.911 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-14 05:44:03.952 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-14 05:44:03.955 +03:00 [INF] Hosting environment: Development
+2025-03-14 05:44:03.956 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-14 05:44:04.902 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 05:44:05.035 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 133.1134ms
+2025-03-14 05:44:05.543 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 05:44:05.543 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 05:44:05.588 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 45.1117ms
+2025-03-14 05:44:05.663 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 120.4868ms
+2025-03-14 05:44:06.241 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 05:44:06.271 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/favicon-32x32.png - null null
+2025-03-14 05:44:06.276 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 34.7413ms
+2025-03-14 05:44:06.282 +03:00 [INF] Sending file. Request path: '/favicon-32x32.png'. Physical path: 'N/A'
+2025-03-14 05:44:06.284 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/favicon-32x32.png - 200 628 image/png 13.2755ms
+2025-03-14 05:44:19.718 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 05:44:19.738 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 19.8953ms
+2025-03-14 05:44:19.788 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 05:44:19.789 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 05:44:19.792 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 4.2275ms
+2025-03-14 05:44:19.800 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 11.081ms
+2025-03-14 05:44:19.929 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 05:44:19.946 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 16.6772ms
+2025-03-14 05:44:26.665 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-14 05:44:26.721 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-14 05:44:26.843 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-14 05:44:26.844 +03:00 [INF] Hosting environment: Development
+2025-03-14 05:44:26.846 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-14 05:44:26.897 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 05:44:27.069 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 174.0305ms
+2025-03-14 05:44:27.121 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 05:44:27.121 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 05:44:27.130 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 9.2116ms
+2025-03-14 05:44:27.155 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 33.9197ms
+2025-03-14 05:44:27.190 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 05:44:27.215 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 24.4048ms
+2025-03-14 05:44:47.941 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-14 05:44:48.003 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-14 05:44:48.203 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-14 05:44:48.205 +03:00 [INF] Hosting environment: Development
+2025-03-14 05:44:48.206 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-14 05:44:52.291 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 05:44:52.641 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 358.2472ms
+2025-03-14 05:44:52.646 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 05:44:52.646 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 05:44:52.670 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 23.8483ms
+2025-03-14 05:44:52.695 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 49.3583ms
+2025-03-14 05:44:52.879 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 05:44:52.919 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 40.2197ms
+2025-03-14 05:44:58.014 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games - null null
+2025-03-14 05:44:58.038 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 05:44:58.063 +03:00 [INF] Route matched with {action = "get_games", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] get_games() on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 05:45:00.010 +03:00 [INF] Executed DbCommand (257ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-14 05:45:00.051 +03:00 [INF] A list of games have been fetched
+2025-03-14 05:45:00.071 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-14 05:45:00.398 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi) in 2329.6184ms
+2025-03-14 05:45:00.400 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 05:45:00.409 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games - 200 520 application/json; charset=utf-8 2394.6958ms
+2025-03-14 05:45:13.476 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-14 05:45:13.519 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-14 05:45:13.583 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-14 05:45:13.586 +03:00 [INF] Hosting environment: Development
+2025-03-14 05:45:13.587 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-14 05:45:13.724 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 05:45:13.883 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 160.7653ms
+2025-03-14 05:45:13.894 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 05:45:13.894 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 05:45:13.906 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 12.2218ms
+2025-03-14 05:45:13.931 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 36.643ms
+2025-03-14 05:45:13.996 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 05:45:14.014 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 18.6019ms
+2025-03-14 05:45:18.230 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games - null null
+2025-03-14 05:45:18.282 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 05:45:18.356 +03:00 [INF] Route matched with {action = "get_games", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] get_games() on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 05:45:19.307 +03:00 [INF] Executed DbCommand (30ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-14 05:45:19.335 +03:00 [INF] A list of games have been fetched
+2025-03-14 05:45:19.376 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-14 05:45:19.631 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi) in 1259.7653ms
+2025-03-14 05:45:19.636 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 05:45:19.645 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games - 200 520 application/json; charset=utf-8 1414.8134ms
+2025-03-14 05:51:52.192 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 05:51:52.215 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 22.5607ms
+2025-03-14 05:51:52.348 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 05:51:52.398 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 50.9154ms
+2025-03-14 21:56:03.164 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-14 21:56:03.246 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-14 21:56:03.402 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-14 21:56:03.403 +03:00 [INF] Hosting environment: Development
+2025-03-14 21:56:03.405 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-14 21:56:03.786 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 21:56:04.025 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 242.3004ms
+2025-03-14 21:56:04.053 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 21:56:04.056 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 21:56:04.062 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 8.284ms
+2025-03-14 21:56:04.115 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 59.1937ms
+2025-03-14 21:56:04.173 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 21:56:04.213 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 39.5531ms
+2025-03-14 21:56:07.356 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games - null null
+2025-03-14 21:56:07.366 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 21:56:07.392 +03:00 [INF] Route matched with {action = "get_games", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] get_games() on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 21:56:09.200 +03:00 [INF] Executed DbCommand (314ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-14 21:56:09.226 +03:00 [INF] A list of games have been fetched
+2025-03-14 21:56:09.257 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-14 21:56:09.493 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi) in 2095.1079ms
+2025-03-14 21:56:09.495 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 21:56:09.505 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games - 200 520 application/json; charset=utf-8 2148.8117ms
+2025-03-14 21:57:37.112 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-14 21:57:37.143 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-14 21:57:37.185 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-14 21:57:37.187 +03:00 [INF] Hosting environment: Development
+2025-03-14 21:57:37.188 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-14 21:57:37.644 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 21:57:37.764 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 120.2206ms
+2025-03-14 21:57:37.773 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 21:57:37.773 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 21:57:37.784 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 11.3634ms
+2025-03-14 21:57:37.804 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 30.8145ms
+2025-03-14 21:57:37.852 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 21:57:37.880 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 27.9354ms
+2025-03-14 21:57:48.198 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 21:57:48.213 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 14.8289ms
+2025-03-14 21:57:48.224 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 21:57:48.224 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 21:57:48.229 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 5.4202ms
+2025-03-14 21:57:48.243 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 18.978ms
+2025-03-14 21:57:48.277 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 21:57:48.302 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 24.291ms
+2025-03-14 21:57:50.334 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games - null null
+2025-03-14 21:57:50.369 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 21:57:50.394 +03:00 [INF] Route matched with {action = "get_games", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] get_games() on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 21:57:51.408 +03:00 [INF] Executed DbCommand (170ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], DATEADD(day, CAST(1.0E0 AS int), [g].[created_at]) AS [created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-14 21:57:51.523 +03:00 [INF] A list of games have been fetched
+2025-03-14 21:57:51.539 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-14 21:57:51.653 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi) in 1252.9422ms
+2025-03-14 21:57:51.655 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 21:57:51.665 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games - 200 520 application/json; charset=utf-8 1331.7337ms
+2025-03-14 21:58:15.482 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-14 21:58:15.516 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-14 21:58:15.558 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-14 21:58:15.560 +03:00 [INF] Hosting environment: Development
+2025-03-14 21:58:15.562 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-14 21:58:15.589 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 21:58:15.735 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 145.8922ms
+2025-03-14 21:58:15.763 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 21:58:15.763 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 21:58:15.769 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 5.4266ms
+2025-03-14 21:58:15.825 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 61.5827ms
+2025-03-14 21:58:15.931 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 21:58:15.951 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 20.5999ms
+2025-03-14 21:58:27.556 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-14 21:58:27.615 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-14 21:58:27.681 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-14 21:58:27.682 +03:00 [INF] Hosting environment: Development
+2025-03-14 21:58:27.684 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-14 21:58:28.469 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 21:58:28.807 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 349.3087ms
+2025-03-14 21:58:29.036 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 21:58:29.037 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 21:58:29.063 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 28.6233ms
+2025-03-14 21:58:29.161 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 124.45ms
+2025-03-14 21:58:29.221 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 21:58:29.262 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 41.4723ms
+2025-03-14 21:58:33.605 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games - null null
+2025-03-14 21:58:33.629 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 21:58:33.662 +03:00 [INF] Route matched with {action = "get_games", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] get_games() on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 21:58:35.650 +03:00 [INF] Executed DbCommand (79ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], DATEADD(day, CAST(5.0E0 AS int), [g].[created_at]) AS [created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-14 21:58:35.734 +03:00 [INF] A list of games have been fetched
+2025-03-14 21:58:35.780 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-14 21:58:35.896 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi) in 2228.1944ms
+2025-03-14 21:58:35.898 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 21:58:35.904 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games - 200 520 application/json; charset=utf-8 2299.4659ms
+2025-03-14 22:53:00.493 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-14 22:53:00.529 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-14 22:53:00.574 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-14 22:53:00.576 +03:00 [INF] Hosting environment: Development
+2025-03-14 22:53:00.577 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-14 22:53:01.113 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 22:53:01.274 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 160.825ms
+2025-03-14 22:53:01.294 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 22:53:01.295 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 22:53:01.312 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 17.854ms
+2025-03-14 22:53:01.412 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 117.4957ms
+2025-03-14 22:53:01.482 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 22:53:01.508 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 25.7272ms
+2025-03-14 22:53:07.551 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games/2 - null null
+2025-03-14 22:53:07.565 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 22:53:07.592 +03:00 [INF] Route matched with {action = "get_a_game", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Proz_WebApi.Models.Dto.Games_Dto2]] get_a_game(Int32) on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 22:53:09.208 +03:00 [INF] Executed DbCommand (191ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+WHERE [g].[id] = @__id_0
+2025-03-14 22:53:09.261 +03:00 [INF] Executing ObjectResult, writing value of type 'Proz_WebApi.Models.Dto.Games_Dto2'.
+2025-03-14 22:53:09.335 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi) in 1735.8996ms
+2025-03-14 22:53:09.337 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 22:53:09.343 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games/2 - 200 174 application/json; charset=utf-8 1792.1968ms
+2025-03-14 22:53:13.151 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games/1 - null null
+2025-03-14 22:53:13.160 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 22:53:13.166 +03:00 [INF] Route matched with {action = "get_a_game", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Proz_WebApi.Models.Dto.Games_Dto2]] get_a_game(Int32) on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 22:53:13.186 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+WHERE [g].[id] = @__id_0
+2025-03-14 22:53:13.189 +03:00 [INF] Executing ObjectResult, writing value of type 'Proz_WebApi.Models.Dto.Games_Dto2'.
+2025-03-14 22:53:13.190 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi) in 22.0301ms
+2025-03-14 22:53:13.194 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 22:53:13.195 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games/1 - 200 175 application/json; charset=utf-8 43.6587ms
+2025-03-14 22:53:15.967 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games/3 - null null
+2025-03-14 22:53:15.970 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 22:53:15.971 +03:00 [INF] Route matched with {action = "get_a_game", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Proz_WebApi.Models.Dto.Games_Dto2]] get_a_game(Int32) on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 22:53:16.027 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+WHERE [g].[id] = @__id_0
+2025-03-14 22:53:16.030 +03:00 [INF] Executing ObjectResult, writing value of type 'Proz_WebApi.Models.Dto.Games_Dto2'.
+2025-03-14 22:53:16.031 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi) in 58.4297ms
+2025-03-14 22:53:16.033 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 22:53:16.034 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games/3 - 200 167 application/json; charset=utf-8 67.0333ms
+2025-03-14 23:04:35.418 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-14 23:04:35.448 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-14 23:04:35.486 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-14 23:04:35.489 +03:00 [INF] Hosting environment: Development
+2025-03-14 23:04:35.490 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-14 23:04:35.562 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 23:04:35.679 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 117.4961ms
+2025-03-14 23:04:35.820 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 23:04:35.820 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 23:04:35.829 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 9.0099ms
+2025-03-14 23:04:35.843 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 23.3862ms
+2025-03-14 23:04:35.889 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 23:04:35.919 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 29.8424ms
+2025-03-14 23:04:47.720 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-14 23:04:47.765 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-14 23:04:47.834 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-14 23:04:47.835 +03:00 [INF] Hosting environment: Development
+2025-03-14 23:04:47.836 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-14 23:04:48.433 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 23:04:48.621 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 190.9721ms
+2025-03-14 23:04:48.631 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 23:04:48.632 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 23:04:48.645 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 15.4782ms
+2025-03-14 23:04:48.699 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 67.503ms
+2025-03-14 23:04:48.907 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 23:04:48.941 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 33.8498ms
+2025-03-14 23:04:53.107 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games/2 - null null
+2025-03-14 23:04:53.124 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 23:04:53.153 +03:00 [INF] Route matched with {action = "get_a_game", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Proz_WebApi.Models.Dto.Games_Dto2]] get_a_game(Int32) on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 23:04:54.631 +03:00 [INF] Executed DbCommand (40ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+WHERE [g].[id] = @__id_0
+2025-03-14 23:04:54.668 +03:00 [INF] Executing ObjectResult, writing value of type 'Proz_WebApi.Models.Dto.Games_Dto2'.
+2025-03-14 23:04:54.756 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi) in 1598.3599ms
+2025-03-14 23:04:54.758 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 23:04:54.766 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games/2 - 200 174 application/json; charset=utf-8 1659.2635ms
+2025-03-14 23:04:59.719 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games/3 - null null
+2025-03-14 23:04:59.725 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 23:04:59.727 +03:00 [INF] Route matched with {action = "get_a_game", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Proz_WebApi.Models.Dto.Games_Dto2]] get_a_game(Int32) on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 23:04:59.761 +03:00 [INF] Executed DbCommand (8ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+WHERE [g].[id] = @__id_0
+2025-03-14 23:04:59.779 +03:00 [INF] Executing ObjectResult, writing value of type 'Proz_WebApi.Models.Dto.Games_Dto2'.
+2025-03-14 23:04:59.784 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi) in 52.8845ms
+2025-03-14 23:04:59.791 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 23:04:59.794 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games/3 - 200 167 application/json; charset=utf-8 75.0463ms
+2025-03-14 23:05:02.359 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games/4 - null null
+2025-03-14 23:05:02.364 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 23:05:02.365 +03:00 [INF] Route matched with {action = "get_a_game", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Proz_WebApi.Models.Dto.Games_Dto2]] get_a_game(Int32) on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 23:05:02.426 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+WHERE [g].[id] = @__id_0
+2025-03-14 23:05:02.430 +03:00 [WRN] User is trying to fetch avaliable item
+2025-03-14 23:05:02.433 +03:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-03-14 23:05:02.447 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi) in 79.8657ms
+2025-03-14 23:05:02.450 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 23:05:02.451 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games/4 - 404 162 application/problem+json; charset=utf-8 92.394ms
+2025-03-14 23:05:05.158 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games/1 - null null
+2025-03-14 23:05:05.171 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 23:05:05.173 +03:00 [INF] Route matched with {action = "get_a_game", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Proz_WebApi.Models.Dto.Games_Dto2]] get_a_game(Int32) on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 23:05:05.187 +03:00 [INF] Executed DbCommand (10ms) [Parameters=[@__id_0='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+WHERE [g].[id] = @__id_0
+2025-03-14 23:05:05.191 +03:00 [INF] Executing ObjectResult, writing value of type 'Proz_WebApi.Models.Dto.Games_Dto2'.
+2025-03-14 23:05:05.194 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi) in 19.2131ms
+2025-03-14 23:05:05.197 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_a_game (Proz_WebApi)'
+2025-03-14 23:05:05.199 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games/1 - 200 175 application/json; charset=utf-8 40.5084ms
+2025-03-14 23:13:00.862 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-14 23:13:00.895 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-14 23:13:00.942 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-14 23:13:00.944 +03:00 [INF] Hosting environment: Development
+2025-03-14 23:13:00.945 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-14 23:13:01.385 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-14 23:13:01.613 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 235.9294ms
+2025-03-14 23:13:01.621 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-14 23:13:01.622 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-14 23:13:01.634 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 12.7931ms
+2025-03-14 23:13:01.671 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 49.2296ms
+2025-03-14 23:13:01.732 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-14 23:13:01.767 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 35.2153ms
+2025-03-14 23:14:06.956 +03:00 [INF] Request starting HTTP/2 POST https://localhost:7148/API/Games - application/json-patch+json 120
+2025-03-14 23:14:06.965 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.inserting_a_game (Proz_WebApi)'
+2025-03-14 23:14:06.986 +03:00 [INF] Route matched with {action = "inserting_a_game", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Proz_WebApi.Models.Dto.Games_Dto2]] inserting_a_game(Proz_WebApi.Models.Dto.Games_Dto) on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 23:14:08.733 +03:00 [INF] Executed DbCommand (85ms) [Parameters=[@__ToLower_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Games] AS [g]
+        WHERE LOWER([g].[name]) = @__ToLower_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2025-03-14 23:14:09.188 +03:00 [INF] Executed DbCommand (28ms) [Parameters=[@p0='?' (DbType = DateTime2), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Double), @p4='?' (DbType = Int32), @p5='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Games] ([created_at], [description], [name], [price], [sold_copies], [updated_at])
+OUTPUT INSERTED.[id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+2025-03-14 23:14:09.217 +03:00 [INF] Executing CreatedAtRouteResult, writing value of type 'Proz_WebApi.Models.Dto.Games_Dto2'.
+2025-03-14 23:14:09.265 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.inserting_a_game (Proz_WebApi) in 2273.0258ms
+2025-03-14 23:14:09.267 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.inserting_a_game (Proz_WebApi)'
+2025-03-14 23:14:09.276 +03:00 [INF] Request finished HTTP/2 POST https://localhost:7148/API/Games - 201 207 application/json; charset=utf-8 2320.7215ms
+2025-03-14 23:14:53.018 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games - null null
+2025-03-14 23:14:53.026 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 23:14:53.030 +03:00 [INF] Route matched with {action = "get_games", controller = "Testing_"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] get_games() on controller Proz_WebApi.Controllers.Testing_Controller (Proz_WebApi).
+2025-03-14 23:14:53.091 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], [g].[price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-14 23:14:53.098 +03:00 [INF] A list of games have been fetched
+2025-03-14 23:14:53.100 +03:00 [INF] Executing OkObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-14 23:14:53.107 +03:00 [INF] Executed action Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi) in 74.7339ms
+2025-03-14 23:14:53.108 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.Testing_Controller.get_games (Proz_WebApi)'
+2025-03-14 23:14:53.110 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games - 200 716 application/json; charset=utf-8 91.8281ms

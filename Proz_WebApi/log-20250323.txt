@@ -1,0 +1,13 @@
+2025-03-23 00:47:30.404 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-23 00:47:30.605 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-23 00:47:30.740 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-23 00:47:30.742 +03:00 [INF] Hosting environment: Development
+2025-03-23 00:47:30.744 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-23 00:47:31.837 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-23 00:47:32.252 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 419.5069ms
+2025-03-23 00:47:32.313 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-23 00:47:32.317 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-23 00:47:32.324 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 10.8292ms
+2025-03-23 00:47:32.376 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 59.5094ms
+2025-03-23 00:47:32.702 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-23 00:47:32.762 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 60.202ms

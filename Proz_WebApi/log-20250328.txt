@@ -1,0 +1,1224 @@
+2025-03-28 00:01:50.853 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 00:01:51.680 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 00:01:51.684 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 00:01:51.796 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 00:01:51.800 +03:00 [INF] Hosting environment: Development
+2025-03-28 00:01:51.803 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 00:01:52.936 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 00:01:53.504 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 574.5561ms
+2025-03-28 00:01:53.541 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 00:01:53.560 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 19.471ms
+2025-03-28 00:01:53.574 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 00:01:53.659 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 84.8423ms
+2025-03-28 00:01:53.791 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 00:01:53.855 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 63.6237ms
+2025-03-28 00:02:00.207 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 00:02:00.247 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 00:02:00.264 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 00:02:00.269 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 302 0 null 61.6175ms
+2025-03-28 00:02:00.276 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 00:02:00.285 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 8.5364ms
+2025-03-28 00:02:00.295 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 00:02:05.996 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 137
+2025-03-28 00:02:06.006 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 00:02:06.052 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 00:02:06.449 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 00:02:08.905 +03:00 [INF] Executed DbCommand (53ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 00:02:09.446 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 00:02:09.464 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-03-28 00:02:09.475 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 3412.4131ms
+2025-03-28 00:02:09.479 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 00:02:09.498 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 200 null text/plain; charset=utf-8 3501.3406ms
+2025-03-28 00:02:15.846 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 00:02:15.856 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 00:02:15.860 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 00:02:15.862 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 302 0 null 16.421ms
+2025-03-28 00:02:15.868 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 00:02:15.873 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 5.3767ms
+2025-03-28 00:02:15.880 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 00:52:41.918 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 00:52:42.558 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 00:52:42.561 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 00:52:42.798 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 00:52:42.861 +03:00 [INF] Hosting environment: Development
+2025-03-28 00:52:42.877 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 00:52:44.244 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 00:52:44.641 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 403.1482ms
+2025-03-28 00:52:44.651 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 00:52:44.663 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 00:52:44.757 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 106.2159ms
+2025-03-28 00:52:44.937 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 274.6286ms
+2025-03-28 00:52:45.115 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 00:52:45.377 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 262.096ms
+2025-03-28 00:52:51.976 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 137
+2025-03-28 00:52:51.997 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 00:52:52.060 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 00:52:52.686 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 00:52:55.120 +03:00 [INF] Executed DbCommand (80ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 00:52:55.726 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 00:52:55.758 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-03-28 00:52:55.792 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 3717.4696ms
+2025-03-28 00:52:55.806 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 00:52:55.843 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 200 null text/plain; charset=utf-8 3868.6979ms
+2025-03-28 00:53:02.744 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 00:53:02.779 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 00:53:02.802 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 00:53:02.806 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 302 0 null 61.8968ms
+2025-03-28 00:53:02.835 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 00:53:02.858 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 23.7567ms
+2025-03-28 00:53:02.867 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 00:53:13.896 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 00:53:13.904 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 00:53:13.907 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 00:53:13.909 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 302 0 null 12.7969ms
+2025-03-28 00:53:13.913 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 00:53:13.919 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 5.5102ms
+2025-03-28 00:53:13.926 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 00:53:20.757 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 00:53:20.765 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 00:53:20.768 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 00:53:20.770 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 302 0 null 13.7604ms
+2025-03-28 00:53:20.777 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 00:53:20.782 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 4.7094ms
+2025-03-28 00:53:20.789 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 00:53:46.643 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 89
+2025-03-28 00:53:46.650 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 00:53:46.654 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 00:53:46.667 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 00:53:46.772 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 00:53:46.873 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 00:53:46.876 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-03-28 00:53:46.878 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 218.6298ms
+2025-03-28 00:53:46.881 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 00:53:46.884 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 200 null text/plain; charset=utf-8 241.2819ms
+2025-03-28 00:53:53.902 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 00:53:53.905 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 00:53:53.907 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 00:53:53.922 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 00:53:53.950 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 00:53:54.062 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 00:53:54.065 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-03-28 00:53:54.068 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 158.7041ms
+2025-03-28 00:53:54.071 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 00:53:54.073 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 200 null text/plain; charset=utf-8 171.4811ms
+2025-03-28 00:53:59.968 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 00:53:59.975 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 00:53:59.979 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 00:53:59.983 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 302 0 null 14.7699ms
+2025-03-28 00:53:59.991 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 00:53:59.997 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 6.4701ms
+2025-03-28 00:54:00.004 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 00:55:25.551 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 00:55:25.954 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 00:55:25.956 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 00:55:26.013 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 00:55:26.016 +03:00 [INF] Hosting environment: Development
+2025-03-28 00:55:26.018 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 00:55:26.728 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 00:55:26.992 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 269.9238ms
+2025-03-28 00:55:27.001 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 00:55:27.001 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 00:55:27.037 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 35.76ms
+2025-03-28 00:55:27.097 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 95.9999ms
+2025-03-28 00:55:27.188 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 00:55:27.248 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 60.6286ms
+2025-03-28 00:55:34.186 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 00:55:34.205 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 00:55:34.301 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 00:55:34.812 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 00:55:37.204 +03:00 [INF] Executed DbCommand (80ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 00:55:37.846 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 00:55:37.858 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-03-28 00:55:37.873 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 3560.5015ms
+2025-03-28 00:55:37.877 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 00:55:37.891 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 200 null text/plain; charset=utf-8 3705.6653ms
+2025-03-28 00:55:44.727 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 00:55:44.747 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 00:55:44.759 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 00:55:44.763 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 302 0 null 36.7953ms
+2025-03-28 00:55:44.789 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 00:55:44.796 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 7.5618ms
+2025-03-28 00:55:44.833 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 00:55:46.324 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 00:55:46.330 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 00:55:46.332 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 00:55:46.334 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 302 0 null 10.5309ms
+2025-03-28 00:55:46.340 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 00:55:46.345 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 4.9531ms
+2025-03-28 00:55:46.355 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 01:22:48.015 +03:00 [INF] Executed DbCommand (29ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-03-28 01:22:48.095 +03:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-03-28 01:22:48.278 +03:00 [INF] Executed DbCommand (167ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-03-28 01:22:48.283 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-03-28 01:22:48.284 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-03-28 01:22:48.284 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-03-28 01:22:48.285 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-03-28 01:22:48.286 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-03-28 01:22:48.301 +03:00 [INF] Reverting migration '20250327011124_removinguserstable'.
+2025-03-28 01:22:48.697 +03:00 [INF] Executed DbCommand (349ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [UserTable] (
+    [Username] nvarchar(450) NOT NULL,
+    [Email] nvarchar(max) NOT NULL,
+    [Password] nvarchar(max) NOT NULL,
+    CONSTRAINT [PK_UserTable] PRIMARY KEY ([Username])
+);
+2025-03-28 01:22:48.933 +03:00 [INF] Executed DbCommand (235ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM [__EFMigrationsHistory]
+WHERE [MigrationId] = N'20250327011124_removinguserstable';
+2025-03-28 01:35:10.992 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 01:35:11.498 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 01:35:11.500 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 01:35:11.609 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 01:35:11.612 +03:00 [INF] Hosting environment: Development
+2025-03-28 01:35:11.614 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 01:35:12.560 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 01:35:12.918 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 357.8872ms
+2025-03-28 01:35:13.006 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 01:35:13.006 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 01:35:13.117 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 111.2017ms
+2025-03-28 01:35:13.203 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 197.6168ms
+2025-03-28 01:35:13.296 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 01:35:13.356 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 61.4145ms
+2025-03-28 01:35:21.871 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 01:35:22.535 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 01:35:22.538 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 01:35:22.829 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 01:35:22.831 +03:00 [INF] Hosting environment: Development
+2025-03-28 01:35:22.833 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 01:35:23.450 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 01:35:23.740 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 300.3611ms
+2025-03-28 01:35:23.754 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 01:35:23.754 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 01:35:23.800 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 46.1189ms
+2025-03-28 01:35:23.847 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 93.4546ms
+2025-03-28 01:35:24.147 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 01:35:24.197 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 51.2285ms
+2025-03-28 01:35:29.526 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 01:35:29.541 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 01:35:29.579 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 01:35:29.585 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 302 0 null 59.6751ms
+2025-03-28 01:35:29.593 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 01:35:29.603 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 10.4185ms
+2025-03-28 01:35:29.616 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 01:35:33.458 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 01:35:33.470 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:35:33.621 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 01:35:34.366 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 01:35:35.976 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 01:35:36.016 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 2377.7652ms
+2025-03-28 01:35:36.029 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:35:36.039 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Cannot create a DbSet for 'IdentityUser' because this type is not included in the model for the context.
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityType()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.CheckState()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.get_EntityQueryable()
+   at Microsoft.EntityFrameworkCore.Internal.InternalDbSet`1.System.Linq.IQueryable.get_Provider()
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, LambdaExpression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstOrDefaultAsync[TSource](IQueryable`1 source, Expression`1 predicate, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.EntityFrameworkCore.UserStore`9.FindByNameAsync(String normalizedUserName, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Identity.UserManager`1.FindByNameAsync(String userName)
+   at Proz_WebApi.Services.AuthService.LoginAUser(UserLogin userlogin) in C:\Users\monde\source\repos\Proz\Proz_WebApi\Services\AuthService.cs:line 36
+   at Proz_WebApi.Controllers.AuthController.LoginAUser(UserLogin userlogin) in C:\Users\monde\source\repos\Proz\Proz_WebApi\Controllers\AuthController.cs:line 64
+   at lambda_method6(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.InvokeInnerFilterAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-03-28 01:35:36.230 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 500 null text/plain; charset=utf-8 2772.0572ms
+2025-03-28 01:36:20.130 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 01:36:20.514 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 01:36:20.516 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 01:36:20.583 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 01:36:20.587 +03:00 [INF] Hosting environment: Development
+2025-03-28 01:36:20.590 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 01:36:21.761 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 01:36:22.141 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 390.9459ms
+2025-03-28 01:36:22.162 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 01:36:22.163 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 01:36:22.182 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 20.3579ms
+2025-03-28 01:36:22.375 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 212.5177ms
+2025-03-28 01:36:22.474 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 01:36:22.552 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 78.4613ms
+2025-03-28 01:36:25.406 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 01:36:25.421 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:36:25.550 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 01:36:26.182 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 01:36:29.889 +03:00 [INF] Executed DbCommand (155ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 01:36:30.715 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 01:36:30.726 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-03-28 01:36:30.736 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 5163.0025ms
+2025-03-28 01:36:30.740 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:36:30.756 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 200 null text/plain; charset=utf-8 5350.307ms
+2025-03-28 01:36:37.002 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 01:36:37.016 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 01:36:37.022 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 01:36:37.024 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 302 0 null 22.3522ms
+2025-03-28 01:36:37.031 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 01:36:37.035 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 4.7796ms
+2025-03-28 01:36:37.041 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 01:37:23.223 +03:00 [INF] Executed DbCommand (27ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-03-28 01:37:23.304 +03:00 [INF] Executed DbCommand (27ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-03-28 01:37:23.307 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-03-28 01:37:23.309 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-03-28 01:37:23.332 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-03-28 01:37:23.358 +03:00 [INF] Reverting migration '20250326224517_setting_identity'.
+2025-03-28 01:37:23.585 +03:00 [INF] Executed DbCommand (177ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM [__EFMigrationsHistory]
+WHERE [MigrationId] = N'20250326224517_setting_identity';
+2025-03-28 01:37:23.605 +03:00 [INF] Reverting migration '20250317220527_AddingIdentityPackages'.
+2025-03-28 01:37:23.999 +03:00 [INF] Executed DbCommand (338ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE [AspNetRoleClaims];
+2025-03-28 01:37:24.029 +03:00 [INF] Executed DbCommand (29ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE [AspNetUserClaims];
+2025-03-28 01:37:24.048 +03:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE [AspNetUserLogins];
+2025-03-28 01:37:24.054 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE [AspNetUserRoles];
+2025-03-28 01:37:24.061 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE [AspNetUserTokens];
+2025-03-28 01:37:24.063 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE [AspNetRoles];
+2025-03-28 01:37:24.124 +03:00 [INF] Executed DbCommand (61ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE [AspNetUsers];
+2025-03-28 01:37:24.262 +03:00 [INF] Executed DbCommand (138ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'id', N'created_at', N'description', N'name', N'price', N'sold_copies', N'updated_at') AND [object_id] = OBJECT_ID(N'[Games]'))
+    SET IDENTITY_INSERT [Games] ON;
+INSERT INTO [Games] ([id], [created_at], [description], [name], [price], [sold_copies], [updated_at])
+VALUES (1, '2025-03-07T21:00:27.1552299+03:00', N'Beatifull game!!', N'BF1', 49.990000000000002E0, 2424222, '2025-03-07T21:14:27.1552310+03:00'),
+(2, '2025-03-07T21:00:27.1552316+03:00', N'Beatifull game', N'BF4', 29.989999999999998E0, 1624222, '2025-03-07T21:14:27.1552317+03:00');
+IF EXISTS (SELECT * FROM [sys].[identity_columns] WHERE [name] IN (N'id', N'created_at', N'description', N'name', N'price', N'sold_copies', N'updated_at') AND [object_id] = OBJECT_ID(N'[Games]'))
+    SET IDENTITY_INSERT [Games] OFF;
+2025-03-28 01:37:24.264 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM [__EFMigrationsHistory]
+WHERE [MigrationId] = N'20250317220527_AddingIdentityPackages';
+2025-03-28 01:37:24.268 +03:00 [INF] Reverting migration '20250307180027_inserting_games_data'.
+2025-03-28 01:37:24.309 +03:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM [Games]
+WHERE [id] = 1;
+SELECT @@ROWCOUNT;
+2025-03-28 01:37:24.310 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM [Games]
+WHERE [id] = 2;
+SELECT @@ROWCOUNT;
+2025-03-28 01:37:24.313 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM [__EFMigrationsHistory]
+WHERE [MigrationId] = N'20250307180027_inserting_games_data';
+2025-03-28 01:37:24.314 +03:00 [INF] Reverting migration '20250307173912_creates_tables'.
+2025-03-28 01:37:24.318 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DROP TABLE [Games];
+2025-03-28 01:37:24.322 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+DELETE FROM [__EFMigrationsHistory]
+WHERE [MigrationId] = N'20250307173912_creates_tables';
+2025-03-28 01:37:44.308 +03:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-03-28 01:37:44.375 +03:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-03-28 01:37:44.384 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-03-28 01:44:59.801 +03:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-03-28 01:44:59.860 +03:00 [INF] Executed DbCommand (14ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-03-28 01:44:59.862 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-03-28 01:44:59.863 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-03-28 01:44:59.877 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-03-28 01:44:59.890 +03:00 [INF] Applying migration '20250327224438_creategamestable'.
+2025-03-28 01:44:59.934 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250327224438_creategamestable', N'8.0.0');
+2025-03-28 01:46:50.155 +03:00 [INF] Executed DbCommand (15ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-03-28 01:46:50.220 +03:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-03-28 01:46:50.222 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-03-28 01:46:50.223 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-03-28 01:46:50.237 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-03-28 01:46:50.255 +03:00 [INF] No migrations were applied. The database is already up to date.
+2025-03-28 01:47:57.797 +03:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-03-28 01:47:57.876 +03:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-03-28 01:47:57.879 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT 1
+2025-03-28 01:47:57.880 +03:00 [INF] Executed DbCommand (0ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT OBJECT_ID(N'[__EFMigrationsHistory]');
+2025-03-28 01:47:57.892 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [MigrationId], [ProductVersion]
+FROM [__EFMigrationsHistory]
+ORDER BY [MigrationId];
+2025-03-28 01:47:57.909 +03:00 [INF] Applying migration '20250327224729_CreatingGamesTable'.
+2025-03-28 01:47:58.035 +03:00 [INF] Executed DbCommand (49ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetRoles] (
+    [Id] nvarchar(450) NOT NULL,
+    [Name] nvarchar(256) NULL,
+    [NormalizedName] nvarchar(256) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetRoles] PRIMARY KEY ([Id])
+);
+2025-03-28 01:47:58.054 +03:00 [INF] Executed DbCommand (17ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUsers] (
+    [Id] nvarchar(450) NOT NULL,
+    [UserName] nvarchar(256) NULL,
+    [NormalizedUserName] nvarchar(256) NULL,
+    [Email] nvarchar(256) NULL,
+    [NormalizedEmail] nvarchar(256) NULL,
+    [EmailConfirmed] bit NOT NULL,
+    [PasswordHash] nvarchar(max) NULL,
+    [SecurityStamp] nvarchar(max) NULL,
+    [ConcurrencyStamp] nvarchar(max) NULL,
+    [PhoneNumber] nvarchar(max) NULL,
+    [PhoneNumberConfirmed] bit NOT NULL,
+    [TwoFactorEnabled] bit NOT NULL,
+    [LockoutEnd] datetimeoffset NULL,
+    [LockoutEnabled] bit NOT NULL,
+    [AccessFailedCount] int NOT NULL,
+    CONSTRAINT [PK_AspNetUsers] PRIMARY KEY ([Id])
+);
+2025-03-28 01:47:58.060 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [Games] (
+    [id] int NOT NULL IDENTITY,
+    [name] nvarchar(max) NOT NULL,
+    [price] real NOT NULL,
+    [sold_copies] int NOT NULL,
+    [description] nvarchar(max) NOT NULL,
+    [created_at] datetime2 NOT NULL,
+    [updated_at] datetime2 NOT NULL,
+    CONSTRAINT [PK_Games] PRIMARY KEY ([id])
+);
+2025-03-28 01:47:58.080 +03:00 [INF] Executed DbCommand (19ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetRoleClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [RoleId] nvarchar(450) NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetRoleClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE
+);
+2025-03-28 01:47:58.082 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUserClaims] (
+    [Id] int NOT NULL IDENTITY,
+    [UserId] nvarchar(450) NOT NULL,
+    [ClaimType] nvarchar(max) NULL,
+    [ClaimValue] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY ([Id]),
+    CONSTRAINT [FK_AspNetUserClaims_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+2025-03-28 01:47:58.095 +03:00 [INF] Executed DbCommand (13ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUserLogins] (
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [ProviderKey] nvarchar(450) NOT NULL,
+    [ProviderDisplayName] nvarchar(max) NULL,
+    [UserId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_AspNetUserLogins] PRIMARY KEY ([LoginProvider], [ProviderKey]),
+    CONSTRAINT [FK_AspNetUserLogins_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+2025-03-28 01:47:58.117 +03:00 [INF] Executed DbCommand (21ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUserRoles] (
+    [UserId] nvarchar(450) NOT NULL,
+    [RoleId] nvarchar(450) NOT NULL,
+    CONSTRAINT [PK_AspNetUserRoles] PRIMARY KEY ([UserId], [RoleId]),
+    CONSTRAINT [FK_AspNetUserRoles_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE,
+    CONSTRAINT [FK_AspNetUserRoles_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+2025-03-28 01:47:58.145 +03:00 [INF] Executed DbCommand (28ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE TABLE [AspNetUserTokens] (
+    [UserId] nvarchar(450) NOT NULL,
+    [LoginProvider] nvarchar(450) NOT NULL,
+    [Name] nvarchar(450) NOT NULL,
+    [Value] nvarchar(max) NULL,
+    CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY ([UserId], [LoginProvider], [Name]),
+    CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+);
+2025-03-28 01:47:58.178 +03:00 [INF] Executed DbCommand (33ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [AspNetRoleClaims] ([RoleId]);
+2025-03-28 01:47:58.185 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [RoleNameIndex] ON [AspNetRoles] ([NormalizedName]) WHERE [NormalizedName] IS NOT NULL;
+2025-03-28 01:47:58.188 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_AspNetUserClaims_UserId] ON [AspNetUserClaims] ([UserId]);
+2025-03-28 01:47:58.212 +03:00 [INF] Executed DbCommand (16ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_AspNetUserLogins_UserId] ON [AspNetUserLogins] ([UserId]);
+2025-03-28 01:47:58.214 +03:00 [INF] Executed DbCommand (2ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [IX_AspNetUserRoles_RoleId] ON [AspNetUserRoles] ([RoleId]);
+2025-03-28 01:47:58.215 +03:00 [INF] Executed DbCommand (1ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE INDEX [EmailIndex] ON [AspNetUsers] ([NormalizedEmail]);
+2025-03-28 01:47:58.233 +03:00 [INF] Executed DbCommand (18ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+CREATE UNIQUE INDEX [UserNameIndex] ON [AspNetUsers] ([NormalizedUserName]) WHERE [NormalizedUserName] IS NOT NULL;
+2025-03-28 01:47:58.245 +03:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+VALUES (N'20250327224729_CreatingGamesTable', N'8.0.0');
+2025-03-28 01:48:26.656 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 01:48:27.339 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 01:48:27.341 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 01:48:27.447 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 01:48:27.449 +03:00 [INF] Hosting environment: Development
+2025-03-28 01:48:27.451 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 01:48:28.836 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 01:48:29.273 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 01:48:29.273 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 01:48:29.278 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 449.4781ms
+2025-03-28 01:48:29.308 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 33.9759ms
+2025-03-28 01:48:29.401 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 127.8878ms
+2025-03-28 01:48:29.521 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 01:48:29.603 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 81.1513ms
+2025-03-28 01:48:33.026 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games - null null
+2025-03-28 01:48:33.058 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 01:48:33.102 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 01:48:33.109 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games - 302 0 null 83.7426ms
+2025-03-28 01:48:33.132 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 01:48:33.187 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 54.8474ms
+2025-03-28 01:48:33.202 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 01:48:47.467 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/API/Games - null null
+2025-03-28 01:48:47.479 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 01:48:47.482 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 01:48:47.484 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/API/Games - 302 0 null 17.3899ms
+2025-03-28 01:48:47.488 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 01:48:47.516 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 27.9581ms
+2025-03-28 01:48:47.543 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 01:50:08.481 +03:00 [INF] Request starting HTTP/2 POST https://localhost:7148/API/Games - application/json-patch+json 98
+2025-03-28 01:50:08.496 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 01:50:08.509 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 01:50:08.516 +03:00 [INF] Request finished HTTP/2 POST https://localhost:7148/API/Games - 302 0 null 35.073ms
+2025-03-28 01:50:08.522 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 01:50:08.538 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 16.7942ms
+2025-03-28 01:50:08.560 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 01:50:31.732 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 01:50:32.403 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 01:50:32.406 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 01:50:32.532 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 01:50:32.534 +03:00 [INF] Hosting environment: Development
+2025-03-28 01:50:32.535 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 01:50:33.224 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 01:50:33.528 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 307.2492ms
+2025-03-28 01:50:33.580 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 01:50:33.580 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 01:50:33.600 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 20.115ms
+2025-03-28 01:50:33.671 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 90.6228ms
+2025-03-28 01:50:33.822 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 01:50:34.007 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 185.2561ms
+2025-03-28 01:50:47.680 +03:00 [INF] Request starting HTTP/2 POST https://localhost:7148/API/Games - application/json-patch+json 93
+2025-03-28 01:50:47.703 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.GamesController.InsertingGame (Proz_WebApi)'
+2025-03-28 01:50:47.740 +03:00 [INF] Route matched with {action = "InsertingGame", controller = "Games"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Proz_WebApi.Models.Dto.Games_Dto2]] InsertingGame(Proz_WebApi.Models.Dto.Games_Dto) on controller Proz_WebApi.Controllers.GamesController (Proz_WebApi).
+2025-03-28 01:50:48.528 +03:00 [INF] Executing BadRequestObjectResult, writing value of type '<>f__AnonymousType11`4[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.Collections.Generic.Dictionary`2[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e],[System.String[], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2025-03-28 01:50:48.584 +03:00 [INF] Executed action Proz_WebApi.Controllers.GamesController.InsertingGame (Proz_WebApi) in 835.8199ms
+2025-03-28 01:50:48.587 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.GamesController.InsertingGame (Proz_WebApi)'
+2025-03-28 01:50:48.591 +03:00 [INF] Request finished HTTP/2 POST https://localhost:7148/API/Games - 400 127 application/json; charset=utf-8 914.5451ms
+2025-03-28 01:50:55.905 +03:00 [INF] Request starting HTTP/2 POST https://localhost:7148/API/Games - application/json-patch+json 103
+2025-03-28 01:50:55.914 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.GamesController.InsertingGame (Proz_WebApi)'
+2025-03-28 01:50:55.917 +03:00 [INF] Route matched with {action = "InsertingGame", controller = "Games"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[Proz_WebApi.Models.Dto.Games_Dto2]] InsertingGame(Proz_WebApi.Models.Dto.Games_Dto) on controller Proz_WebApi.Controllers.GamesController (Proz_WebApi).
+2025-03-28 01:50:55.931 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 01:50:58.297 +03:00 [INF] Executed DbCommand (65ms) [Parameters=[@__ToLower_0='?' (Size = 4000)], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Games] AS [g]
+        WHERE LOWER([g].[name]) = @__ToLower_0) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2025-03-28 01:50:58.904 +03:00 [INF] Executed DbCommand (116ms) [Parameters=[@p0='?' (DbType = DateTime2), @p1='?' (Size = 4000), @p2='?' (Size = 4000), @p3='?' (DbType = Single), @p4='?' (DbType = Int32), @p5='?' (DbType = DateTime2)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [Games] ([created_at], [description], [name], [price], [sold_copies], [updated_at])
+OUTPUT INSERTED.[id]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5);
+2025-03-28 01:50:58.966 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 01:50:58.970 +03:00 [INF] Executing CreatedAtRouteResult, writing value of type 'Proz_WebApi.Models.Dto.Games_Dto2'.
+2025-03-28 01:50:59.002 +03:00 [INF] Executed action Proz_WebApi.Controllers.GamesController.InsertingGame (Proz_WebApi) in 3081.944ms
+2025-03-28 01:50:59.005 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.GamesController.InsertingGame (Proz_WebApi)'
+2025-03-28 01:50:59.014 +03:00 [INF] Request finished HTTP/2 POST https://localhost:7148/API/Games - 201 193 application/json; charset=utf-8 3108.9418ms
+2025-03-28 01:57:26.374 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 01:57:27.055 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 01:57:27.057 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 01:57:27.147 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 01:57:27.150 +03:00 [INF] Hosting environment: Development
+2025-03-28 01:57:27.152 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 01:57:28.315 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 01:57:28.638 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 01:57:28.639 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 01:57:28.644 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 338.9928ms
+2025-03-28 01:57:28.664 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 25.767ms
+2025-03-28 01:57:29.299 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 660.3995ms
+2025-03-28 01:57:29.407 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 01:57:29.448 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 41.2603ms
+2025-03-28 01:57:34.550 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 01:57:34.585 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:57:34.640 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 01:57:35.426 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 01:57:37.896 +03:00 [INF] Executed DbCommand (93ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 01:57:37.947 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 01:57:37.959 +03:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-03-28 01:57:38.069 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 3418.0923ms
+2025-03-28 01:57:38.120 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:57:38.139 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 400 164 application/problem+json; charset=utf-8 3588.8713ms
+2025-03-28 01:57:41.238 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 01:57:41.258 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:57:41.268 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 01:57:41.305 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 01:57:41.460 +03:00 [INF] Executed DbCommand (6ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 01:57:41.467 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 01:57:41.470 +03:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-03-28 01:57:41.473 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 191.6713ms
+2025-03-28 01:57:41.476 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:57:41.479 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 400 164 application/problem+json; charset=utf-8 241.6101ms
+2025-03-28 01:57:55.127 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 01:57:55.819 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 01:57:55.821 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 01:57:55.901 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 01:57:55.904 +03:00 [INF] Hosting environment: Development
+2025-03-28 01:57:55.905 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 01:57:57.092 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 01:57:57.343 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 256.3409ms
+2025-03-28 01:57:57.356 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 01:57:57.356 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 01:57:57.385 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 29.2538ms
+2025-03-28 01:57:57.451 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 95.3004ms
+2025-03-28 01:57:57.638 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 01:57:57.712 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 74.4876ms
+2025-03-28 01:58:01.386 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 01:58:01.443 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:58:01.539 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 01:58:02.371 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 01:58:05.297 +03:00 [INF] Executed DbCommand (94ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 01:58:05.351 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 01:58:05.365 +03:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-03-28 01:58:05.442 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 3887.457ms
+2025-03-28 01:58:05.448 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:58:05.464 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 400 164 application/problem+json; charset=utf-8 4078.623ms
+2025-03-28 01:58:08.151 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 01:58:08.163 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:58:08.167 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 01:58:08.180 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 01:58:08.280 +03:00 [INF] Executed DbCommand (13ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 01:58:08.289 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 01:58:08.292 +03:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-03-28 01:58:08.298 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 125.101ms
+2025-03-28 01:58:08.301 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:58:08.305 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 400 164 application/problem+json; charset=utf-8 154.5075ms
+2025-03-28 01:58:10.490 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 01:58:10.505 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:58:10.509 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 01:58:10.532 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 01:58:10.576 +03:00 [INF] Executed DbCommand (22ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 01:58:10.583 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 01:58:10.585 +03:00 [INF] Executing ObjectResult, writing value of type 'Microsoft.AspNetCore.Mvc.ProblemDetails'.
+2025-03-28 01:58:10.587 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 72.4008ms
+2025-03-28 01:58:10.590 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:58:10.593 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 400 164 application/problem+json; charset=utf-8 105.1605ms
+2025-03-28 01:58:17.488 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Register - application/json 137
+2025-03-28 01:58:17.507 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.RegisterAUser (Proz_WebApi)'
+2025-03-28 01:58:17.524 +03:00 [INF] Route matched with {action = "RegisterAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] RegisterAUser(Proz_WebApi.Models.Dto.UserRegisteration) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 01:58:17.535 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 01:58:17.688 +03:00 [INF] Executed DbCommand (4ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 01:58:18.214 +03:00 [INF] Executed DbCommand (112ms) [Parameters=[@p0='?' (Size = 450), @p1='?' (DbType = Int32), @p2='?' (Size = 4000), @p3='?' (Size = 256), @p4='?' (DbType = Boolean), @p5='?' (DbType = Boolean), @p6='?' (DbType = DateTimeOffset), @p7='?' (Size = 256), @p8='?' (Size = 256), @p9='?' (Size = 4000), @p10='?' (Size = 4000), @p11='?' (DbType = Boolean), @p12='?' (Size = 4000), @p13='?' (DbType = Boolean), @p14='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [AspNetUsers] ([Id], [AccessFailedCount], [ConcurrencyStamp], [Email], [EmailConfirmed], [LockoutEnabled], [LockoutEnd], [NormalizedEmail], [NormalizedUserName], [PasswordHash], [PhoneNumber], [PhoneNumberConfirmed], [SecurityStamp], [TwoFactorEnabled], [UserName])
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12, @p13, @p14);
+2025-03-28 01:58:18.558 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 01:58:18.561 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-03-28 01:58:18.565 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.RegisterAUser (Proz_WebApi) in 1036.3026ms
+2025-03-28 01:58:18.573 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.RegisterAUser (Proz_WebApi)'
+2025-03-28 01:58:18.580 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Register - 200 null text/plain; charset=utf-8 1091.9659ms
+2025-03-28 01:58:28.187 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 01:58:28.208 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 01:58:28.215 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 01:58:28.218 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 302 0 null 30.9561ms
+2025-03-28 01:58:28.226 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 01:58:28.232 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 6.2991ms
+2025-03-28 01:58:28.241 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 01:58:44.923 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 01:58:45.575 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 01:58:45.577 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 01:58:45.775 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 01:58:45.778 +03:00 [INF] Hosting environment: Development
+2025-03-28 01:58:45.780 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 01:58:47.034 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 01:58:47.264 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 258.0365ms
+2025-03-28 01:58:47.294 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 01:58:47.293 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 01:58:47.334 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 41.8357ms
+2025-03-28 01:58:47.417 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 123.3869ms
+2025-03-28 01:58:47.661 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 01:58:47.722 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 61.5422ms
+2025-03-28 01:58:50.173 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 01:58:50.207 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:58:50.431 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 01:58:51.202 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 01:58:54.229 +03:00 [INF] Executed DbCommand (123ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 01:58:54.677 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 01:58:54.688 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-03-28 01:58:54.702 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 4248.5448ms
+2025-03-28 01:58:54.706 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 01:58:54.719 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 200 null text/plain; charset=utf-8 4546.5871ms
+2025-03-28 01:59:00.451 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 01:59:00.468 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 01:59:00.479 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 01:59:00.483 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 302 0 null 31.3127ms
+2025-03-28 01:59:00.490 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 01:59:00.498 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 7.8155ms
+2025-03-28 01:59:00.508 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 02:01:48.209 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 02:01:48.608 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 02:01:48.610 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 02:01:48.716 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 02:01:48.718 +03:00 [INF] Hosting environment: Development
+2025-03-28 02:01:48.721 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 02:01:49.565 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 02:01:49.877 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 316.2351ms
+2025-03-28 02:01:49.910 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 02:01:49.908 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 02:01:49.941 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 35.8927ms
+2025-03-28 02:01:50.019 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 110.3194ms
+2025-03-28 02:01:50.165 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 02:01:50.316 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 150.4445ms
+2025-03-28 02:01:54.075 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 02:01:54.126 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The AuthorizationPolicy named: 'yes' was not found.
+   at Microsoft.AspNetCore.Authorization.AuthorizationPolicy.CombineAsync(IAuthorizationPolicyProvider policyProvider, IEnumerable`1 authorizeData, IEnumerable`1 policies)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-03-28 02:01:54.236 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 500 null text/plain; charset=utf-8 161.8336ms
+2025-03-28 02:01:58.828 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 02:01:58.837 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The AuthorizationPolicy named: 'yes' was not found.
+   at Microsoft.AspNetCore.Authorization.AuthorizationPolicy.CombineAsync(IAuthorizationPolicyProvider policyProvider, IEnumerable`1 authorizeData, IEnumerable`1 policies)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-03-28 02:01:58.847 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 500 null text/plain; charset=utf-8 18.9287ms
+2025-03-28 02:02:02.879 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 02:02:02.888 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 02:02:02.922 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 02:02:03.660 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 02:02:06.194 +03:00 [INF] Executed DbCommand (105ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 02:02:06.623 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 02:02:06.634 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-03-28 02:02:06.646 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 3712.9955ms
+2025-03-28 02:02:06.650 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 02:02:06.670 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 200 null text/plain; charset=utf-8 3791.7735ms
+2025-03-28 02:02:13.268 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 02:02:13.277 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The AuthorizationPolicy named: 'yes' was not found.
+   at Microsoft.AspNetCore.Authorization.AuthorizationPolicy.CombineAsync(IAuthorizationPolicyProvider policyProvider, IEnumerable`1 authorizeData, IEnumerable`1 policies)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-03-28 02:02:13.287 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 500 null text/plain; charset=utf-8 19.2421ms
+2025-03-28 02:09:15.195 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 02:09:15.648 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 02:09:15.650 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 02:09:15.756 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 02:09:15.759 +03:00 [INF] Hosting environment: Development
+2025-03-28 02:09:15.760 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 02:09:16.558 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 02:09:16.907 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 361.3773ms
+2025-03-28 02:09:16.932 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 02:09:16.932 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 02:09:17.048 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 115.8662ms
+2025-03-28 02:09:17.111 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 179.0324ms
+2025-03-28 02:09:17.194 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 02:09:17.269 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 76.7692ms
+2025-03-28 02:12:07.546 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 02:12:07.966 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 02:12:07.968 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 02:12:08.039 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 02:12:08.042 +03:00 [INF] Hosting environment: Development
+2025-03-28 02:12:08.043 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 02:12:08.990 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 02:12:09.196 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 217.0377ms
+2025-03-28 02:12:09.209 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 02:12:09.209 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 02:12:09.227 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 17.8112ms
+2025-03-28 02:12:09.317 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 108.1559ms
+2025-03-28 02:12:09.524 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 02:12:09.673 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 150.6284ms
+2025-03-28 02:12:12.488 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 02:12:12.535 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 02:12:12.565 +03:00 [INF] AuthenticationScheme: Identity.Application was challenged.
+2025-03-28 02:12:12.574 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 302 0 null 85.5199ms
+2025-03-28 02:12:12.616 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - null null
+2025-03-28 02:12:12.633 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/Account/Login?ReturnUrl=%2FAPI%2FGames - 404 0 null 17.8185ms
+2025-03-28 02:12:12.664 +03:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7148/Account/Login, Response status code: 404
+2025-03-28 02:12:16.857 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 02:12:16.866 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 02:12:16.922 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 02:12:17.593 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 02:12:20.105 +03:00 [INF] Executed DbCommand (152ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 02:12:20.781 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 02:12:20.790 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 3856.652ms
+2025-03-28 02:12:20.795 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 02:12:20.805 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentOutOfRangeException: IDX10720: Unable to create KeyedHashAlgorithm for algorithm 'HS256', the key size must be greater than: '256' bits, key has '224' bits. (Parameter 'keyBytes')
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.ValidateKeySize(Byte[] keyBytes, String algorithm, Int32 expectedNumberOfBytes)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateKeyedHashAlgorithm(Byte[] keyBytes, String algorithm)
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider.CreateKeyedHashAlgorithm()
+   at Microsoft.IdentityModel.Tokens.DisposableObjectPool`1.CreateInstance()
+   at Microsoft.IdentityModel.Tokens.DisposableObjectPool`1.Allocate()
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider.GetKeyedHashAlgorithm(Byte[] keyBytes, String algorithm)
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider.Sign(Byte[] input)
+   at Microsoft.IdentityModel.JsonWebTokens.JwtTokenUtilities.CreateEncodedSignature(String input, SigningCredentials signingCredentials)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.CreateJwtSecurityTokenPrivate(String issuer, String audience, ClaimsIdentity subject, Nullable`1 notBefore, Nullable`1 expires, Nullable`1 issuedAt, SigningCredentials signingCredentials, EncryptingCredentials encryptingCredentials, IDictionary`2 claimCollection, String tokenType, IDictionary`2 additionalHeaderClaims, IDictionary`2 additionalInnerHeaderClaims)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.CreateToken(SecurityTokenDescriptor tokenDescriptor)
+   at Proz_WebApi.Services.AuthService.GetJwtToken(UserLogin userlogin) in C:\Users\monde\source\repos\Proz\Proz_WebApi\Services\AuthService.cs:line 58
+   at Proz_WebApi.Controllers.AuthController.LoginAUser(UserLogin userlogin) in C:\Users\monde\source\repos\Proz\Proz_WebApi\Controllers\AuthController.cs:line 67
+   at lambda_method6(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-03-28 02:12:21.016 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 500 null text/plain; charset=utf-8 4159.8149ms
+2025-03-28 02:12:23.627 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 02:12:23.634 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 02:12:23.636 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 02:12:23.643 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 02:12:23.722 +03:00 [INF] Executed DbCommand (13ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 02:12:23.961 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 02:12:23.965 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 325.7601ms
+2025-03-28 02:12:23.968 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 02:12:23.971 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentOutOfRangeException: IDX10720: Unable to create KeyedHashAlgorithm for algorithm 'HS256', the key size must be greater than: '256' bits, key has '224' bits. (Parameter 'keyBytes')
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.ValidateKeySize(Byte[] keyBytes, String algorithm, Int32 expectedNumberOfBytes)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateKeyedHashAlgorithm(Byte[] keyBytes, String algorithm)
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider.CreateKeyedHashAlgorithm()
+   at Microsoft.IdentityModel.Tokens.DisposableObjectPool`1.CreateInstance()
+   at Microsoft.IdentityModel.Tokens.DisposableObjectPool`1.Allocate()
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider.GetKeyedHashAlgorithm(Byte[] keyBytes, String algorithm)
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider.Sign(Byte[] input)
+   at Microsoft.IdentityModel.JsonWebTokens.JwtTokenUtilities.CreateEncodedSignature(String input, SigningCredentials signingCredentials)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.CreateJwtSecurityTokenPrivate(String issuer, String audience, ClaimsIdentity subject, Nullable`1 notBefore, Nullable`1 expires, Nullable`1 issuedAt, SigningCredentials signingCredentials, EncryptingCredentials encryptingCredentials, IDictionary`2 claimCollection, String tokenType, IDictionary`2 additionalHeaderClaims, IDictionary`2 additionalInnerHeaderClaims)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.CreateToken(SecurityTokenDescriptor tokenDescriptor)
+   at Proz_WebApi.Services.AuthService.GetJwtToken(UserLogin userlogin) in C:\Users\monde\source\repos\Proz\Proz_WebApi\Services\AuthService.cs:line 58
+   at Proz_WebApi.Controllers.AuthController.LoginAUser(UserLogin userlogin) in C:\Users\monde\source\repos\Proz\Proz_WebApi\Controllers\AuthController.cs:line 67
+   at lambda_method6(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-03-28 02:12:23.992 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 500 null text/plain; charset=utf-8 365.1608ms
+2025-03-28 02:12:34.653 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 02:12:35.004 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 02:12:35.006 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 02:12:35.085 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 02:12:35.088 +03:00 [INF] Hosting environment: Development
+2025-03-28 02:12:35.090 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 02:12:35.988 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 02:12:36.170 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 186.1572ms
+2025-03-28 02:12:36.179 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 02:12:36.179 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 02:12:36.216 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 36.7509ms
+2025-03-28 02:12:36.288 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 109.6085ms
+2025-03-28 02:12:36.358 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 02:12:36.437 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 78.9774ms
+2025-03-28 02:12:38.137 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 02:12:38.166 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 02:12:38.208 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 02:12:38.838 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 02:12:41.457 +03:00 [INF] Executed DbCommand (101ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 02:12:42.029 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 02:12:42.055 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-03-28 02:12:42.093 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 3872.1917ms
+2025-03-28 02:12:42.101 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 02:12:42.140 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 200 null text/plain; charset=utf-8 4001.4634ms
+2025-03-28 04:23:21.453 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 04:23:21.985 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 04:23:21.988 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 04:23:22.045 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 04:23:22.047 +03:00 [INF] Hosting environment: Development
+2025-03-28 04:23:22.048 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 04:23:23.720 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 04:23:24.068 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 357.5016ms
+2025-03-28 04:23:24.163 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 04:23:24.166 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 04:23:24.177 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 13.5499ms
+2025-03-28 04:23:24.314 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 148.418ms
+2025-03-28 04:23:24.396 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 04:23:24.442 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 46.6003ms
+2025-03-28 04:24:17.029 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 04:24:17.059 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 04:24:17.107 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 04:24:17.913 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 04:24:20.999 +03:00 [INF] Executed DbCommand (287ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 04:24:21.739 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 04:24:21.746 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 4632.3854ms
+2025-03-28 04:24:21.752 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 04:24:21.760 +03:00 [ERR] An unhandled exception has occurred while executing the request.
+System.ArgumentOutOfRangeException: IDX10720: Unable to create KeyedHashAlgorithm for algorithm 'HS256', the key size must be greater than: '256' bits, key has '224' bits. (Parameter 'keyBytes')
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.ValidateKeySize(Byte[] keyBytes, String algorithm, Int32 expectedNumberOfBytes)
+   at Microsoft.IdentityModel.Tokens.CryptoProviderFactory.CreateKeyedHashAlgorithm(Byte[] keyBytes, String algorithm)
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider.CreateKeyedHashAlgorithm()
+   at Microsoft.IdentityModel.Tokens.DisposableObjectPool`1.CreateInstance()
+   at Microsoft.IdentityModel.Tokens.DisposableObjectPool`1.Allocate()
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider.GetKeyedHashAlgorithm(Byte[] keyBytes, String algorithm)
+   at Microsoft.IdentityModel.Tokens.SymmetricSignatureProvider.Sign(Byte[] input)
+   at Microsoft.IdentityModel.JsonWebTokens.JwtTokenUtilities.CreateEncodedSignature(String input, SigningCredentials signingCredentials)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.CreateJwtSecurityTokenPrivate(String issuer, String audience, ClaimsIdentity subject, Nullable`1 notBefore, Nullable`1 expires, Nullable`1 issuedAt, SigningCredentials signingCredentials, EncryptingCredentials encryptingCredentials, IDictionary`2 claimCollection, String tokenType, IDictionary`2 additionalHeaderClaims, IDictionary`2 additionalInnerHeaderClaims)
+   at System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler.CreateToken(SecurityTokenDescriptor tokenDescriptor)
+   at Proz_WebApi.Services.AuthService.GetJwtToken(UserLogin userlogin) in C:\Users\monde\source\repos\Proz\Proz_WebApi\Services\AuthService.cs:line 58
+   at Proz_WebApi.Controllers.AuthController.LoginAUser(UserLogin userlogin) in C:\Users\monde\source\repos\Proz\Proz_WebApi\Controllers\AuthController.cs:line 67
+   at lambda_method6(Closure, Object)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.AwaitableObjectResultExecutor.Execute(ActionContext actionContext, IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|20_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-03-28 04:24:21.953 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 500 null text/plain; charset=utf-8 4923.795ms
+2025-03-28 04:24:55.106 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 04:24:55.772 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 04:24:55.774 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 04:24:55.848 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 04:24:55.850 +03:00 [INF] Hosting environment: Development
+2025-03-28 04:24:55.852 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 04:24:56.861 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 04:24:57.129 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 04:24:57.130 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 282.3358ms
+2025-03-28 04:24:57.130 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 04:24:57.181 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 50.0527ms
+2025-03-28 04:24:57.237 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 108.2218ms
+2025-03-28 04:24:57.340 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 04:24:57.382 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 42.1584ms
+2025-03-28 04:25:01.632 +03:00 [INF] Request starting HTTP/1.1 POST https://localhost:7148/Clients/Login - application/json 86
+2025-03-28 04:25:01.670 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 04:25:01.723 +03:00 [INF] Route matched with {action = "LoginAUser", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.String]] LoginAUser(Proz_WebApi.Models.Dto.UserLogin) on controller Proz_WebApi.Controllers.AuthController (Proz_WebApi).
+2025-03-28 04:25:02.411 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 04:25:05.227 +03:00 [INF] Executed DbCommand (307ms) [Parameters=[@__normalizedUserName_0='?' (Size = 256)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [a].[Id], [a].[AccessFailedCount], [a].[ConcurrencyStamp], [a].[Email], [a].[EmailConfirmed], [a].[LockoutEnabled], [a].[LockoutEnd], [a].[NormalizedEmail], [a].[NormalizedUserName], [a].[PasswordHash], [a].[PhoneNumber], [a].[PhoneNumberConfirmed], [a].[SecurityStamp], [a].[TwoFactorEnabled], [a].[UserName]
+FROM [AspNetUsers] AS [a]
+WHERE [a].[NormalizedUserName] = @__normalizedUserName_0
+2025-03-28 04:25:05.628 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 04:25:05.637 +03:00 [INF] Executing ObjectResult, writing value of type 'System.String'.
+2025-03-28 04:25:05.649 +03:00 [INF] Executed action Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi) in 3917.9244ms
+2025-03-28 04:25:05.652 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.AuthController.LoginAUser (Proz_WebApi)'
+2025-03-28 04:25:05.666 +03:00 [INF] Request finished HTTP/1.1 POST https://localhost:7148/Clients/Login - 200 null text/plain; charset=utf-8 4033.5862ms
+2025-03-28 04:25:12.452 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 04:25:12.869 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:25:12.875 +03:00 [INF] Route matched with {action = "GetGames", controller = "Games"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] GetGames() on controller Proz_WebApi.Controllers.GamesController (Proz_WebApi).
+2025-03-28 04:25:12.881 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 04:25:13.463 +03:00 [INF] Executed DbCommand (419ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], CAST([g].[price] AS float) AS [price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-28 04:25:13.472 +03:00 [INF] A list of games has been fetched.
+2025-03-28 04:25:13.474 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 04:25:13.480 +03:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-28 04:25:13.539 +03:00 [INF] Executed action Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi) in 659.7317ms
+2025-03-28 04:25:13.540 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:25:13.543 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 200 183 application/json; charset=utf-8 1090.4487ms
+2025-03-28 04:25:29.300 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 04:25:29.320 +03:00 [INF] Failed to validate the token.
+Microsoft.IdentityModel.Tokens.SecurityTokenMalformedException: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+ ---> System.ArgumentException: IDX14102: Unable to decode the header '[PII of type 'Microsoft.IdentityModel.Logging.SecurityArtifact' is hidden. For more details, see https://aka.ms/IdentityModel/PII.]' as Base64Url encoded string.
+ ---> System.Text.Json.JsonReaderException: Expected end of string, but instead reached end of data. LineNumber: 0 | BytePositionInLine: 27.
+   at System.Text.Json.ThrowHelper.ThrowJsonReaderException(Utf8JsonReader& json, ExceptionResource resource, Byte nextByte, ReadOnlySpan`1 bytes)
+   at System.Text.Json.Utf8JsonReader.ConsumeString()
+   at System.Text.Json.Utf8JsonReader.ConsumeValue(Byte marker)
+   at System.Text.Json.Utf8JsonReader.ReadSingleSegment()
+   at System.Text.Json.Utf8JsonReader.Read()
+   at Microsoft.IdentityModel.Tokens.Json.JsonSerializerPrimitives.ReadString(Utf8JsonReader& reader, String propertyName, String className, Boolean read)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.CreateHeaderClaimSet(Byte[] bytes, Int32 length)
+   at Microsoft.IdentityModel.Tokens.Base64UrlEncoding.Decode[T](String input, Int32 offset, Int32 length, Func`3 action)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.CreateClaimSet(String rawString, Int32 startIndex, Int32 length, Func`3 action)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(String encodedJson)
+   --- End of inner exception stack trace ---
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken.ReadToken(String encodedJson)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebToken..ctor(String jwtEncodedString)
+   at Microsoft.IdentityModel.JsonWebTokens.JsonWebTokenHandler.ReadToken(String token, TokenValidationParameters validationParameters)
+   --- End of inner exception stack trace ---
+2025-03-28 04:25:29.379 +03:00 [INF] Bearer was not authenticated. Failure message: IDX14100: JWT is not well formed, there are no dots (.).
+The token needs to be in JWS or JWE Compact Serialization Format. (JWS): 'EncodedHeader.EndcodedPayload.EncodedSignature'. (JWE): 'EncodedProtectedHeader.EncodedEncryptedKey.EncodedInitializationVector.EncodedCiphertext.EncodedAuthenticationTag'.
+2025-03-28 04:25:29.383 +03:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2025-03-28 04:25:29.392 +03:00 [INF] AuthenticationScheme: Bearer was challenged.
+2025-03-28 04:25:29.395 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 401 0 null 95.3004ms
+2025-03-28 04:25:32.968 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 04:25:32.974 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:25:32.976 +03:00 [INF] Route matched with {action = "GetGames", controller = "Games"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] GetGames() on controller Proz_WebApi.Controllers.GamesController (Proz_WebApi).
+2025-03-28 04:25:32.980 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 04:25:32.998 +03:00 [INF] Executed DbCommand (3ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], CAST([g].[price] AS float) AS [price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-28 04:25:33.002 +03:00 [INF] A list of games has been fetched.
+2025-03-28 04:25:33.003 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 04:25:33.005 +03:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-28 04:25:33.007 +03:00 [INF] Executed action Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi) in 28.4204ms
+2025-03-28 04:25:33.009 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:25:33.011 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 200 183 application/json; charset=utf-8 42.6344ms
+2025-03-28 04:42:07.107 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 04:42:08.083 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 04:42:08.085 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 04:42:08.181 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 04:42:08.183 +03:00 [INF] Hosting environment: Development
+2025-03-28 04:42:08.185 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 04:42:10.538 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 04:42:10.697 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 166.7935ms
+2025-03-28 04:42:10.753 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 04:42:10.753 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 04:42:10.796 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 44.4466ms
+2025-03-28 04:42:10.945 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 192.0468ms
+2025-03-28 04:42:11.139 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 04:42:11.375 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 235.894ms
+2025-03-28 04:44:54.080 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 04:44:54.968 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 04:44:54.972 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 04:44:55.139 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 04:44:55.141 +03:00 [INF] Hosting environment: Development
+2025-03-28 04:44:55.143 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 04:44:56.908 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 04:44:57.205 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 314.1357ms
+2025-03-28 04:44:57.330 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 04:44:57.331 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 04:44:57.524 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 184.2742ms
+2025-03-28 04:44:57.767 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 436.5496ms
+2025-03-28 04:44:57.866 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 04:44:57.922 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 55.3974ms
+2025-03-28 04:45:00.631 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 04:45:01.197 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:45:01.275 +03:00 [INF] Route matched with {action = "GetGames", controller = "Games"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] GetGames() on controller Proz_WebApi.Controllers.GamesController (Proz_WebApi).
+2025-03-28 04:45:01.998 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 04:45:05.830 +03:00 [INF] Executed DbCommand (173ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], CAST([g].[price] AS float) AS [price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-28 04:45:05.914 +03:00 [INF] A list of games has been fetched.
+2025-03-28 04:45:05.921 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 04:45:05.939 +03:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-28 04:45:06.235 +03:00 [INF] Executed action Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi) in 4927.0042ms
+2025-03-28 04:45:06.239 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:45:06.311 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 200 183 application/json; charset=utf-8 5679.8762ms
+2025-03-28 04:45:10.236 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 04:45:10.309 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:45:10.327 +03:00 [INF] Route matched with {action = "GetGames", controller = "Games"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] GetGames() on controller Proz_WebApi.Controllers.GamesController (Proz_WebApi).
+2025-03-28 04:45:10.342 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 04:45:10.411 +03:00 [INF] Executed DbCommand (11ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], CAST([g].[price] AS float) AS [price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-28 04:45:10.420 +03:00 [INF] A list of games has been fetched.
+2025-03-28 04:45:10.426 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 04:45:10.435 +03:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-28 04:45:10.441 +03:00 [INF] Executed action Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi) in 103.1434ms
+2025-03-28 04:45:10.445 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:45:10.449 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 200 183 application/json; charset=utf-8 213.1942ms
+2025-03-28 04:45:46.340 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 04:45:47.070 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 04:45:47.072 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 04:45:47.174 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 04:45:47.176 +03:00 [INF] Hosting environment: Development
+2025-03-28 04:45:47.178 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 04:45:48.269 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 04:45:48.611 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 347.684ms
+2025-03-28 04:45:48.681 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 04:45:48.681 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 04:45:48.992 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 310.0772ms
+2025-03-28 04:45:49.116 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 435.8142ms
+2025-03-28 04:45:49.259 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 04:45:49.365 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 105.8517ms
+2025-03-28 04:45:55.467 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 04:45:56.065 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:45:56.126 +03:00 [INF] Route matched with {action = "GetGames", controller = "Games"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] GetGames() on controller Proz_WebApi.Controllers.GamesController (Proz_WebApi).
+2025-03-28 04:45:56.460 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 04:46:00.793 +03:00 [INF] Executed DbCommand (241ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], CAST([g].[price] AS float) AS [price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-28 04:46:00.848 +03:00 [INF] A list of games has been fetched.
+2025-03-28 04:46:00.856 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 04:46:00.873 +03:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-28 04:46:01.106 +03:00 [INF] Executed action Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi) in 4970.9836ms
+2025-03-28 04:46:01.111 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:46:01.127 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 200 183 application/json; charset=utf-8 5660.5917ms
+2025-03-28 04:47:55.676 +03:00 [INF] User profile is available. Using 'C:\Users\monde\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-03-28 04:47:56.334 +03:00 [INF] Now listening on: https://localhost:7148
+2025-03-28 04:47:56.336 +03:00 [INF] Now listening on: http://localhost:5209
+2025-03-28 04:47:56.421 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-03-28 04:47:56.425 +03:00 [INF] Hosting environment: Development
+2025-03-28 04:47:56.426 +03:00 [INF] Content root path: C:\Users\monde\source\repos\Proz\Proz_WebApi
+2025-03-28 04:47:58.025 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/index.html - null null
+2025-03-28 04:47:58.518 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - null null
+2025-03-28 04:47:58.518 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/_vs/browserLink - null null
+2025-03-28 04:47:58.520 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/index.html - 200 null text/html;charset=utf-8 513.6217ms
+2025-03-28 04:47:58.551 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_framework/aspnetcore-browser-refresh.js - 200 13774 application/javascript; charset=utf-8 32.9923ms
+2025-03-28 04:47:58.640 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/_vs/browserLink - 200 null text/javascript; charset=UTF-8 122.1537ms
+2025-03-28 04:47:58.746 +03:00 [INF] Request starting HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - null null
+2025-03-28 04:47:58.785 +03:00 [INF] Request finished HTTP/2 GET https://localhost:7148/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 39.6221ms
+2025-03-28 04:48:00.320 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 04:48:01.482 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:48:01.525 +03:00 [INF] Route matched with {action = "GetGames", controller = "Games"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] GetGames() on controller Proz_WebApi.Controllers.GamesController (Proz_WebApi).
+2025-03-28 04:48:02.367 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 04:48:05.879 +03:00 [INF] Executed DbCommand (336ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], CAST([g].[price] AS float) AS [price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-28 04:48:05.967 +03:00 [INF] A list of games has been fetched.
+2025-03-28 04:48:05.974 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 04:48:05.991 +03:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-28 04:48:06.225 +03:00 [INF] Executed action Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi) in 4690.9447ms
+2025-03-28 04:48:06.230 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:48:06.246 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 200 183 application/json; charset=utf-8 5925.9499ms
+2025-03-28 04:48:11.985 +03:00 [INF] Request starting HTTP/1.1 GET https://localhost:7148/API/Games - null null
+2025-03-28 04:48:11.998 +03:00 [INF] Executing endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:48:12.001 +03:00 [INF] Route matched with {action = "GetGames", controller = "Games"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.ActionResult`1[System.Collections.Generic.IEnumerable`1[Proz_WebApi.Models.Dto.Games_Dto2]]] GetGames() on controller Proz_WebApi.Controllers.GamesController (Proz_WebApi).
+2025-03-28 04:48:12.009 +03:00 [INF] the user is trying to execute this method {visted-method}
+2025-03-28 04:48:12.213 +03:00 [INF] Executed DbCommand (59ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT [g].[id], [g].[name], CAST([g].[price] AS float) AS [price], [g].[sold_copies], [g].[description], [g].[created_at], [g].[updated_at]
+FROM [Games] AS [g]
+ORDER BY [g].[price]
+2025-03-28 04:48:12.218 +03:00 [INF] A list of games has been fetched.
+2025-03-28 04:48:12.220 +03:00 [INF] and this is me after the user executed the method {visted-method}
+2025-03-28 04:48:12.223 +03:00 [INF] Executing ObjectResult, writing value of type 'System.Collections.Generic.List`1[[Proz_WebApi.Models.Dto.Games_Dto2, Proz_WebApi, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2025-03-28 04:48:12.229 +03:00 [INF] Executed action Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi) in 222.0418ms
+2025-03-28 04:48:12.232 +03:00 [INF] Executed endpoint 'Proz_WebApi.Controllers.GamesController.GetGames (Proz_WebApi)'
+2025-03-28 04:48:12.235 +03:00 [INF] Request finished HTTP/1.1 GET https://localhost:7148/API/Games - 200 183 application/json; charset=utf-8 250.1461ms

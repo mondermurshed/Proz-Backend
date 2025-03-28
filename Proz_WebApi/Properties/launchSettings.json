@@ -1,4 +1,34 @@
-﻿{
+{
+  "profiles": {
+    "http": {
+        "commandName": "Project", //For educating purposes only, the web API works on four enigns, two of them are the only important for us, Kestrel which is the modern and cross platform engine (which is the default option for HTTP and HTTPS meaning if you run the project as HTTP then you are using Kestrel) and the other one is the IIS which is for window only. Always use Kestrel.
+        "launchBrowser": true,
+        "launchUrl": "swagger", //this means that the default lunch setting will open as swagger, meaning if you open it as http protocol then the URL will be like https://localhost:7148/swagger/index.html
+        "environmentVariables": {
+            "ASPNETCORE_ENVIRONMENT": "Development" //this one is the responsible one that tells the program that this run purpose was only for developing purposes (if you have code that you want to run it only when developing not in production for example then set this value as you want), in program.cs file for example you may find something called "if (app.Environment.IsDevelopment())" so the code inside it will only run when this property is set to "Development". it's considered as the main variable in which it will tell the whole program whether we are in the development phase or testing or staging or production, if the framework just know then it will use the rest of the vaiables (there is other variables not just this) based on the value of this main one, like will use the values of the variables from the appsettings.json or appsettings.Development.json (if there is any) if we were in the development, and it will use the values from the environment variables or we were in the Staging or Production (of course if we were in stagin and we lack of some variables then the system will take the values from the appsetting and.. etc...
+        },
+        "dotnetRunMessages": true,
+        "applicationUrl": "http://localhost:5209" //this is as name suggest is the applicationURL
+    },
+    "https": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:7148;http://localhost:5209"
+    },
+    "IIS Express": { 
+        "commandName": "IISExpress",
+        "launchBrowser": true,
+        "launchUrl": "swagger",
+        "environmentVariables": {
+            "ASPNETCORE_ENVIRONMENT": "Development"
+        }
+    }
+  },
   "$schema": "http://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
@@ -6,36 +36,6 @@
     "iisExpress": {
       "applicationUrl": "http://localhost:32717",
       "sslPort": 44336
-    }
-  },
-  "profiles": {
-    "http": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "http://localhost:5209",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "https": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "applicationUrl": "https://localhost:7148;http://localhost:5209",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "IIS Express": {
-      "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
     }
   }
 }
