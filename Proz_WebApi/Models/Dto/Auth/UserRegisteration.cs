@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Azure.Identity;
 
-namespace Proz_WebApi.Models.Dto
+namespace Proz_WebApi.Models.Dto.Auth
 {
 
     public class UserRegisteration

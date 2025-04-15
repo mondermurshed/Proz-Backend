@@ -1,6 +1,8 @@
 ﻿using Mapster;
 using Proz_WebApi.Models;
 using Proz_WebApi.Models.Dto;
+using Proz_WebApi.Models.Dto.Admin;
+using Proz_WebApi.Models.Dto.Auth;
 using System.Runtime.Intrinsics.X86;
 
 public static class Maps
@@ -14,6 +16,7 @@ public static class Maps
         //1 - updateGameDto.Adapt(game);  //this will map from the source object "updateGameDto" to the dect "game" object without creating any other object (this way is really fast and efficint)
         //2 - game = updateGameDto.Adapt(game); //this way doing the same exact same but, it first map the values from the "updateGameDto" as a src to a new object (that it will create it) as a des, then from the new object that has been created as a src to the game object as a des (same as the previous way but it will create a new object in the middle of the process)
         //3 - Games_Model ModelToUpdate = game.Adapt<Games_Model>(); //we use this way when we first want to create an object, then map this object to the src, like the ModelToUpdate is our new and desc object and our game object is the src here.
+        //both the Adapt<>() or ProjectToType<>() are using these maps and they will fail if these maps wasn't there.
         TypeAdapterConfig<Games_Model, Games_Dto2>.NewConfig()
             .Map(dest => dest.id, src => src.id)
             .Map(dest => dest.name, src => src.name)
@@ -38,6 +41,14 @@ public static class Maps
              TypeAdapterConfig<UserRegisteration, UserLogin>.NewConfig()
             .Map(dest => dest.Username, src => src.Username)
             .Map(dest => dest.Password, src => src.Password).IgnoreNonMapped(true);
+             
+             TypeAdapterConfig<ExtendedIdentityUsers, ReturnUsersWithRolesAdminDto>
+            .NewConfig()
+            .Map(dest => dest.id, src => src.Id)
+            .Map(dest => dest.UserName, src => src.UserName)
+            .Map(dest => dest.Email, src => src.Email)
+            .Map(dest => dest.Roles, src =>
+            src.UserRoles.Select(ur => ur.Role.Name).ToList());
 
 
     }

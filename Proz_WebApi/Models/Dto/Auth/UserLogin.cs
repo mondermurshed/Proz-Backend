@@ -1,4 +1,4 @@
-﻿namespace Proz_WebApi.Models.Dto
+﻿namespace Proz_WebApi.Models.Dto.Auth
 {
     public class UserLogin
     {

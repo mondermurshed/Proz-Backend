@@ -20,7 +20,8 @@ namespace Proz_WebApi.Controllers
     //[Route("API/[controller]")] //this is used when you want it to use the name of the class automatically (this is bad because if you changed the class name in the future the class route will change as well and the frontend app must change the API calling as well, so making it static is the best choice).
     [Route("API/Games")]
     [ApiController]
-    [Authorize (AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]    
+    [Authorize (AuthenticationSchemes =JwtBearerDefaults.AuthenticationScheme)]//THIS IS USED IF YOU WANT THE USERS TO ACCESS YOUR ENDPOINT ONLY IF THEY Authorized already.   
+    //[AllowAnonymous] this is the reverse of [Authorize] in which all of the freely of use of these endpoints.
     public class GamesController : ControllerBase //The name of the controller should always ends with "Controller" word!
     {
         private readonly ILogger<GamesController> _loggerr;
@@ -169,7 +170,7 @@ namespace Proz_WebApi.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError,ex);
             }
-
+            
             return NoContent();
 
         }

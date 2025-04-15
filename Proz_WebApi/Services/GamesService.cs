@@ -51,8 +51,8 @@ namespace Proz_WebApi.Services
 
 
             Games_Model ModelToUpdate = game.Adapt<Games_Model>();
-            ModelToUpdate.created_at = DateTime.Now;
-            ModelToUpdate.updated_at = DateTime.Now;
+            ModelToUpdate.created_at = DateTime.UtcNow;
+            ModelToUpdate.updated_at = DateTime.UtcNow;
           await _db.Games.AddAsync(ModelToUpdate);
             await _db.SaveChangesAsync();
 
