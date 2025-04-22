@@ -38,6 +38,7 @@ namespace Proz_WebApi.Controllers
             userregister.Password,
             userregister.Email,
             userregister.Username
+            
         );
             if (!validation.IsValid)
             {
@@ -68,7 +69,12 @@ namespace Proz_WebApi.Controllers
             }
             else
             {
-                return BadRequest(new { Errors = result.Errors });
+                return BadRequest(new
+                { 
+                  Errors = result.Errors,
+                  Messages=result.Messages
+                 
+                });
             }
         }
         [Route("Login")]

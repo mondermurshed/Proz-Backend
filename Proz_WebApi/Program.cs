@@ -26,6 +26,7 @@ using Zxcvbn;
 using Proz_WebApi.Models;
 using Proz_WebApi.Helpers_Types;
 using System.ComponentModel;
+using Proz_WebApi.Helpers_Services;
 var builder = WebApplication.CreateBuilder(args);
 
 Maps.RegisterMappings();//noticed that Maps is an actual staic class that we have created ourselfs in the helpers folder, the RegisterMappings() is our static method that we have defined inside the Maps class. The program.cs is considered as or Main method so the code starts from here, and we want to call this method in every time we run the project (and of course before any request process) so mapster will know the golbal settings for its mapping process that it will done.
@@ -50,6 +51,8 @@ builder.Services.AddSingleton(JWTOptions); //this is to register the actual serv
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<AdminLogicService>();
 builder.Services.AddScoped<DepartmentManagerLogicService>();
+builder.Services.AddSingleton<ILookupNormalizer, EmailNormalizer>();
+//Scoped Transient Singleton
 //----------------------------------------------------------------------------------------
 builder.Services.AddAuthentication(options =>
 {
@@ -162,7 +165,7 @@ builder.Services.AddIdentity<ExtendedIdentityUsers, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = false; //if it's true then it will Forces passwords to include at least one symbol that is not a letter or number (e.g., !, @, #, $, %, etc.).
     options.Password.RequiredLength = 10;
     options.Password.RequiredUniqueChars = 2; //this will require the password to have atleast two unique characters, like user can't enter "AAAAAAA" as a password but can enter "AAAAAF1"
-
+    options.User.RequireUniqueEmail = true;
     // Lockout settings (THESE settings are preventing brute-force attacks by the users
     options.Lockout.MaxFailedAccessAttempts = 5; //if the user enters their password wrong 5 times in a row then their account will be locked
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15); //this control the time that their accounts will be locked for 

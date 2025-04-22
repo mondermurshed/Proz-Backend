@@ -19,6 +19,7 @@ using Proz_WebApi.Helpers_Types;
 using Proz_WebApi.Controllers;
 using Proz_WebApi.Exceptions;
 using Proz_WebApi.Models.Dto.Auth;
+using Proz_WebApi.Helpers_Services;
 
 namespace Proz_WebApi.Services
 {
@@ -43,16 +44,27 @@ namespace Proz_WebApi.Services
         {
             await using var transaction = await _dbcontext.Database.BeginTransactionAsync();
             var finalresult = new FinalResult();
+            EmailNormalizer normalizer = new EmailNormalizer();
+          
             try
             {
-
-            
+                string normalizedName = normalizer.NormalizeName(userregister.Username);
+                string normalizedEmail=normalizer.NormalizeEmail(userregister.Email);
+                var part = userregister.Email.Split('@');
+                bool existing =await EmailDomainValidator.IsValidEmailDomainAsync(part[1]);
+                if (existing == false)
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Add("The email domain that you have entered is not existed or it's not able to receive mails");
+                    finalresult.Messages.Add("Please enter a valid email's domain in order to register");
+                    return finalresult;
+                }
             var user = new ExtendedIdentityUsers
             {
                 UserName = userregister.Username,
                 Email = userregister.Email
                 
-
+               
                 
             };
      

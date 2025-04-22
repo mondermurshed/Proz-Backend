@@ -44,7 +44,8 @@ namespace Proz_WebApi.Controllers
                     Error = result.Errors,
                     Message = result.Messages,
                     NumberOfFailedProcesses = result.FailedCount,
-                    NumberOfSuccessProcesses = result.SuccessCount
+                    NumberOfSuccessProcesses = result.SuccessCount,
+                    NumberOfSkippedProcesses = result.SkippedCount
                 });
 
             }
@@ -52,13 +53,20 @@ namespace Proz_WebApi.Controllers
             {   Error=result.Errors,
                 Message = result.Messages,
                 NumberOfFailedProcesses = result.FailedCount,
-                NumberOfSuccessProcesses = result.SuccessCount
+                NumberOfSuccessProcesses = result.SuccessCount,
+                NumberOfSkippedProcesses=result.SkippedCount
             });
         }
 
         [HttpGet("Users/GetUsers")]
         public async Task<ActionResult<IEnumerable<ReturnUsersWithRolesAdminDto>>> GetUsers()
         {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
             var response = await _adminlogicservice.GetUsers();
             if (response == null || !response.Any())
             {
@@ -100,14 +108,17 @@ namespace Proz_WebApi.Controllers
                     Error = result.Errors,
                     Message = result.Messages,
                     NumberOfFailedProcesses = result.FailedCount,
-                    NumberOfSuccessProcesses = result.SuccessCount
+                    NumberOfSuccessProcesses = result.SuccessCount,
+                    NumberOfSkippedProcesses = result.SkippedCount
                 });
             }
                 return Ok(new
                 {
+                    Error = result.Errors,
                     Message = result.Messages,
                     NumberOfFailedProcesses = result.FailedCount,
-                    NumberOfSuccessProcesses = result.SuccessCount
+                    NumberOfSuccessProcesses = result.SuccessCount,
+                    NumberOfSkippedProcesses = result.SkippedCount
                 });
             
 

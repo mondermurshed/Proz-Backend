@@ -1,7 +1,7 @@
 ﻿namespace Proz_WebApi.Models.Dto.Admin
 {
 
-    public class UserInformation 
+    public class UserInformationClass
     {
     
         public string UserId { get; set; }
@@ -12,6 +12,6 @@
     public class RoleChangeRequestAdmin
     {
         // A collection of per-user role change instructions.
-        public List<UserInformation> UserInformation { get; set; }
+        public List<UserInformationClass> UserInformation { get; set; }
     }
 }

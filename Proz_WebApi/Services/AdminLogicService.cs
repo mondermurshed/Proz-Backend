@@ -82,17 +82,29 @@ namespace Proz_WebApi.Services
 
                     await transaction.RollbackAsync();
                     finalresult.Succeeded = false;
-                    finalresult.Messages.Add("Try to select only valid users and then try again. No changes was happened to the database");
+                    finalresult.Messages.Add("Try to select valid users and roles then try again. No changes was happened to the database");
                     return finalresult;
                 }
-              
+                var dedupedUserInfo = request.UserInformation
+         .GroupBy(ui => ui.UserId)
+         .Select(g => g.First())
+         .ToList();
+
                 // Process each user's role changes
-                foreach (var UserInformation in request.UserInformation)
+                foreach (var UserInformation in dedupedUserInfo)
                 {
                     var user = users.First(u => u.Id == UserInformation.UserId);
                     var currentRoles = await _userManager.GetRolesAsync(user);
+                    List<string> rolesToAdd = new List<string>();
 
                     // Remove existing roles if replacing
+                   if (currentRoles.Contains(AppRoles.Admin))
+                    {
+                        finalresult.FailedCount++;
+                        finalresult.Errors.Add($"We can't assign anything to the user {user.UserName} because he got the {AppRoles.Admin} role");
+                        continue;
+                    }
+         
                     if (UserInformation.ReplaceExisting && currentRoles.Any())
                     {
                         var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
@@ -102,22 +114,54 @@ namespace Proz_WebApi.Services
                             finalresult.Errors.Add($"Something went wrong for the user {user.UserName} because {string.Join(", ", removeResult.Errors.Select(e => e.Description), 1, removeResult.Errors.Count() - 1)} No operation was done for this user.");
                             continue;
                         }
-                   
-                    }
+                        rolesToAdd = UserInformation.NewRoles.ToList() ;
 
-                    // Determine roles to add
-                    List<string> rolesToAdd=new List<string>();
-                    if (UserInformation.ReplaceExisting)
-                    {
-                        rolesToAdd = UserInformation.NewRoles;
                     }
                     else
                     {
+                        foreach (var curRole in currentRoles)
+                        {
+                            if (UserInformation.NewRoles.Contains(curRole))
+                            {
+                                finalresult.Errors.Add($"User {user.UserName} already have the role {curRole}. Nothing will be done here.");
+                            }
+                        }
                         rolesToAdd = UserInformation.NewRoles.Except(currentRoles).ToList();
                     }
+               
+
+
+
 
                     if (rolesToAdd.Any())
                     {
+                        
+                        bool AddedUserRole = rolesToAdd.Contains(AppRoles.User);
+                        bool AddedEmployeeRole = rolesToAdd.Contains(AppRoles.Employee);
+                        bool ContainUserRole = currentRoles.Contains(AppRoles.User);
+                        bool ContainEmployee = currentRoles.Contains(AppRoles.Employee);
+                        
+                        //bool Case1 = ContainUserRole && ContainEmployeeRole;
+                        //bool Case2 = (ContainUserRole || ContainEmployeeRole) && (HasUserRole || HasEmployeeRole);
+                        //bool Case3 = (ContainUserRole || ContainEmployeeRole) && count > 1;
+                        bool Case1 = AddedUserRole && AddedEmployeeRole;
+                        bool Case2 = ContainUserRole || ContainEmployee;
+                        bool Case3=  (AddedUserRole || AddedEmployeeRole) && (ContainUserRole || ContainEmployee);
+                        bool Case4 = (AddedUserRole || AddedEmployeeRole) && rolesToAdd.Count > 1;
+                        if ((!UserInformation.ReplaceExisting) && (Case1 || Case2 || Case3))
+                        {
+                            finalresult.Errors.Add($"the user {user.UserName} can only have a user role or an employee role and not the both together.");
+                            finalresult.FailedCount++;
+                            finalresult.Messages.Add($"The policy of the system expect from the person to have either a '{AppRoles.User}' role or an '{AppRoles.Employee}' role only without having both together and without having any other role beside them.");
+                            continue;
+                        }
+                        else if (UserInformation.ReplaceExisting && (Case1 || Case4))
+                        {
+                            finalresult.Errors.Add($"the user {user.UserName} can only have a user role or an employee role and not the both together.");
+                            finalresult.FailedCount++;
+                            finalresult.Messages.Add($"The policy of the system expect from the person to have either a '{AppRoles.User}' role or an '{AppRoles.Employee}' role only without having both together and without having any other role beside them.");
+                            continue;
+                        }
                         var addResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
                         if (addResult.Succeeded)
                         {
@@ -126,23 +170,27 @@ namespace Proz_WebApi.Services
                             {
                                 finalresult.Messages.Add($"User {user.UserName} was successfully removed from its old roles and was assigned to new ones.");
                             }
+                            else
+                            {
+                                finalresult.Messages.Add($"User {user.UserName} was successfully assigned to the new roles");
+                            }
                       
                         }
                         else
                         {
+                            
                             finalresult.FailedCount++;
-                            finalresult.Errors.AddRange(addResult.Errors.Select(e =>
-                            $"{user.UserName} : {e.Description}"));
+                            finalresult.Errors.Add($"Something went wrong for the user {user.UserName} because {string.Join(", ", addResult.Errors.Select(e => e.Description), 1, addResult.Errors.Count() - 1)} No operation was done for this user.");
                             if (currentRoles.Any()&&UserInformation.ReplaceExisting)
                             {
                                 var result = await _userManager.AddToRolesAsync(user, currentRoles);
                                 if (result.Succeeded)
                                 {
-                                    finalresult.Messages.Add($"Something went wrong with assigning the new roles to the user {user.UserName} so we have just restored the old roles to the user again");
+                                    finalresult.Messages.Add($"Something went wrong while assigning the new roles to the user {user.UserName} so we have just restored the old roles to the user again");
                                 }
                                 else
                                 {
-                                    finalresult.Messages.Add($"Something went wrong with assigning the new roles to the user {user.UserName}");
+                                    finalresult.Messages.Add($"Something went wrong while assigning the new roles to the user {user.UserName} and while trying to restore the old user's roles we got another error {string.Join(", ", result.Errors.Select(e => e.Description), 1, result.Errors.Count() - 1)} ");
                                 }
                                
                             }
@@ -150,7 +198,14 @@ namespace Proz_WebApi.Services
                             
                         
                         }
+                        
                     }
+                    else
+                    {
+                        finalresult.SkippedCount++;
+                        finalresult.Messages.Add($"Nothing was performed for the user {user.UserName} because he was having these roles");
+                    }
+                   
                 }
 
                 // Commit if any successful updates
@@ -214,7 +269,7 @@ namespace Proz_WebApi.Services
                 var processedIds = new HashSet<string>(); //You'll use this to keep track of which user IDs have already been processed during your deletion loop. Benefit:       It ensures that each user ID is handled only once.The HashSet is an efficient way to verify if a particular user has already been processed(to avoid duplicate work or unintended side effects). So it's just a place to store the ID inside so we can know if a user was already processed (contain the a hashed id of the user already = the user was processed)
 
 
-
+             
                 
                
 
