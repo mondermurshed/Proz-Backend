@@ -27,6 +27,7 @@ using Proz_WebApi.Models;
 using Proz_WebApi.Helpers_Types;
 using System.ComponentModel;
 using Proz_WebApi.Helpers_Services;
+using EasyCaching.Core.Configurations;
 var builder = WebApplication.CreateBuilder(args);
 
 Maps.RegisterMappings();//noticed that Maps is an actual staic class that we have created ourselfs in the helpers folder, the RegisterMappings() is our static method that we have defined inside the Maps class. The program.cs is considered as or Main method so the code starts from here, and we want to call this method in every time we run the project (and of course before any request process) so mapster will know the golbal settings for its mapping process that it will done.
@@ -207,8 +208,19 @@ options.AddPolicy("AdminOnly", policy =>
     });
 });
 //----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+builder.Services.AddEasyCaching(options =>
+{
+    options.UseRedis(redisConfig =>
+    {
+        // Point to your Redis endpoint(s)
+        redisConfig.DBConfig.Endpoints.Add(new ServerEndPoint("localhost", 6379));
+        // redisConfig.DBConfig.Database = 0;  // optional
+    }, "redis1");          // name this provider "redis1"
+});
 var app = builder.Build();
-
+//For easy caching configuration.
+//----------------------------------------------------------------------------------------
 
 
 //using (var scope = app.Services.CreateScope())
