@@ -218,7 +218,7 @@ builder.Services.AddEasyCaching(options =>
         // redisConfig.DBConfig.Database = 0;  // optional
     }, "redis1");          // name this provider "redis1"
 });
-var app = builder.Build();
+
 //For easy caching configuration.
 //----------------------------------------------------------------------------------------
 
@@ -254,7 +254,7 @@ var app = builder.Build();
 //    }
 //}
 
-
+var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
