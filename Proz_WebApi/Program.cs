@@ -9,7 +9,6 @@ using Proz_WebApi;
 using Proz_WebApi.Controllers;
 using Proz_WebApi.Data;
 using Proz_WebApi.filters;
-using Proz_WebApi.Services;
 using Serilog;
 using Serilog.Events;
 using Serilog.Filters;
@@ -23,20 +22,31 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Zxcvbn;
-using Proz_WebApi.Models;
 using Proz_WebApi.Helpers_Types;
 using System.ComponentModel;
 using Proz_WebApi.Helpers_Services;
 using EasyCaching.Core.Configurations;
+using DnsClient;
+using Amazon.SimpleEmailV2;
+using Amazon.Extensions.NETCore.Setup;
+using Proz_WebApi.Services.DesktopServices;
+using EasyCaching.Serialization.SystemTextJson.Configurations;
+using Proz_WebApi.Models.DesktopModels.DatabaseTables;
+
+
+using StackExchange.Redis;
+
 var builder = WebApplication.CreateBuilder(args);
 
 Maps.RegisterMappings();//noticed that Maps is an actual staic class that we have created ourselfs in the helpers folder, the RegisterMappings() is our static method that we have defined inside the Maps class. The program.cs is considered as or Main method so the code starts from here, and we want to call this method in every time we run the project (and of course before any request process) so mapster will know the golbal settings for its mapping process that it will done.
 
-builder.Services.AddControllers().AddNewtonsoftJson();//please add this ".AddNewtonsoftJson()" in here when you install the packages
+
 builder.Services.AddControllers(options =>
 {
     options.Filters.Add<LogActivityFilter>();
-});
+})
+.AddNewtonsoftJson(); //please add this ".AddNewtonsoftJson()" in here when you install the packages
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 //here there is something very fun called Dependency Injection (DI) which is let ASP.NET automatically creates as well as pass object to.
@@ -52,8 +62,27 @@ builder.Services.AddSingleton(JWTOptions); //this is to register the actual serv
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<AdminLogicService>();
 builder.Services.AddScoped<DepartmentManagerLogicService>();
-builder.Services.AddSingleton<ILookupNormalizer, EmailNormalizer>();
+builder.Services.AddScoped<EmployeeLogicService>();
+//builder.Services.AddSingleton<ILookupNormalizer, EmailNormalizer>();
+builder.Services.AddScoped<EmailNormalizer>();
+builder.Services.AddScoped<DomainVerifier>();
+
+builder.Services.AddScoped<VerificationCodeService>();
+builder.Services.AddScoped<LookupClient>();
+
+builder.Services.AddSingleton<AesEncryptionService>();
+builder.Services.AddSingleton(PollyPolicyRegistry.CreateDefaultRetryPolicy());
+builder.Services.AddSingleton<SesEmailSender>();
+builder.Services.AddHttpContextAccessor(); //this is to register (add to DI) this interface. This is all you need — it registers IHttpContextAccessor as a singleton, which is how it’s supposed to work. This service is used to get the IP address of the user from the HTTP/HTTPs request.
 //Scoped Transient Singleton
+//----------------------------------------------------------------------------------------
+
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions()); // Load AWS config from appsettings.json. This just takes all the settings that you have defined inside the app.setting.json file in a section that says "AWS" AND LOAD THESE SETTINGS.
+builder.Services.AddAWSService<IAmazonSimpleEmailServiceV2>(); //// Add Amazon SES client
+
+
+//for AWS setup
+//----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
 builder.Services.AddAuthentication(options =>
 {
@@ -117,9 +146,14 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
 
-builder.Services.AddDbContext<ApplicationDbContext>(option =>
+builder.Services.AddDbContext<ApplicationDbContext_Desktop>(option => //for desktop
 {
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSqlConnection"));
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DesktopDBSqlConnection"));
+});
+
+builder.Services.AddDbContext<ApplicationDbContext_WebApp>(option => //for web app
+{
+    option.UseSqlServer(builder.Configuration.GetConnectionString("WebAppDBSqlConnection"));
 });
 //this is for sqlserver 
 //----------------------------------------------------------------------------------------
@@ -152,12 +186,12 @@ builder.Services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>()
 //----------------------------------------------------------------------------------------
 
 //----------------------------------------------------------------------------------------
-builder.Services.AddIdentity<ExtendedIdentityUsers, IdentityRole>(options =>
+builder.Services.AddIdentity<ExtendedIdentityUsersDesktop, ExtendedIdentityRolesDesktop>(options =>
 {
     // Username settings
     options.User.AllowedUserNameCharacters =
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    options.User.RequireUniqueEmail = true; //this let the framework accepts only unique emails that wasn't defined before in the system
+    options.User.RequireUniqueEmail = false; //this let the framework accepts only unique emails that wasn't defined before in the system
  
     // Password settings
     options.Password.RequireDigit = true;
@@ -166,41 +200,52 @@ builder.Services.AddIdentity<ExtendedIdentityUsers, IdentityRole>(options =>
     options.Password.RequireNonAlphanumeric = false; //if it's true then it will Forces passwords to include at least one symbol that is not a letter or number (e.g., !, @, #, $, %, etc.).
     options.Password.RequiredLength = 10;
     options.Password.RequiredUniqueChars = 2; //this will require the password to have atleast two unique characters, like user can't enter "AAAAAAA" as a password but can enter "AAAAAF1"
-    options.User.RequireUniqueEmail = true;
+ 
     // Lockout settings (THESE settings are preventing brute-force attacks by the users
-    options.Lockout.MaxFailedAccessAttempts = 5; //if the user enters their password wrong 5 times in a row then their account will be locked
+    options.Lockout.MaxFailedAccessAttempts = 10; //if the user enters their password wrong 5 times in a row then their account will be locked
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15); //this control the time that their accounts will be locked for 
     options.Lockout.AllowedForNewUsers = true; //this mean apply these rules (the MaxFailedAccessAttempts and DefaultLockoutTimeSpan) even to the new registerd users.
 
 
-}).AddEntityFrameworkStores<ApplicationDbContext>()
-.AddDefaultTokenProviders();
+}).AddEntityFrameworkStores<ApplicationDbContext_Desktop>()
+.AddDefaultTokenProviders(); //this is required for identity's token systen to work like the token that identity package generate to reset the user's password. If this wasn't here identity will not be able to do these features.
 
+builder.Services.Configure<DataProtectionTokenProviderOptions>(option =>
+{
+    option.TokenLifespan = TimeSpan.FromMinutes(30); //we are making any tokens that identity generate to live 30 minutes (the default was 1 hour)
+});
 //For identity UseAuthentication
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
-builder.Services.AddAuthorization(options =>
-{
-// Policy using Identity roles
-options.AddPolicy("AdminOnly", policy =>
-{
-    policy.RequireRole(AppRoles.Admin);
-   
-    
-});
+     builder.Services.AddAuthorization(options => //you can get this Authorization system from Microsoft.AspNetCore.Authorization package, which is automatically included when you: Create an ASP.NET Core project or when you Install the Microsoft.AspNetCore.Identity package. No extra NuGet packages needed!
+     {
+     // Policy using Identity roles
+     options.AddPolicy("Admin", policy =>
+     {
+         policy.RequireRole(AppRoles_Desktop.Admin);
+        
+         
+     });
        
     
-   
+    options.AddPolicy("HRManager", policy =>
+        policy.RequireRole(AppRoles_Desktop.Admin, AppRoles_Desktop.HRManager));
 
-    options.AddPolicy("HRManagement", policy =>
-        policy.RequireRole(AppRoles.Admin, AppRoles.HRManager));
-
-    options.AddPolicy("DepartmentManagement", policy =>
+    options.AddPolicy("DepartmentManager", policy =>
     {
-        policy.RequireRole(AppRoles.Admin, AppRoles.HRManager, AppRoles.DepartmentManager);
+        policy.RequireRole(AppRoles_Desktop.Admin, AppRoles_Desktop.HRManager, AppRoles_Desktop.DepartmentManager);
         //policy.RequireClaim("DepartmentApproved", "true");
     });
+    options.AddPolicy("Employee", policy =>
+    {
+        policy.RequireRole(AppRoles_Desktop.Admin, AppRoles_Desktop.HRManager, AppRoles_Desktop.DepartmentManager,AppRoles_Desktop.Employee);
+        
+    });
+    options.AddPolicy("User", policy =>
+    {
+        policy.RequireRole(AppRoles_Desktop.Admin, AppRoles_Desktop.HRManager, AppRoles_Desktop.DepartmentManager, AppRoles_Desktop.Employee, AppRoles_Desktop.User);
 
+    });
     options.AddPolicy("TrustedUser", policy =>
     {
         policy.RequireRole("User", "Moderator");
@@ -214,27 +259,38 @@ builder.Services.AddEasyCaching(options =>
     options.UseRedis(redisConfig =>
     {
         // Point to your Redis endpoint(s)
-        redisConfig.DBConfig.Endpoints.Add(new ServerEndPoint("localhost", 6379));
+        redisConfig.DBConfig.Endpoints.Add(new ServerEndPoint("localhost", 6379)); 
         // redisConfig.DBConfig.Database = 0;  // optional
     }, "redis1");          // name this provider "redis1"
+    options.WithSystemTextJson("redis1");
 });
 
 //For easy caching configuration.
 //----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowResetPage", policy =>
+    {
+        policy.WithOrigins("https://reset.prozsupport.xyz") //this will make anyone in public who has the URL in his browser https://reset.prozsupport.xyz to request any endpoint in this application
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-//    List<string> roles = new List<string> { AppRoles.Admin, AppRoles.HRManager, AppRoles.DepartmentManager, AppRoles.Employee, AppRoles.User }; // add more roles as needed
 
-//    foreach (var role in roles)
-//        if (!await roleManager.RoleExistsAsync(role))
-//        {
-//            await roleManager.CreateAsync(new IdentityRole(role));
-//        }
 
-//}
+
+
+
+
+
+
+
+//CORS Policy
+//----------------------------------------------------------------------------------------
+
 
 
 //using (var scope = app.Services.CreateScope())
@@ -255,16 +311,53 @@ builder.Services.AddEasyCaching(options =>
 //}
 
 var app = builder.Build();
+
+//using (var scope = app.Services.CreateScope())
+//{
+//    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ExtendedIdentityRolesDesktop>>();
+//    //default hex colors, user = #21b559    employee = #2181b5   department manager = #2621b5    hr manager =  #9c21b5   admin = #b52121
+//    var roleName = AppRoles_Desktop.Admin;
+//    var roleColorCode = "#b52121";  
+
+//    if (!await roleManager.RoleExistsAsync(roleName))
+//    {
+//        var role = new ExtendedIdentityRolesDesktop
+//        {
+//            Name = roleName,
+//            RoleColorCode = roleColorCode
+//        };
+
+//        var result = await roleManager.CreateAsync(role);
+
+//        if (!result.Succeeded)
+//        {
+//            foreach (var error in result.Errors)
+//            {
+//                Console.WriteLine($"Role creation error: {error.Description}");
+//            }
+//        }
+//    }
+//}
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseCors("AllowResetPage");
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+app.Use(async (context, next) =>
+{
+    Console.WriteLine($"Incoming request: {context.Request.Method} {context.Request.Path}");
+    await next();
+});
 app.Run();
 
 

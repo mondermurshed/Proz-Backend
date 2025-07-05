@@ -1,8 +1,8 @@
 ﻿using Mapster;
-using Proz_WebApi.Models;
-using Proz_WebApi.Models.Dto;
-using Proz_WebApi.Models.Dto.Admin;
-using Proz_WebApi.Models.Dto.Auth;
+using Proz_WebApi.Models.DesktopModels.DatabaseTables;
+using Proz_WebApi.Models.DesktopModels.Dto;
+using Proz_WebApi.Models.DesktopModels.Dto.Admin;
+using Proz_WebApi.Models.DesktopModels.Dto.Auth;
 using System.Runtime.Intrinsics.X86;
 
 public static class Maps
@@ -42,13 +42,13 @@ public static class Maps
             .Map(dest => dest.Username, src => src.Username)
             .Map(dest => dest.Password, src => src.Password).IgnoreNonMapped(true);
              
-             TypeAdapterConfig<ExtendedIdentityUsers, ReturnUsersWithRolesAdminDto>
+             TypeAdapterConfig<ExtendedIdentityUsersDesktop, ReturnUsersWithRolesAdminDto>
             .NewConfig()
             .Map(dest => dest.id, src => src.Id)
             .Map(dest => dest.UserName, src => src.UserName)
             .Map(dest => dest.Email, src => src.Email)
             .Map(dest => dest.Roles, src =>
-            src.UserRoles.Select(ur => ur.Role.Name).ToList());
+            src.UserRolesNA.Select(ur => ur.RoleNA.Name).ToList());
 
 
     }
