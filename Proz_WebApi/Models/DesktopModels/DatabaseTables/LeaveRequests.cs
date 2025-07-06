@@ -19,19 +19,24 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
     [Unicode]
     [Required]
      public string Reason { get; set; }
-     public bool IsEditable { get; set; } = true; //the user can edit or fix his text ? it will not be editable if a department manager or hr manager/admin reply to pin his request
+    
 
     public DateTime LastUpdate {  get; set; } = DateTime.UtcNow;
-    public bool? HasSanctions {  get; set; }
+    public DateTime? LastUpdateDM { get; set; } 
+    public DateTime? LastUpdateHR { get; set; } 
+        public bool? HasSanctions {  get; set; }
     public bool? AgreedOn { get; set; }
-
-    [MaxLength(15)]
+    public bool? Completed { get; set; } = false;
+        [MaxLength(15)]
+        [Unicode]
+     public string RequesterStatus { get; set; } = "Waiting";
+     [MaxLength(15)]
     [Unicode]
     public string? DMStatus {  get; set; }
     [MaxLength(15)]
     [Unicode]
     public string? FinalStatus {  get; set; }
-    public DateTime Created_At {  get; set; } = DateTime.UtcNow;
+   
     [MaxLength(250)]
     [Unicode]
     public string? DepartmentManagerComment {  get; set; }

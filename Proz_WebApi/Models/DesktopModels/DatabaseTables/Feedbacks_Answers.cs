@@ -13,10 +13,11 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
         [StringLength(1500, MinimumLength = 3)]
         [Unicode]
         [Required]
-        public string Answer {  get; set; }
-        public DateTime ResponseDateTime { get; set; } = DateTime.UtcNow;
-       public bool IsEditAble { get; set; } = true;
-       public Guid Feedback_FK { get; set; }
+        public string Answer { get; set; }
+
+        public bool IsSeen { get; set; } = false;
+         public DateTime LastUpdated {  get; set; } = DateTime.UtcNow;
+        public Guid Feedback_FK { get; set; }
        
        public Feedbacks FeedbackNA { get; set; }
 

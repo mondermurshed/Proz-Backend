@@ -21,7 +21,7 @@ namespace Proz_WebApi.Configurations
                 .IsUnicode()
                 .IsRequired();
 
-            builder.Property(f => f.FeedbackDate)
+            builder.Property(f => f.LastUpdated)
                 .HasColumnType("datetime2");
 
             builder.HasOne(f => f.EmployeeNA)

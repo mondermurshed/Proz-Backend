@@ -21,10 +21,18 @@ namespace Proz_WebApi.Configurations
                 .IsUnicode()
                 .IsRequired();
 
-            builder.Property(l => l.IsEditable);
+           
 
             builder.Property(l => l.LastUpdate)
                 .HasColumnType("datetime2");
+            builder.Property(l => l.LastUpdateDM)
+                .HasColumnType("datetime2");
+            builder.Property(l => l.LastUpdateHR
+            )
+                .HasColumnType("datetime2");
+            builder.Property(l => l.RequesterStatus)
+                .HasMaxLength(15)
+                .IsUnicode();
 
             builder.Property(l => l.DMStatus)
                 .HasMaxLength(15)
@@ -34,8 +42,7 @@ namespace Proz_WebApi.Configurations
                 .HasMaxLength(15)
                 .IsUnicode();
 
-            builder.Property(l => l.Created_At)
-                .HasColumnType("datetime2");
+         
 
             builder.Property(l => l.DepartmentManagerComment)
                 .HasMaxLength(250)

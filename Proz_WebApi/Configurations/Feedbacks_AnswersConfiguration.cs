@@ -14,8 +14,9 @@ namespace Proz_WebApi.Configurations
                 .HasMaxLength(1500)
                 .IsUnicode()
                 .IsRequired();
+ 
 
-            builder.Property(a => a.ResponseDateTime)
+            builder.Property(a => a.LastUpdated)
                 .HasColumnType("datetime2");
 
             builder.HasOne(a => a.EmployeeNA)
