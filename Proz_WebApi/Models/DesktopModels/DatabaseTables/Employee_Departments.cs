@@ -12,23 +12,13 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
         public Guid Id { get; set; }
         [Precision(18, 2)]
         public Double Salary { get; set; }
-        [MaxLength(4)]
-        [Unicode]
-        [Required]
-        public string Salary_Currency_Type { get; set; }
+      
         [Precision(18, 2)]
         public double? Company_Bonus { get; set; }
-        [MaxLength(4)]
-        [Unicode]
-        public string? Company_Bonus_Currency_Type { get; set; }
-        [MaxLength(7)]
-        [Unicode]
-        [Required]
-        public string Payment_Frequency {  get; set; }
         public DateOnly StartDate { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow); 
         public Guid Employee_FK { get; set; }
         public Employees EmployeeNA { get; set; }
-        public int Department_FK { get; set; }
+        public Guid Department_FK { get; set; }
         public Departments DepartmentNA { get; set; }
         public int Shift_FK {  get; set; }
         public ShiftInformationTable ShiftNA { get; set; }    

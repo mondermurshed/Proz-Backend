@@ -20,17 +20,11 @@ namespace Proz_WebApi.Configurations
 
             builder.Property(s => s.PaymentCounter);
             
-            builder.OwnsOne(s => s.EmployeeBonus, bonus =>
-            {
-                bonus.Property(b => b.Amount).HasPrecision(18, 2);
-                bonus.Property(b => b.Currency).HasMaxLength(4).IsUnicode().IsRequired();
-            });
+         builder.Property(s=>s.EmployeeBonus).HasPrecision(18, 2);
 
-            builder.OwnsOne(s => s.Employee_Deduction, deduction =>
-            {
-                deduction.Property(d => d.Amount).HasPrecision(18, 2);
-                deduction.Property(d => d.Currency).HasMaxLength(4).IsUnicode().IsRequired();
-            });
+            builder.Property(s => s.Employee_Deduction).HasPrecision(18, 2);
+
+
 
             builder.Property(s => s.Version)
                 .IsRowVersion();

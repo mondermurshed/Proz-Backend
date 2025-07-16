@@ -22,7 +22,7 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
     [MaxLength(25)]
     [Unicode]
     [Required]
-    public string Type {  get; set; }
+    public string? Type {  get; set; }
     [MaxLength(6)]
     [Unicode]
     [Required]

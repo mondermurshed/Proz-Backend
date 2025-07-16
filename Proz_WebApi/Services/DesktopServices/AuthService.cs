@@ -243,23 +243,23 @@ namespace Proz_WebApi.Services.DesktopServices
                 return finalResult;
             }
 
-            var existingData = await _managingTempData.GetUserRegistrationDataTemp(normalizedEmail);
-            if (existingData == null)
-            {
-                finalResult.Succeeded = false;
-                finalResult.Errors.Add("No pending registration found for this email.");
-                return finalResult;
-            }
+          
 
             try
             {
                 if (await _managingTempData.IsInCooldownAsync(normalizedEmail))
                 {
                     finalResult.Succeeded = false;
-                    finalResult.Errors.Add("Please wait few seconds from the moment you sent the previous code");
+                    finalResult.Errors.Add("Please wait few seconds from the moment you sent the previous code!");
                     return finalResult;
                 }
-                
+                var existingData = await _managingTempData.GetUserRegistrationDataTemp(normalizedEmail);
+                if (existingData == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("No pending registration found for this email.");
+                    return finalResult;
+                }
                 string newCode = await _managingTempData.GenerateAndStoreCodeAsync(normalizedEmail);
                 await _managingTempData.StoreUserRegistrationDataTemp(existingData, normalizedEmail);
                if(!await _EmailSender.SendVerificationCodeAsync(normalizedEmail, newCode))
@@ -465,11 +465,21 @@ namespace Proz_WebApi.Services.DesktopServices
                 try
                 {
 
-                var user = await _userManager.FindByNameAsync(userlogin.Username); //here is to get the user object with all the row's information
-                if (user == null)
+                    ExtendedIdentityUsersDesktop? user;
+
+                    if (userlogin.Username.Contains("@"))
+                    {
+                        user = await _userManager.FindByEmailAsync(userlogin.Username);
+                    }
+                    else
+                    {
+                        user = await _userManager.FindByNameAsync(userlogin.Username);
+                    }
+
+                    if (user == null)
                 {
                     finalresult.Succeeded = false;
-                    finalresult.Errors.Clear();
+                  
                     finalresult.Errors.Add("User is not located inside the database");
                     return finalresult;
                 }
@@ -477,8 +487,8 @@ namespace Proz_WebApi.Services.DesktopServices
                 if (!await _userManager.CheckPasswordAsync(user, userlogin.Password)) //since our password is stored into the database as a hashed password (for security puposes so no one who has access to the database to know the users passwords) we can only compare the user's provided password to the user's hashed password that is stored in the database only by CheckPasswordAsync method.
                 {
                     finalresult.Succeeded = false;
-                    finalresult.Errors.Clear();
-                    finalresult.Errors.Add("Password is not correct");
+                  
+                    finalresult.Errors.Add("An account was found but the password is not correct");
                     return finalresult;
                 }
 
@@ -568,8 +578,11 @@ namespace Proz_WebApi.Services.DesktopServices
 
         public async Task<FinalResult> RefreshAToken(AccessAndRefreshTokenPassing request)
         {
-            // 1. Hash the incoming refresh token with SHA256
-            using var sha256 = SHA256.Create(); //go read the lines (the last lines maybe ?? idk go check them) of the GenerateRefreshToken method to understand these.
+            using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+            {
+           
+                // 1. Hash the incoming refresh token with SHA256
+                using var sha256 = SHA256.Create(); //go read the lines (the last lines maybe ?? idk go check them) of the GenerateRefreshToken method to understand these.
             var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(request.RefreshToken));
             var tokenHash = Convert.ToBase64String(hashBytes);
             var finalresult = new FinalResult();
@@ -609,12 +622,85 @@ namespace Proz_WebApi.Services.DesktopServices
                 TokenHash = newHash,
                 ExpiresAt = DateTime.UtcNow.AddDays(7)
             });
-
+           
             await _dbcontext.SaveChangesAsync();
+            finalresult.Succeeded = true;
             finalresult.AuthSuccess(newAccessToken, newRefreshToken);
+                scope.Complete();
             return finalresult;
-
+            }
         }
+
+
+        public async Task<FinalResult> ChangeUsernameAsync(string userId, ChangeUsernameDTO dto)
+        {
+            var finalResult = new FinalResult();
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                finalResult.Succeeded = false;
+                finalResult.Errors.Add("User not found.");
+                return finalResult;
+            }
+
+            if (!await _userManager.CheckPasswordAsync(user, dto.CurrentPassword))
+            {
+                finalResult.Succeeded = false;
+                finalResult.Errors.Add("Current password is incorrect.");
+                return finalResult;
+            }
+
+            string newUsername = _emailNormalizer.NormalizeName(dto.NewUsername);
+            var existingUser = await _userManager.FindByNameAsync(newUsername);
+            if (existingUser != null && existingUser.Id != user.Id)
+            {
+                finalResult.Succeeded = false;
+                finalResult.Errors.Add("Username already taken. Try a different one.");
+                return finalResult;
+            }
+
+            user.UserName = newUsername;
+            user.NormalizedUserName = newUsername.ToUpper(); // Important for ASP.NET Identity lookups
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                finalResult.Succeeded = false;
+                finalResult.Errors.AddRange(result.Errors.Select(e => e.Description));
+                return finalResult;
+            }
+
+            finalResult.Succeeded = true;
+            finalResult.Messages.Add("Username changed successfully.");
+            return finalResult;
+        }
+
+        public async Task<FinalResult> ChangePasswordAsync(string userId, ChangePasswordDTO dto)
+        {
+            var finalResult = new FinalResult();
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                finalResult.Succeeded = false;
+                finalResult.Errors.Add("User not found.");
+                return finalResult;
+            }
+
+            var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
+            if (!result.Succeeded)
+            {
+                finalResult.Succeeded = false;
+                finalResult.Errors.AddRange(result.Errors.Select(e => e.Description));
+                return finalResult;
+            }
+
+            finalResult.Succeeded = true;
+            finalResult.Messages.Add("Password changed successfully.");
+            return finalResult;
+        }
+
 
 
 

@@ -52,8 +52,7 @@ namespace Proz_WebApi.Validators.DesktopValidators
 //the difference betten null and empyt rules are that the NotNull() is dumb, it Applies to: Reference types (string, class, collections, etc.) but doesn't effect the value types. 
 //the NotEmpty() will make sure that the property has meaningful content. For example it can detect if the user entred whitespaces like "    " < this is unvalid. for value types (int, decimal, etc.): the default value (e.g., 0 for int) will also be unacceptable! 
 .NotEmpty().WithErrorCode("Username is empty!")
-.MinimumLength(8).WithErrorCode("Username should be atleast 8 characters!")
-.MaximumLength(25).WithErrorCode("Username has reached the maximum number to be entered which is 25 characters")
+.MinimumLength(8).WithErrorCode("Username/email should be atleast 8 characters!")
 .Matches(@"^[A-Za-z].*").WithErrorCode("Username should starts only with a letter.");
 
             RuleFor(p => p.Password)

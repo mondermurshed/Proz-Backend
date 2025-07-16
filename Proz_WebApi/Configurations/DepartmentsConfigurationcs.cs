@@ -9,11 +9,14 @@ namespace Proz_WebApi.Configurations
         public void Configure(EntityTypeBuilder<Departments> builder)
         {
             builder.HasKey(d => d.Id);
-
+            builder.Property(ed => ed.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
             builder.Property(d => d.DepartmentName)
                 .HasMaxLength(100)
                 .IsUnicode()
                 .IsRequired();
+
+            builder.Property(p => p.DepartmentDefaultSalary)
+              .HasPrecision(18, 2);
 
             builder.HasOne(d => d.ManagerNA)
              .WithMany(e => e.ManagerAtNA)

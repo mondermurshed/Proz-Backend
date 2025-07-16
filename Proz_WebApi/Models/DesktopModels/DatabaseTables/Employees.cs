@@ -28,6 +28,9 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
         public ICollection<LeaveRequests> DepartmentManagerLeaveRequestsDealsNA { get; set; } = new List<LeaveRequests>();
         public ICollection<LeaveRequests> ADHRLeaveRequestsDealsNA { get; set; } = new List<LeaveRequests>();
         public ICollection<Notifications> NotificationsNA { get; set; } = new List<Notifications>();
-       
+
+        public ICollection<LeaveRequestsHigherRole> ManagerLeaveRequestsNA { get; set; } = new List<LeaveRequestsHigherRole>();
+        public ICollection<LeaveRequestsHigherRole> HRManagerLeaveRequestsNA { get; set; } = new List<LeaveRequestsHigherRole>();
+
     }
 }

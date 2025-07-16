@@ -8,11 +8,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Proz_WebApi.Models.DesktopModels;
 using Proz_WebApi.Models.DesktopModels.Dto.Auth;
+using Proz_WebApi.Models.DesktopModels.DTO;
 using Proz_WebApi.Models.DesktopModels.DTO.Auth;
 using Proz_WebApi.Services.DesktopServices;
 using Zxcvbn;
@@ -46,15 +48,21 @@ namespace Proz_WebApi.Controllers.DesktopControllers
             userregister.Username
 
         );
+            var MessageService = new List<string>();
             if (!validation.IsValid)
             {
-                return BadRequest(new
+                MessageService.Add(validation.Message);
+                return BadRequest(new RegisterResponse
                 {
-                    validation.Message,
-                    validation.Score,
-                    validation.Strength,
-                    validation.CrackTime,
-                    validation.Suggestions
+                    Message = MessageService,
+                    Error = null,
+                    Score = validation.Score,
+                    Strength = validation.Strength,
+                    CrackTime = validation.CrackTime,
+                    Suggestions = validation.Suggestions.ToList(),
+                    PasswordCause = true
+
+
                 });
             }
 
@@ -63,23 +71,34 @@ namespace Proz_WebApi.Controllers.DesktopControllers
             var result = await _authservice.RegisterAUserStageOne(userregister);
             if (result.Succeeded)
             {
-                string PasswordInfo = validation.Message;
-                string PasswordStrength = validation.Strength;
-                int PasswordRating = validation.Score;
-                return Ok(new
+
+
+               
+                MessageService.Add($"A verification code has been sent successfully to your email service, please re type the code here. The code validity period is one minute");
+
+                
+
+
+                return Ok(new RegisterResponse
                 {
-                    Message = $"A verification code has been sent successfully to your email service, please re type the code here. {Environment.NewLine} The code validity period is one minute",
-                    PasswordInfo,
-                    PasswordStrength,
-                    PasswordRating
+                    Message = MessageService,
+                    Error = null,
+                    CrackTime = null,
+                    Suggestions = null,
+                    Strength = validation.Strength,
+                    Score = validation.Score
                 });
             }
             else
             {
-                return BadRequest(new
+              
+                return BadRequest(new RegisterResponse
                 {
                    Message = result.Messages,
-                   Error = result.Errors
+                   Error = result.Errors,
+                    Suggestions = null,
+                    CrackTime = null,
+                    Strength = null
 
                 });
             }
@@ -90,12 +109,14 @@ namespace Proz_WebApi.Controllers.DesktopControllers
         public async Task<ActionResult<string>> RegisterAUserStageTwo([FromBody] UserRegistrationFinal userregister)
         {
             var result = await _authservice.RegisterAUserStageTwo(userregister);
+            var MessageService = new List<string>();
             if (result.Succeeded)
             {
-
-                return Ok(new
+             MessageService.Add("Your account has been successfully created!");
+                return Ok(new AuthResponseDTO
                 {
-                    Message = "Your account has been successfully created!"
+                    Message = MessageService,
+                    Error = null
                 });
             }
             else
@@ -118,14 +139,16 @@ namespace Proz_WebApi.Controllers.DesktopControllers
             if (result.Succeeded)
             {
 
-                return Ok(new
+                return Ok(new AuthResponseDTO
                 {
-                    Message = result.Messages
+                    Message = result.Messages,
+                    Error=null
+                    
                 });
             }
             else
             {
-                return BadRequest(new
+                return BadRequest(new AuthResponseDTO
                 {
                     Message = result.Messages,
                     Error = result.Errors
@@ -192,15 +215,21 @@ namespace Proz_WebApi.Controllers.DesktopControllers
 
             if (result.Succeeded)
             {
-                return Ok(new
+                return Ok(new LoginResultDTO
                 {
-                    result.AccessToken,
-                    result.RefreshToken
+                  Token=  result.AccessToken,
+                  RefreshToken =  result.RefreshToken,
+                  Errors = null
                 });
             }
             else
             {
-                return Unauthorized(new { result.Errors });
+                return Unauthorized(new LoginResultDTO
+                {
+                    Token = null,
+                    RefreshToken = null,
+                    Errors =  result.Errors
+                });
             }
         }
         [Route("ForgotMyPassword")]
@@ -211,24 +240,21 @@ namespace Proz_WebApi.Controllers.DesktopControllers
             var result = await _authservice.ForgotMyPassword(foregetpassword);
             if (result.Succeeded)
             {
-                return Ok(new
+                return Ok(new AuthResponseDTO
                 {
-                   Message = result.Messages
+                    Message = result.Messages,
+                    Error = null
                 });
             }
             else
             {
-                if (result.Messages==null)
-                return BadRequest(new
-                {
-               Error = result.Errors
-                });
+          
 
-             return BadRequest(new
+             return BadRequest(new AuthResponseDTO
              {
            Message =  result.Messages,
            Error = result.Errors
-                });
+             });
             }
               
 
@@ -286,14 +312,80 @@ namespace Proz_WebApi.Controllers.DesktopControllers
             var result = await _authservice.RefreshAToken(refreshToken);
             if (!result.Succeeded)
             {
-                return Unauthorized(new { result.Errors });
+                return Unauthorized(new LoginResultDTO
+                { 
+                    Token=null,
+                    RefreshToken = null,
+                    Errors= result.Errors
+                
+                });
             }
             string YourNewAccessToken = result.AccessToken;
             string YourNewRefreshToken = result.RefreshToken;
-            return Ok(new
+            return Ok(new LoginResultDTO
             {
-                YourNewAccessToken,
-                YourNewRefreshToken
+             Token = YourNewAccessToken,
+             RefreshToken = YourNewRefreshToken,
+             Errors = null
+            });
+        }
+
+
+        [HttpPost("ChangeUsername")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //[AllowAnonymous] do NOT make this endpoint [Authorize] because the main goal of this endpoint (The refresh token) purpose is to renew an expired access token, so the endpoint must work even if the access token is invalid/expired.
+        public async Task<ActionResult<string>> ChangeUserName([FromBody] ChangeUsernameDTO Request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId) ||Request.NewUsername==null ||Request.NewUsername==null)
+            {
+
+                return Unauthorized("The Requester is unknown or some null data was entered");
+            }
+            var result = await _authservice.ChangeUsernameAsync(currentUserId,Request);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new ChangeUsernamePasswordDTO
+                {
+                    Message = null,
+                    Errors = result.Errors
+
+                });
+            }
+            return Ok(new ChangeUsernamePasswordDTO
+            {
+                Message = result.Messages,
+                Errors = null
+            });
+        }
+
+        [HttpPost("ChangePassword")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        //[AllowAnonymous] do NOT make this endpoint [Authorize] because the main goal of this endpoint (The refresh token) purpose is to renew an expired access token, so the endpoint must work even if the access token is invalid/expired.
+        public async Task<ActionResult<string>> ChangePassword([FromBody] ChangePasswordDTO Request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId) || Request.CurrentPassword == null || Request.NewPassword == null)
+            {
+
+                return Unauthorized("The Requester is unknown or some null data was entered");
+            }
+            var result = await _authservice.ChangePasswordAsync(currentUserId, Request);
+            if (!result.Succeeded)
+            {
+                return BadRequest(new ChangeUsernamePasswordDTO
+                {
+                    Message = null,
+                    Errors = result.Errors
+
+                });
+            }
+            return Ok(new ChangeUsernamePasswordDTO
+            {
+                Message = result.Messages,
+                Errors = null
             });
         }
     }

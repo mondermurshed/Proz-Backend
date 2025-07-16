@@ -442,7 +442,7 @@ public class SesEmailSender
             var key = $"verification:{email}";
             var value = Random.Shared.Next(100000, 999999).ToString(); //here it must be string because redis excepts only string values and not pure int, so this is why the code variable will be string
 
-            // Store with 15-minute TTL
+            
             await _cache.SetAsync(key, value, TimeSpan.FromSeconds(90));
             return value;
         }
@@ -475,14 +475,21 @@ public class SesEmailSender
         {
             var key = $"cooldown:{email}";
             var result = await _cache.GetAsync<string>(key);
+           
             return result.HasValue;
         }
 
         public async Task StartCooldownAsync(string email)
         {
             var key = $"cooldown:{email}";
-            await _cache.SetAsync(key, "cooling", TimeSpan.FromSeconds(15));
+            var exists = await _cache.ExistsAsync(key);
+
+            if (!exists)
+            {
+                await _cache.SetAsync(key, "cooling", TimeSpan.FromSeconds(5));
+            }
         }
+
     }
 
 

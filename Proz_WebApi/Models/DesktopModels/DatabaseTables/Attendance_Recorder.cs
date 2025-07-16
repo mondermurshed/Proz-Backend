@@ -9,7 +9,7 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
     { //value types like int, double or timeonly or timedate or GUID are always not null by default so you don't have to put [Required] above them, you only do that for reference types, and to make refrence type + value types to be nullable then add '?' at the end of the property type.
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         public TimeOnly CheckInTime { get; set; } = TimeOnly.FromDateTime(DateTime.UtcNow);
 
@@ -30,7 +30,8 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
     [Unicode]
       
     public string? CheckOutComment { get; set; }
-    public Guid EmployeeDepartment_FK { get; set; }
+    public DateOnly DateOfAttendance { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
+     public Guid EmployeeDepartment_FK { get; set; }
     public Employee_Departments EmployeeDepartmentNA { get; set; }
     }
 }

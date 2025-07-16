@@ -16,34 +16,22 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
     public int PaymentCounter {  get; set; }
     [Precision(18, 2)]
     public double Salary {  get; set; }
-    [MaxLength(4)]
-    [Unicode]
-    [Required]
-    public string SalaryCurrencyType {  get; set; }
+
     [Precision(18, 2)]
     public double FixedBonus {  get; set; }
-    [MaxLength(4)]
-    [Unicode]
-    [Required]
-    public string FixedBonusCurrencyType {  get; set; }
+  
     [StringLength(150, MinimumLength = 25)]
     [Unicode]
     public string? FixedBonusNote { get; set; }
     [Precision(18, 2)]
     public double PerformanceBonus {  get; set; }
-    [MaxLength(4)]
-    [Unicode]
-    [Required]
-    public string PerformanceBonusCurrencyType {  get; set; }
+ 
     [StringLength(150, MinimumLength = 25)]
     [Unicode]
     public string? PerformanceBonusNote {  get; set; }
     [Precision(18, 2)]
     public double Deduction {  get; set; }
-    [MaxLength(4)]
-    [Unicode]
-    [Required]
-    public string DeductionCurrencyType {  get; set; }
+
     [StringLength(150, MinimumLength = 25)]
     [Unicode]
     public string? DeductionNote {  get; set; }

@@ -9,6 +9,7 @@ namespace Proz_WebApi.Configurations
         public void Configure(EntityTypeBuilder<Attendance_Recorder> builder)
         {
             builder.HasKey(a => a.Id);
+            builder.Property(ed => ed.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
 
             builder.Property(a => a.CheckInTime)
                 .HasColumnType("time");

@@ -35,6 +35,7 @@ using Proz_WebApi.Models.DesktopModels.DatabaseTables;
 
 
 using StackExchange.Redis;
+using System.Reflection.Metadata;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -116,8 +117,13 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddControllers()
     .AddFluentValidation(fv =>
     {
-        fv.RegisterValidatorsFromAssemblyContaining<Program>(); // Scans for validators
-        fv.AutomaticValidationEnabled = true; // Auto-validate models
+        fv.RegisterValidatorsFromAssemblyContaining<Program>(); // Scans for validators. •	This scans the assembly containing the Program class (your main entry point) for any classes that implement IValidator<T>. Validators are typically defined as separate classes that inherit from AbstractValidator<T> and specify validation rules for a specific model type.
+
+
+
+        fv.AutomaticValidationEnabled = true; // Auto-validate models. •	This enables automatic validation of models during the request pipeline. •	When a controller action receives a model(e.g., via[FromBody]), FluentValidation will automatically validate it before the action executes. •	If validation fails, the framework will return a 400 Bad Request response with the validation errors.
+
+
         //these two will register all the Validators from the FluentValidation automatically for you.
     });
 
@@ -136,7 +142,6 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
         return new BadRequestObjectResult(new
         {
             StatusCode = 400,
-            add = "asasf",
             Message = "Validation errors occurred.",
             Errors = errors
         });
@@ -259,10 +264,12 @@ builder.Services.AddEasyCaching(options =>
     options.UseRedis(redisConfig =>
     {
         // Point to your Redis endpoint(s)
-        redisConfig.DBConfig.Endpoints.Add(new ServerEndPoint("localhost", 6379)); 
+        redisConfig.DBConfig.Endpoints.Add(new ServerEndPoint("localhost", 6379));
         // redisConfig.DBConfig.Database = 0;  // optional
     }, "redis1");          // name this provider "redis1"
     options.WithSystemTextJson("redis1");
+
+
 });
 
 //For easy caching configuration.
@@ -273,6 +280,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowResetPage", policy =>
     {
         policy.WithOrigins("https://reset.prozsupport.xyz") //this will make anyone in public who has the URL in his browser https://reset.prozsupport.xyz to request any endpoint in this application
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+    options.AddPolicy("AllowAPICalls", policy =>
+    {
+        policy.WithOrigins("https://api.prozsupport.xyz") //this will make anyone in public who has the URL in his browser https://reset.prozsupport.xyz to request any endpoint in this application
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
@@ -293,31 +306,24 @@ builder.Services.AddCors(options =>
 
 
 
-//using (var scope = app.Services.CreateScope())
-//{
-//    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-//    var role = await roleManager.FindByNameAsync("User");
-//    if (role != null)
-//    {
-//        role.Name = "Employee";
-//        var result = await roleManager.UpdateAsync(role);
-//        if (!result.Succeeded)
-//        {
-//            // Handle errors here
-//            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-//            throw new Exception($"Role update failed: {errors}");
-//        }
-//    }
-//}
-
 var app = builder.Build();
+
+
+
+
+
+
+
+
+
+
 
 //using (var scope = app.Services.CreateScope())
 //{
 //    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ExtendedIdentityRolesDesktop>>();
 //    //default hex colors, user = #21b559    employee = #2181b5   department manager = #2621b5    hr manager =  #9c21b5   admin = #b52121
 //    var roleName = AppRoles_Desktop.Admin;
-//    var roleColorCode = "#b52121";  
+//    var roleColorCode = "#b52121";
 
 //    if (!await roleManager.RoleExistsAsync(roleName))
 //    {
@@ -348,6 +354,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors("AllowResetPage");
+app.UseCors("AllowAPICalls");
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();

@@ -15,22 +15,13 @@ namespace Proz_WebApi.Configurations
             builder.Property(ed => ed.Salary)
                 .HasPrecision(18, 2);
 
-            builder.Property(ed => ed.Salary_Currency_Type)
-                .HasMaxLength(4)
-                .IsUnicode()
-                .IsRequired();
+    
 
             builder.Property(ed => ed.Company_Bonus)
                 .HasPrecision(18, 2);
 
-            builder.Property(ed => ed.Company_Bonus_Currency_Type)
-                .HasMaxLength(4)
-                .IsUnicode();
+        
 
-            builder.Property(ed => ed.Payment_Frequency)
-                .HasMaxLength(7)
-                .IsUnicode()
-                .IsRequired();
 
             builder.Property(ed => ed.StartDate)
                 .HasColumnType("date");

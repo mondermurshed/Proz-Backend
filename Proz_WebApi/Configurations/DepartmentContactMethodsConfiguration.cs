@@ -9,7 +9,7 @@ namespace Proz_WebApi.Configurations
         public void Configure(EntityTypeBuilder<DepartmentContactMethods> builder)
         {
             builder.HasKey(dc => dc.Id);
-
+            builder.Property(ed => ed.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
             builder.Property(dc => dc.ContactMethod)
                 .HasMaxLength(20)
                 .IsUnicode()

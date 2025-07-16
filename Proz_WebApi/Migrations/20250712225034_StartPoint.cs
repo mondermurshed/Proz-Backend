@@ -320,11 +320,11 @@ namespace Proz_WebApi.Migrations
                 name: "DepartmentsTable",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     DepartmentName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    DepartmentDefaultSalary = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
                     Manager_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ParentDepartment_FK = table.Column<int>(type: "int", nullable: true)
+                    ParentDepartment_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -350,10 +350,9 @@ namespace Proz_WebApi.Migrations
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     FeedbackTitle = table.Column<string>(type: "nvarchar(80)", maxLength: 80, nullable: false),
                     FeedbackDescription = table.Column<string>(type: "nvarchar(1500)", maxLength: 1500, nullable: false),
-                    FeedbackDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsEditAble = table.Column<bool>(type: "bit", nullable: false),
-                    CanBeSeen = table.Column<bool>(type: "bit", nullable: false),
+                    IsSeen = table.Column<bool>(type: "bit", nullable: false),
                     IsCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     FeedbackType_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Employee_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -375,6 +374,44 @@ namespace Proz_WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "LeaveRequestsHigherRole",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    StartDate = table.Column<DateOnly>(type: "date", maxLength: 35, nullable: false),
+                    EndDate = table.Column<DateOnly>(type: "date", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    LastUpdate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateAdmin = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    HasSanctions = table.Column<bool>(type: "bit", nullable: true),
+                    AgreedOn = table.Column<bool>(type: "bit", nullable: true),
+                    Completed = table.Column<bool>(type: "bit", nullable: true),
+                    RequesterStatus = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    HRStatus = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
+                    HR_Comment = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Decision_At = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Requester_Employee_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HREmployee_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LeaveRequestsHigherRole", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LeaveRequestsHigherRole_EmployeesTable_HREmployee_FK",
+                        column: x => x.HREmployee_FK,
+                        principalTable: "EmployeesTable",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LeaveRequestsHigherRole_EmployeesTable_Requester_Employee_FK",
+                        column: x => x.Requester_Employee_FK,
+                        principalTable: "EmployeesTable",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LeaveRequestsTable",
                 columns: table => new
                 {
@@ -382,13 +419,15 @@ namespace Proz_WebApi.Migrations
                     StartDate = table.Column<DateOnly>(type: "date", maxLength: 35, nullable: false),
                     EndDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Reason = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    IsEditable = table.Column<bool>(type: "bit", nullable: false),
                     LastUpdate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastUpdateDM = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastUpdateHR = table.Column<DateTime>(type: "datetime2", nullable: true),
                     HasSanctions = table.Column<bool>(type: "bit", nullable: true),
                     AgreedOn = table.Column<bool>(type: "bit", nullable: true),
+                    Completed = table.Column<bool>(type: "bit", nullable: true),
+                    RequesterStatus = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     DMStatus = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
                     FinalStatus = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
-                    Created_At = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DepartmentManagerComment = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     FinalStatus_Comment = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Decision_At = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -522,12 +561,11 @@ namespace Proz_WebApi.Migrations
                 name: "DepartmentContactMethodsTable",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     ContactMethod = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     ContactDetail = table.Column<string>(type: "nvarchar(320)", maxLength: 320, nullable: false),
                     Purpose = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Department_FK = table.Column<int>(type: "int", nullable: false)
+                    Department_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -546,13 +584,10 @@ namespace Proz_WebApi.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     Salary = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
-                    Salary_Currency_Type = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: false),
                     Company_Bonus = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: true),
-                    Company_Bonus_Currency_Type = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Payment_Frequency = table.Column<string>(type: "nvarchar(7)", maxLength: 7, nullable: false),
                     StartDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Employee_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Department_FK = table.Column<int>(type: "int", nullable: false),
+                    Department_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Shift_FK = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -584,8 +619,8 @@ namespace Proz_WebApi.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     Answer = table.Column<string>(type: "nvarchar(1500)", maxLength: 1500, nullable: false),
-                    ResponseDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    IsEditAble = table.Column<bool>(type: "bit", nullable: false),
+                    IsSeen = table.Column<bool>(type: "bit", nullable: false),
+                    LastUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Feedback_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     RespondentAccount_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -610,14 +645,14 @@ namespace Proz_WebApi.Migrations
                 name: "AttendanceRecorder",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     CheckInTime = table.Column<TimeOnly>(type: "time", nullable: false),
                     CheckOutTime = table.Column<TimeOnly>(type: "time", nullable: true),
                     CheckInStatus = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     CheckOutStatus = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     CheckInComment = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
                     CheckOutComment = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    DateOfAttendance = table.Column<DateOnly>(type: "date", nullable: false),
                     EmployeeDepartment_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -667,8 +702,6 @@ namespace Proz_WebApi.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Salary = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
-                    CurrencyType = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
-                    PaymentFrequency = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
                     EffectiveFrom = table.Column<DateOnly>(type: "date", nullable: false),
                     EffectiveTo = table.Column<DateOnly>(type: "date", nullable: true),
                     EmployeeDepartments_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
@@ -694,15 +727,11 @@ namespace Proz_WebApi.Migrations
                     PaymentPeriodEnd = table.Column<DateOnly>(type: "date", nullable: false),
                     PaymentCounter = table.Column<int>(type: "int", nullable: false),
                     Salary = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
-                    SalaryCurrencyType = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: false),
                     FixedBonus = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
-                    FixedBonusCurrencyType = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: false),
                     FixedBonusNote = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     PerformanceBonus = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
-                    PerformanceBonusCurrencyType = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: false),
                     PerformanceBonusNote = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     Deduction = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
-                    DeductionCurrencyType = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: false),
                     DeductionNote = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     EmployeeDepartments_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -723,11 +752,10 @@ namespace Proz_WebApi.Migrations
                 name: "PerformanceRecorderTable",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     PerformanceRating = table.Column<int>(type: "int", nullable: false),
                     ReviewerComment = table.Column<string>(type: "nvarchar(125)", maxLength: 125, nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateOnly>(type: "date", nullable: false),
                     EmployeeDepartment_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Reviewer_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
@@ -756,10 +784,8 @@ namespace Proz_WebApi.Migrations
                     CurrentPeriodStartDate = table.Column<DateOnly>(type: "date", nullable: false),
                     CurrentPeriodEndDate = table.Column<DateOnly>(type: "date", nullable: false),
                     PaymentCounter = table.Column<int>(type: "int", nullable: false),
-                    EmployeeBonus_Amount = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: true),
-                    EmployeeBonus_Currency = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    Employee_Deduction_Amount = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: true),
-                    Employee_Deduction_Currency = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
+                    EmployeeBonus = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
+                    Employee_Deduction = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: false),
                     EmployeeDepartment_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Version = table.Column<byte[]>(type: "rowversion", rowVersion: true, nullable: false)
                 },
@@ -908,6 +934,16 @@ namespace Proz_WebApi.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_LeaveRequestsHigherRole_HREmployee_FK",
+                table: "LeaveRequestsHigherRole",
+                column: "HREmployee_FK");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LeaveRequestsHigherRole_Requester_Employee_FK",
+                table: "LeaveRequestsHigherRole",
+                column: "Requester_Employee_FK");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_LeaveRequestsTable_DepartmentManager_FK",
                 table: "LeaveRequestsTable",
                 column: "DepartmentManager_FK");
@@ -1014,6 +1050,9 @@ namespace Proz_WebApi.Migrations
 
             migrationBuilder.DropTable(
                 name: "HealthInformationTable");
+
+            migrationBuilder.DropTable(
+                name: "LeaveRequestsHigherRole");
 
             migrationBuilder.DropTable(
                 name: "LeaveRequestsTable");

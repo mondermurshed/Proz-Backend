@@ -13,16 +13,6 @@ namespace Proz_WebApi.Configurations
             builder.Property(eh => eh.Salary)
                 .HasPrecision(18, 2);
 
-            builder.Property(eh => eh.CurrencyType)
-                .HasMaxLength(3)
-                .IsUnicode()
-                .IsRequired();
-
-            builder.Property(eh => eh.PaymentFrequency)
-                .HasMaxLength(3)
-                .IsUnicode()
-                .IsRequired();
-
             builder.Property(eh => eh.EffectiveFrom)
                 .HasColumnType("date");
 

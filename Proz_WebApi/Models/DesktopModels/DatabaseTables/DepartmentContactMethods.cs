@@ -8,7 +8,7 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     [StringLength(20, MinimumLength = 3)]
     [Unicode]
     [Required]
@@ -21,7 +21,7 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
     [Unicode]
     [Required]
     public string Purpose { get; set; } //is the information used for General Inquiry, Support, Manager Direct or Critical thing only
-    public int Department_FK { get; set; }
+    public Guid Department_FK { get; set; }
     public Departments Department { get; set; }
     }
 }

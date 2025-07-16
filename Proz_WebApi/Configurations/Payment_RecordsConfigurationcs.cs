@@ -26,18 +26,11 @@ namespace Proz_WebApi.Configurations
             builder.Property(p => p.Salary)
                 .HasPrecision(18, 2);
 
-            builder.Property(p => p.SalaryCurrencyType)
-                .HasMaxLength(4)
-                .IsUnicode()
-                .IsRequired();
-
+        
             builder.Property(p => p.FixedBonus)
                 .HasPrecision(18, 2);
 
-            builder.Property(p => p.FixedBonusCurrencyType)
-                .HasMaxLength(4)
-                .IsUnicode()
-                .IsRequired();
+          
 
             builder.Property(p => p.FixedBonusNote)
                 .HasMaxLength(150)
@@ -46,10 +39,7 @@ namespace Proz_WebApi.Configurations
             builder.Property(p => p.PerformanceBonus)
                 .HasPrecision(18, 2);
 
-            builder.Property(p => p.PerformanceBonusCurrencyType)
-                .HasMaxLength(4)
-                .IsUnicode()
-                .IsRequired();
+          
 
             builder.Property(p => p.PerformanceBonusNote)
                 .HasMaxLength(150)
@@ -58,10 +48,7 @@ namespace Proz_WebApi.Configurations
             builder.Property(p => p.Deduction)
                 .HasPrecision(18, 2);
 
-            builder.Property(p => p.DeductionCurrencyType)
-                .HasMaxLength(4)
-                .IsUnicode()
-                .IsRequired();
+         
 
             builder.Property(p => p.DeductionNote)
                 .HasMaxLength(150)

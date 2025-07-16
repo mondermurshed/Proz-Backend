@@ -9,15 +9,12 @@ namespace Proz_WebApi.Configurations
         public void Configure(EntityTypeBuilder<Performance_Recorder> builder)
         {
             builder.HasKey(p => p.Id);
-
+            builder.Property(ed => ed.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
             builder.Property(p => p.PerformanceRating);
 
             builder.Property(p => p.ReviewerComment)
                 .HasMaxLength(125)
                 .IsUnicode();
-
-            builder.Property(p => p.CreatedAt)
-                .HasColumnType("datetime2");
 
             builder.HasOne(p => p.EmployeeDepartmentNA)
                 .WithMany(ed => ed.PerformanceRecordersNA)
