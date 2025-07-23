@@ -95,7 +95,7 @@ namespace Proz_WebApi.Services.DesktopServices
             if (!domainexisting)
             {
                 finalresult.Succeeded = false;
-                finalresult.Errors.Add("The email's domain that you have entered is not able to receive mails");
+                finalresult.Errors.Add("The email's domain that you have entered is not able to receive emails");
                 finalresult.Messages.Add("Please enter a valid email's domain in order to register");
                 return finalresult;
             }
@@ -131,7 +131,7 @@ namespace Proz_WebApi.Services.DesktopServices
                 return finalresult;
             }
 
-            
+
             if (!await _EmailSender.SendVerificationCodeAsync(normalizedEmail, code))
             {
                 finalresult.Succeeded = false;
@@ -193,16 +193,23 @@ namespace Proz_WebApi.Services.DesktopServices
                     if (!await _roleManager.RoleExistsAsync(AppRoles_Desktop.User))
                     {
 
-                        throw new RoleNotFoundException(AppRoles_Desktop.Employee, user.UserName); //the throw will send the message to the  catch (Exception ex) ex variable so you log the error and what happend exactly inside the try statement from the catch statement.
+                        throw new RoleNotFoundException(AppRoles_Desktop.User, user.UserName); //the throw will send the message to the  catch (Exception ex) ex variable so you log the error and what happend exactly inside the try statement from the catch statement.
                     }
                     var roleResult = await _userManager.AddToRoleAsync(user, AppRoles_Desktop.User);
                     if (!roleResult.Succeeded)
                     {
-                        
+
                         finalresult.Succeeded = false;
                         finalresult.Errors.AddRange(roleResult.Errors.Select(e => e.Description));
                         return finalresult;
                     }
+                    
+                    await _dbcontext.PersonalInformationTable.AddAsync(new Personal_Information
+                    {
+                       FullName=userregister.FullName,
+                       IdentityUser_FK=user.Id
+                    });
+                    await _dbcontext.SaveChangesAsync();
                     scope.Complete();
                     finalresult.Succeeded = true;
                     return finalresult;
@@ -212,7 +219,7 @@ namespace Proz_WebApi.Services.DesktopServices
                 catch (RoleNotFoundException ex) //this catch will only be executed if the RoleNotFoundException was thrown only but not the rest of other exception, so we have to create another global exception like   catch (Exception ex)
                 {
 
-                  
+
                     _loggerr.LogError(ex, "User registration failed at {ErrorTime} because the role {RoleName} wasn't exisit to be assigned to the user {UserName}", ex.ErrorOccurredAt, ex.RoleName, ex.UserName);
                     finalresult.Succeeded = false;
                     finalresult.Errors.Clear();
@@ -222,7 +229,7 @@ namespace Proz_WebApi.Services.DesktopServices
                 }
                 catch (Exception ex)
                 {
-                   
+
                     finalresult.Succeeded = false;
                     finalresult.Errors.Clear();
                     finalresult.Errors.Add("Un error occurred. Failed to register the user.");
@@ -243,7 +250,7 @@ namespace Proz_WebApi.Services.DesktopServices
                 return finalResult;
             }
 
-          
+
 
             try
             {
@@ -262,7 +269,7 @@ namespace Proz_WebApi.Services.DesktopServices
                 }
                 string newCode = await _managingTempData.GenerateAndStoreCodeAsync(normalizedEmail);
                 await _managingTempData.StoreUserRegistrationDataTemp(existingData, normalizedEmail);
-               if(!await _EmailSender.SendVerificationCodeAsync(normalizedEmail, newCode))
+                if (!await _EmailSender.SendVerificationCodeAsync(normalizedEmail, newCode))
                 {
                     finalResult.Succeeded = false;
                     finalResult.Errors.Add("Something went wrong while trying to send the email. Please try again later");
@@ -271,7 +278,7 @@ namespace Proz_WebApi.Services.DesktopServices
                 await _managingTempData.StartCooldownAsync(normalizedEmail);
                 finalResult.Succeeded = true;
                 finalResult.Messages.Add("Verification code has been resent to your email.");
-                
+
             }
             catch (Exception ex)
             {
@@ -292,9 +299,9 @@ namespace Proz_WebApi.Services.DesktopServices
                 finalResult.Errors.Add("Please enter a valid email");
                 return finalResult;
             }
-        
+
             var user = await _userManager.FindByEmailAsync(normalizedEmail);
-            if (user == null) 
+            if (user == null)
             {
                 finalResult.Succeeded = false;
                 finalResult.Errors.Add("No email like this was found. Please enter a valid/correct email");
@@ -345,7 +352,7 @@ namespace Proz_WebApi.Services.DesktopServices
             resetpassword.NewPassword,
             user.Email,
             user.UserName
-         
+
             );
             if (!validation.IsValid)
             {
@@ -477,42 +484,42 @@ namespace Proz_WebApi.Services.DesktopServices
                     }
 
                     if (user == null)
-                {
-                    finalresult.Succeeded = false;
-                  
-                    finalresult.Errors.Add("User is not located inside the database");
-                    return finalresult;
+                    {
+                        finalresult.Succeeded = false;
+
+                        finalresult.Errors.Add("User is not located inside the database");
+                        return finalresult;
+                    }
+
+                    if (!await _userManager.CheckPasswordAsync(user, userlogin.Password)) //since our password is stored into the database as a hashed password (for security puposes so no one who has access to the database to know the users passwords) we can only compare the user's provided password to the user's hashed password that is stored in the database only by CheckPasswordAsync method.
+                    {
+                        finalresult.Succeeded = false;
+
+                        finalresult.Errors.Add("An account was found but the password is not correct");
+                        return finalresult;
+                    }
+
+                    var accessToken = await GenerateJwtToken(user); //<added this one the first argument.
+                    var (refreshtoken, hash) = GenerateRefreshToken(); //Because GenerateRefreshToken method returns two parameters then here we create two variables to take the two values that they are returned by this method
+                    await _dbcontext.RefreshTokensTable.AddAsync(new RefreshTokenDesktop
+                    {
+                        UserFK = user.Id,
+                        TokenHash = hash,
+                        ExpiresAt = DateTime.UtcNow.AddDays(3)
+                    });
+                    await _dbcontext.LoginHistoryTable.AddAsync(new LoginHistory
+                    {
+                        ExtendedIdentityUsersDesktop_FK = user.Id,
+                        LoggedAt = DateTime.UtcNow,
+                        IpAddress = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+                    });
+                    user.LastOnline = DateTime.UtcNow; //update the user's last online time to the current time
+                    await _dbcontext.SaveChangesAsync();
+                    scope.Complete();
+                    finalresult.AuthSuccess(accessToken, refreshtoken);
                 }
 
-                if (!await _userManager.CheckPasswordAsync(user, userlogin.Password)) //since our password is stored into the database as a hashed password (for security puposes so no one who has access to the database to know the users passwords) we can only compare the user's provided password to the user's hashed password that is stored in the database only by CheckPasswordAsync method.
-                {
-                    finalresult.Succeeded = false;
-                  
-                    finalresult.Errors.Add("An account was found but the password is not correct");
-                    return finalresult;
-                }
-
-                var accessToken = await GenerateJwtToken(user); //<added this one the first argument.
-                var (refreshtoken, hash) = GenerateRefreshToken(); //Because GenerateRefreshToken method returns two parameters then here we create two variables to take the two values that they are returned by this method
-                await _dbcontext.RefreshTokensTable.AddAsync(new RefreshTokenDesktop
-                {
-                    UserFK = user.Id,
-                    TokenHash = hash,
-                    ExpiresAt = DateTime.UtcNow.AddDays(7)
-                });
-                await _dbcontext.LoginHistoryTable.AddAsync(new LoginHistory
-                {
-                    ExtendedIdentityUsersDesktop_FK = user.Id,
-                    LoggedAt = DateTime.UtcNow,
-                    IpAddress = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
-                });
-               
-                await _dbcontext.SaveChangesAsync();
-                scope.Complete();
-                finalresult.AuthSuccess(accessToken, refreshtoken);
-                }
-
-                catch(Exception a)
+                catch (Exception a)
                 {
                     finalresult.Succeeded = false;
                     finalresult.Errors.Add("Something went wrong, please try again");
@@ -580,54 +587,54 @@ namespace Proz_WebApi.Services.DesktopServices
         {
             using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
             {
-           
+
                 // 1. Hash the incoming refresh token with SHA256
                 using var sha256 = SHA256.Create(); //go read the lines (the last lines maybe ?? idk go check them) of the GenerateRefreshToken method to understand these.
-            var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(request.RefreshToken));
-            var tokenHash = Convert.ToBase64String(hashBytes);
-            var finalresult = new FinalResult();
-            // 2. Find matching token
-            var storedToken = await _dbcontext.RefreshTokensTable //This object will hold the whole refreshtokentable row (if it found or matched our requiremnts)
-          .Include(rt => rt.UserNA) // Load user data (like if we found our desire row that match our 3 conditions (look the second code to understand what i mean) then we load the user that own this refreshtoken row.
-          .FirstOrDefaultAsync(rt =>  //this will Searches for the first row in the database for a valid token matching 3 conditions:
-              rt.TokenHash == tokenHash && // 1- Match the user hash
-              rt.ExpiresAt > DateTime.UtcNow && // 2- Not expired yet
-              !rt.IsRevoked); // 3- still wasn't revoked yet
+                var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(request.RefreshToken));
+                var tokenHash = Convert.ToBase64String(hashBytes);
+                var finalresult = new FinalResult();
+                // 2. Find matching token
+                var storedToken = await _dbcontext.RefreshTokensTable //This object will hold the whole refreshtokentable row (if it found or matched our requiremnts)
+              .Include(rt => rt.UserNA) // Load user data (like if we found our desire row that match our 3 conditions (look the second code to understand what i mean) then we load the user that own this refreshtoken row.
+              .FirstOrDefaultAsync(rt =>  //this will Searches for the first row in the database for a valid token matching 3 conditions:
+                  rt.TokenHash == tokenHash && // 1- Match the user hash
+                  rt.ExpiresAt > DateTime.UtcNow && // 2- Not expired yet
+                  !rt.IsRevoked); // 3- still wasn't revoked yet
 
 
 
-            if (storedToken == null)
-            {
-                finalresult.Succeeded = false;
-                finalresult.Errors.Clear();
-                finalresult.Errors.Add("Unable to send a valid access token to the user, please re signing again");
-                return finalresult;
-            }
+                if (storedToken == null)
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Clear();
+                    finalresult.Errors.Add("Unable to send a valid access token to the user, please re signing again");
+                    return finalresult;
+                }
 
 
-            // 3. Revoke old token
-            storedToken.IsRevoked = true; //here we are following something called "token rotation" which is a concept that mean if the user wants a new access token and he provide both his access and refresh then we don't just create an access token and make him keep his old refresh one but we are also changing his refresh token as well. At the end we give him a brand new access and refresh tokens (just to clarify all our talk are valid only if the user has a valid and unexpired and unrevoked refresh token already stored in out database) so in simple words old tokens become unusable.
+                // 3. Revoke old token
+                storedToken.IsRevoked = true; //here we are following something called "token rotation" which is a concept that mean if the user wants a new access token and he provide both his access and refresh then we don't just create an access token and make him keep his old refresh one but we are also changing his refresh token as well. At the end we give him a brand new access and refresh tokens (just to clarify all our talk are valid only if the user has a valid and unexpired and unrevoked refresh token already stored in out database) so in simple words old tokens become unusable.
 
-            // 4. Generate new tokens
-            var (newRefreshToken, newHash) = GenerateRefreshToken();
-            var newAccessToken = await GenerateJwtToken(storedToken.UserNA);
-
-
+                // 4. Generate new tokens
+                var (newRefreshToken, newHash) = GenerateRefreshToken();
+                var newAccessToken = await GenerateJwtToken(storedToken.UserNA);
 
 
-            // 5. Store new token
-            await _dbcontext.RefreshTokensTable.AddAsync(new RefreshTokenDesktop
-            {
-                UserFK = storedToken.UserNA.Id,
-                TokenHash = newHash,
-                ExpiresAt = DateTime.UtcNow.AddDays(7)
-            });
-           
-            await _dbcontext.SaveChangesAsync();
-            finalresult.Succeeded = true;
-            finalresult.AuthSuccess(newAccessToken, newRefreshToken);
+
+
+                // 5. Store new token
+                await _dbcontext.RefreshTokensTable.AddAsync(new RefreshTokenDesktop
+                {
+                    UserFK = storedToken.UserNA.Id,
+                    TokenHash = newHash,
+                    ExpiresAt = DateTime.UtcNow.AddDays(3)
+                });
+
+                await _dbcontext.SaveChangesAsync();
+                finalresult.Succeeded = true;
+                finalresult.AuthSuccess(newAccessToken, newRefreshToken);
                 scope.Complete();
-            return finalresult;
+                return finalresult;
             }
         }
 
@@ -688,6 +695,18 @@ namespace Proz_WebApi.Services.DesktopServices
                 return finalResult;
             }
 
+            var validation = (PasswordChecker.ValidatePassword(dto.NewPassword, user.Email, user.UserName));
+            if (!validation.IsValid)
+            {
+                finalResult.Succeeded = false;
+                finalResult.Errors.Add("New password needs improvement!.");
+                return finalResult;
+            }
+        
+
+
+
+
             var result = await _userManager.ChangePasswordAsync(user, dto.CurrentPassword, dto.NewPassword);
             if (!result.Succeeded)
             {
@@ -700,6 +719,7 @@ namespace Proz_WebApi.Services.DesktopServices
             finalResult.Messages.Add("Password changed successfully.");
             return finalResult;
         }
+    
 
 
 

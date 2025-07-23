@@ -34,10 +34,6 @@ namespace Proz_WebApi.Configurations
                 .WithMany()
                 .HasForeignKey(ed => ed.Department_FK);
 
-            builder.HasOne(ed => ed.ShiftNA)
-                .WithMany(s => s.EmployeeDepartmentsNA)
-                .HasForeignKey(ed => ed.Shift_FK);
-
             builder.HasOne(ed => ed.SalaryScheduleNA)
                 .WithOne()
                 .HasForeignKey<Salary_Schedule>(s => s.EmployeeDepartment_FK);

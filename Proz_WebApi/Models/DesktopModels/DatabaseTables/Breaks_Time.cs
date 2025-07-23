@@ -8,7 +8,7 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
     public TimeOnly BreakStart {  get; set; }
     public TimeOnly BreakEnd { get; set; }
     [StringLength(35, MinimumLength = 3)]
@@ -18,7 +18,7 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
     [StringLength(350, MinimumLength = 3)]
     [Unicode]
     public string? Notes {  get; set; }
-    public int Shift_FK {  get; set; }
+    public Guid Shift_FK {  get; set; }
     public ShiftInformationTable ShiftNA { get; set; }
     }
 }

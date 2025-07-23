@@ -19,8 +19,8 @@ namespace Proz_WebApi.Configurations
 
             builder.Property(p => p.Gender)
                 .HasMaxLength(6)
-                .IsUnicode()
-                .IsRequired();
+                .IsUnicode();
+        
 
             builder.Property(p => p.Nationality)
                 .HasMaxLength(50)
@@ -30,17 +30,7 @@ namespace Proz_WebApi.Configurations
                 .WithOne(i => i.PersonalInformationNA)
                 .HasForeignKey<Personal_Information>(p => p.IdentityUser_FK);
 
-            builder.HasOne(p => p.CurrentAddressNA)
-                .WithOne(c => c.PersonalInformationNA)
-                .HasForeignKey<CurrentAddress>(c => c.PersonalInformation_FK);
-
-            builder.HasOne(p => p.HealthInformationNA)
-                .WithOne(h => h.PersonalInformationNA)
-                .HasForeignKey<Health_Information>(h => h.PersonalInformation_FK);
-
-            builder.HasMany(p => p.PhoneNumbersNA)
-                .WithOne(pn => pn.PersonalInformationNA)
-                .HasForeignKey(pn => pn.PersonalInformation_FK);
+ 
         }
     }
 }

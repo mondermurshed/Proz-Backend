@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Proz_WebApi.Data;
 
@@ -11,9 +12,11 @@ using Proz_WebApi.Data;
 namespace Proz_WebApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext_Desktop))]
-    partial class ApplicationDbContext_DesktopModelSnapshot : ModelSnapshot
+    [Migration("20250721031429_start_point")]
+    partial class start_point
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1010,6 +1013,7 @@ namespace Proz_WebApi.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("Gender")
+                        .IsRequired()
                         .HasMaxLength(6)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(6)");

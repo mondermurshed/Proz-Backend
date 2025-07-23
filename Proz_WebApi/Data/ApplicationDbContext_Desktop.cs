@@ -28,24 +28,26 @@ namespace Proz_WebApi.Data
         public DbSet<Attendance_Recorder> AttendanceRecorder { get; set; }
         public DbSet<Audit_Logs> AuditLogsTable { get; set; }
         public DbSet<Breaks_Time> BreaksTimeTable { get; set; }
-        public DbSet<CurrentAddress> CurrentAddressTable { get; set; }
-        public DbSet<DepartmentContactMethods> DepartmentContactMethodsTable { get; set; }
+     
         public DbSet<Departments> DepartmentsTable { get; set; }
         public DbSet<Employee_Departments> EmployeeDepartmentsTable { get; set; }
         public DbSet<Employees> EmployeesTable { get; set; }
         public DbSet<EmployeeSalaryHistory> EmployeeSalaryHistoryTable { get; set; }
         public DbSet<Feedbacks> FeedbacksTable { get; set; }
         public DbSet<Feedbacks_Answers> FeedbacksAnswersTable { get; set; }
-        public DbSet<Health_Information> HealthInformationTable { get; set; }
+     
         public DbSet<LeaveRequests> LeaveRequestsTable { get; set; }
         public DbSet<LoginHistory> LoginHistoryTable { get; set; }
         public DbSet<Notifications> NotificationsTable { get; set; }
         public DbSet<Payment_Records> PaymentRecordsTable { get; set; }
         public DbSet<Performance_Recorder> PerformanceRecorderTable { get; set; }
         public DbSet<Personal_Information> PersonalInformationTable { get; set; }
-        public DbSet<Personal_Phone_Numbers> PersonalPhoneNumbersTable { get; set; }
+     
         public DbSet<ShiftInformationTable> ShiftInformationTable { get; set; }
         public DbSet<Salary_Schedule> SalaryScheduleTable { get; set; }
+        public DbSet<Feedback_Types> FeedbacksTypesTable { get; set; }
+        public DbSet<LeaveRequestsHigherRole> LeaveRequestsHigherRoleTable { get; set; }
+        public DbSet<GettingStartedTable> GettingStartedTable { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             

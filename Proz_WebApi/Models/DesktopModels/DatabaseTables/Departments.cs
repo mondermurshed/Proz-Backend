@@ -18,8 +18,9 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
         public Employees ManagerNA { get; set; }
         public Guid? ParentDepartment_FK { get; set; } //If this is null then it's the parent department (it's not a child to any department above it)
         public Departments ParentDepartmentNA { get; set; } //to load the parent of a department (any department inside the department tree) → you need ParentDepartment. The ParentDepartmentId and the ParentDepartment are used together and to go up the hierarchy (one jump) and get the parent of the current department.
+        public ICollection<ShiftInformationTable> ShiftInformationTableNA { get; set; } = new List<ShiftInformationTable>();
         public ICollection<Departments> SubDepartmentsNA { get; set; } = new List<Departments>();
-        public ICollection<DepartmentContactMethods> DepartmentContactMethodsNA { get; set; } = new List<DepartmentContactMethods>();
+      
 
     }
 }

@@ -18,5 +18,7 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
         public Personal_Information PersonalInformationNA { get; set; }
         public ICollection<LoginHistory> LoginHistroyNA { get; set; } = new List<LoginHistory>();
         public Employees EmployeesNA { get; set; }
+
+        public GettingStartedTable? GettingStartedTableNA { get; set; }
     }
 }

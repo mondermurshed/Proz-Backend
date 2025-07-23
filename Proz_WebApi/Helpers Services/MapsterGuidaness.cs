@@ -41,14 +41,11 @@ public static class Maps
              TypeAdapterConfig<UserRegisteration, UserLogin>.NewConfig()
             .Map(dest => dest.Username, src => src.Username)
             .Map(dest => dest.Password, src => src.Password).IgnoreNonMapped(true);
-             
-             TypeAdapterConfig<ExtendedIdentityUsersDesktop, ReturnUsersWithRolesAdminDto>
-            .NewConfig()
-            .Map(dest => dest.id, src => src.Id)
-            .Map(dest => dest.UserName, src => src.UserName)
-            .Map(dest => dest.Email, src => src.Email)
-            .Map(dest => dest.Roles, src =>
-            src.UserRolesNA.Select(ur => ur.RoleNA.Name).ToList());
+
+        TypeAdapterConfig<ExtendedIdentityUsersDesktop, ReturnUsersWithRolesAdminDto>
+       .NewConfig()
+       .Map(dest => dest.id, src => src.Id);
+           
 
 
     }

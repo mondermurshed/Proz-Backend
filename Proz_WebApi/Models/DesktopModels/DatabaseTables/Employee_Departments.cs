@@ -20,8 +20,7 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
         public Employees EmployeeNA { get; set; }
         public Guid Department_FK { get; set; }
         public Departments DepartmentNA { get; set; }
-        public int Shift_FK {  get; set; }
-        public ShiftInformationTable ShiftNA { get; set; }    
+  
         public ICollection<Audit_Logs> Audit_LogsNA { get; set; } = new List<Audit_Logs>();
         public Salary_Schedule SalaryScheduleNA { get;  set; }
         public ICollection<Payment_Records> PaymentRecordsNA { get; set; } = new List<Payment_Records>();

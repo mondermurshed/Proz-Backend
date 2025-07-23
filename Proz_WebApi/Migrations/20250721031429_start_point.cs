@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Proz_WebApi.Migrations
 {
     /// <inheritdoc />
-    public partial class StartPoint : Migration
+    public partial class start_point : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -55,7 +55,7 @@ namespace Proz_WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Feedback_Types",
+                name: "FeedbacksTypesTable",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
@@ -63,7 +63,7 @@ namespace Proz_WebApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Feedback_Types", x => x.id);
+                    table.PrimaryKey("PK_FeedbacksTypesTable", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -83,22 +83,6 @@ namespace Proz_WebApi.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Games", x => x.id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ShiftInformationTable",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Shift_Starts = table.Column<TimeOnly>(type: "time", nullable: false),
-                    Shift_Ends = table.Column<TimeOnly>(type: "time", nullable: false),
-                    TotalHours = table.Column<int>(type: "int", nullable: true),
-                    ShiftType = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ShiftInformationTable", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -228,6 +212,27 @@ namespace Proz_WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GettingStartedTable",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
+                    CompanyName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    CurrenyType = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
+                    SystemFirstRun = table.Column<DateOnly>(type: "date", nullable: false),
+                    Admin_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GettingStartedTable", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GettingStartedTable_AspNetUsers_Admin_FK",
+                        column: x => x.Admin_FK,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "LoginHistoryTable",
                 columns: table => new
                 {
@@ -253,11 +258,11 @@ namespace Proz_WebApi.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
                     FullName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Age = table.Column<int>(type: "int", nullable: false),
-                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: false),
+                    Age = table.Column<int>(type: "int", nullable: true),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: true),
                     Gender = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     Nationality = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    LivingOnPrimaryPlace = table.Column<bool>(type: "bit", nullable: false),
+                    LivingOnPrimaryPlace = table.Column<bool>(type: "bit", nullable: true),
                     IdentityUser_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
@@ -289,29 +294,6 @@ namespace Proz_WebApi.Migrations
                         name: "FK_RefreshTokensTable_AspNetUsers_UserFK",
                         column: x => x.UserFK,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BreaksTimeTable",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    BreakStart = table.Column<TimeOnly>(type: "time", nullable: false),
-                    BreakEnd = table.Column<TimeOnly>(type: "time", nullable: false),
-                    BreakType = table.Column<string>(type: "nvarchar(35)", maxLength: 35, nullable: false),
-                    Notes = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
-                    Shift_FK = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BreaksTimeTable", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BreaksTimeTable_ShiftInformationTable_Shift_FK",
-                        column: x => x.Shift_FK,
-                        principalTable: "ShiftInformationTable",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -366,15 +348,15 @@ namespace Proz_WebApi.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_FeedbacksTable_Feedback_Types_FeedbackType_FK",
+                        name: "FK_FeedbacksTable_FeedbacksTypesTable_FeedbackType_FK",
                         column: x => x.FeedbackType_FK,
-                        principalTable: "Feedback_Types",
+                        principalTable: "FeedbacksTypesTable",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "LeaveRequestsHigherRole",
+                name: "LeaveRequestsHigherRoleTable",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
@@ -396,15 +378,15 @@ namespace Proz_WebApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LeaveRequestsHigherRole", x => x.Id);
+                    table.PrimaryKey("PK_LeaveRequestsHigherRoleTable", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LeaveRequestsHigherRole_EmployeesTable_HREmployee_FK",
+                        name: "FK_LeaveRequestsHigherRoleTable_EmployeesTable_HREmployee_FK",
                         column: x => x.HREmployee_FK,
                         principalTable: "EmployeesTable",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_LeaveRequestsHigherRole_EmployeesTable_Requester_Employee_FK",
+                        name: "FK_LeaveRequestsHigherRoleTable_EmployeesTable_Requester_Employee_FK",
                         column: x => x.Requester_Employee_FK,
                         principalTable: "EmployeesTable",
                         principalColumn: "Id",
@@ -486,99 +468,6 @@ namespace Proz_WebApi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CurrentAddressTable",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CountryName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    CityName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    StreetAddress = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    DepartmentNumber = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Latitude_Coordinate = table.Column<double>(type: "float", nullable: true),
-                    Longitude_Coordinate = table.Column<double>(type: "float", nullable: true),
-                    Describe_The_Location = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    PersonalInformation_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CurrentAddressTable", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CurrentAddressTable_PersonalInformationTable_PersonalInformation_FK",
-                        column: x => x.PersonalInformation_FK,
-                        principalTable: "PersonalInformationTable",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "HealthInformationTable",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MedicalConditions = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    Allergies = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    EmergencyContactName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    EmergencyContactPhone = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    CountryCodeOfThePhone = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    PersonalInformation_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_HealthInformationTable", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_HealthInformationTable_PersonalInformationTable_PersonalInformation_FK",
-                        column: x => x.PersonalInformation_FK,
-                        principalTable: "PersonalInformationTable",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PersonalPhoneNumbersTable",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CountryNumber = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
-                    Number = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    NumberType = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    PersonalInformation_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PersonalPhoneNumbersTable", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PersonalPhoneNumbersTable_PersonalInformationTable_PersonalInformation_FK",
-                        column: x => x.PersonalInformation_FK,
-                        principalTable: "PersonalInformationTable",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DepartmentContactMethodsTable",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWSEQUENTIALID()"),
-                    ContactMethod = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    ContactDetail = table.Column<string>(type: "nvarchar(320)", maxLength: 320, nullable: false),
-                    Purpose = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Department_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DepartmentContactMethodsTable", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DepartmentContactMethodsTable_DepartmentsTable_Department_FK",
-                        column: x => x.Department_FK,
-                        principalTable: "DepartmentsTable",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "EmployeeDepartmentsTable",
                 columns: table => new
                 {
@@ -587,8 +476,7 @@ namespace Proz_WebApi.Migrations
                     Company_Bonus = table.Column<double>(type: "float(18)", precision: 18, scale: 2, nullable: true),
                     StartDate = table.Column<DateOnly>(type: "date", nullable: false),
                     Employee_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Department_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Shift_FK = table.Column<int>(type: "int", nullable: false)
+                    Department_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -605,10 +493,26 @@ namespace Proz_WebApi.Migrations
                         principalTable: "EmployeesTable",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ShiftInformationTable",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Shift_Starts = table.Column<TimeOnly>(type: "time", nullable: false),
+                    Shift_Ends = table.Column<TimeOnly>(type: "time", nullable: false),
+                    TotalHours = table.Column<int>(type: "int", nullable: true),
+                    ShiftType = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Department_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShiftInformationTable", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EmployeeDepartmentsTable_ShiftInformationTable_Shift_FK",
-                        column: x => x.Shift_FK,
-                        principalTable: "ShiftInformationTable",
+                        name: "FK_ShiftInformationTable_DepartmentsTable_Department_FK",
+                        column: x => x.Department_FK,
+                        principalTable: "DepartmentsTable",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -800,6 +704,28 @@ namespace Proz_WebApi.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "BreaksTimeTable",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    BreakStart = table.Column<TimeOnly>(type: "time", nullable: false),
+                    BreakEnd = table.Column<TimeOnly>(type: "time", nullable: false),
+                    BreakType = table.Column<string>(type: "nvarchar(35)", maxLength: 35, nullable: false),
+                    Notes = table.Column<string>(type: "nvarchar(350)", maxLength: 350, nullable: true),
+                    Shift_FK = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BreaksTimeTable", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BreaksTimeTable_ShiftInformationTable_Shift_FK",
+                        column: x => x.Shift_FK,
+                        principalTable: "ShiftInformationTable",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -860,17 +786,6 @@ namespace Proz_WebApi.Migrations
                 column: "Shift_FK");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CurrentAddressTable_PersonalInformation_FK",
-                table: "CurrentAddressTable",
-                column: "PersonalInformation_FK",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DepartmentContactMethodsTable_Department_FK",
-                table: "DepartmentContactMethodsTable",
-                column: "Department_FK");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_DepartmentsTable_Manager_FK",
                 table: "DepartmentsTable",
                 column: "Manager_FK");
@@ -889,11 +804,6 @@ namespace Proz_WebApi.Migrations
                 name: "IX_EmployeeDepartmentsTable_Employee_FK",
                 table: "EmployeeDepartmentsTable",
                 column: "Employee_FK");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EmployeeDepartmentsTable_Shift_FK",
-                table: "EmployeeDepartmentsTable",
-                column: "Shift_FK");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployeeSalaryHistoryTable_EmployeeDepartments_FK",
@@ -928,19 +838,19 @@ namespace Proz_WebApi.Migrations
                 column: "FeedbackType_FK");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HealthInformationTable_PersonalInformation_FK",
-                table: "HealthInformationTable",
-                column: "PersonalInformation_FK",
+                name: "IX_GettingStartedTable_Admin_FK",
+                table: "GettingStartedTable",
+                column: "Admin_FK",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_LeaveRequestsHigherRole_HREmployee_FK",
-                table: "LeaveRequestsHigherRole",
+                name: "IX_LeaveRequestsHigherRoleTable_HREmployee_FK",
+                table: "LeaveRequestsHigherRoleTable",
                 column: "HREmployee_FK");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LeaveRequestsHigherRole_Requester_Employee_FK",
-                table: "LeaveRequestsHigherRole",
+                name: "IX_LeaveRequestsHigherRoleTable_Requester_Employee_FK",
+                table: "LeaveRequestsHigherRoleTable",
                 column: "Requester_Employee_FK");
 
             migrationBuilder.CreateIndex(
@@ -990,11 +900,6 @@ namespace Proz_WebApi.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PersonalPhoneNumbersTable_PersonalInformation_FK",
-                table: "PersonalPhoneNumbersTable",
-                column: "PersonalInformation_FK");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokensTable_UserFK",
                 table: "RefreshTokensTable",
                 column: "UserFK");
@@ -1004,6 +909,11 @@ namespace Proz_WebApi.Migrations
                 table: "SalaryScheduleTable",
                 column: "EmployeeDepartment_FK",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ShiftInformationTable_Department_FK",
+                table: "ShiftInformationTable",
+                column: "Department_FK");
         }
 
         /// <inheritdoc />
@@ -1034,12 +944,6 @@ namespace Proz_WebApi.Migrations
                 name: "BreaksTimeTable");
 
             migrationBuilder.DropTable(
-                name: "CurrentAddressTable");
-
-            migrationBuilder.DropTable(
-                name: "DepartmentContactMethodsTable");
-
-            migrationBuilder.DropTable(
                 name: "EmployeeSalaryHistoryTable");
 
             migrationBuilder.DropTable(
@@ -1049,10 +953,10 @@ namespace Proz_WebApi.Migrations
                 name: "Games");
 
             migrationBuilder.DropTable(
-                name: "HealthInformationTable");
+                name: "GettingStartedTable");
 
             migrationBuilder.DropTable(
-                name: "LeaveRequestsHigherRole");
+                name: "LeaveRequestsHigherRoleTable");
 
             migrationBuilder.DropTable(
                 name: "LeaveRequestsTable");
@@ -1070,7 +974,7 @@ namespace Proz_WebApi.Migrations
                 name: "PerformanceRecorderTable");
 
             migrationBuilder.DropTable(
-                name: "PersonalPhoneNumbersTable");
+                name: "PersonalInformationTable");
 
             migrationBuilder.DropTable(
                 name: "RefreshTokensTable");
@@ -1082,22 +986,19 @@ namespace Proz_WebApi.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "FeedbacksTable");
+                name: "ShiftInformationTable");
 
             migrationBuilder.DropTable(
-                name: "PersonalInformationTable");
+                name: "FeedbacksTable");
 
             migrationBuilder.DropTable(
                 name: "EmployeeDepartmentsTable");
 
             migrationBuilder.DropTable(
-                name: "Feedback_Types");
+                name: "FeedbacksTypesTable");
 
             migrationBuilder.DropTable(
                 name: "DepartmentsTable");
-
-            migrationBuilder.DropTable(
-                name: "ShiftInformationTable");
 
             migrationBuilder.DropTable(
                 name: "EmployeesTable");

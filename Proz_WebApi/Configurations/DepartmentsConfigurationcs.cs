@@ -28,9 +28,10 @@ namespace Proz_WebApi.Configurations
       .HasForeignKey(d => d.ParentDepartment_FK)
       .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(d => d.DepartmentContactMethodsNA)
-           .WithOne(dc => dc.Department)
-           .HasForeignKey(dc => dc.Department_FK);
+            builder.HasMany(d => d.ShiftInformationTableNA)
+            .WithOne(s => s.DepartmentNA).HasForeignKey(d => d.Department_FK);
+
+         
         }
     }
 }

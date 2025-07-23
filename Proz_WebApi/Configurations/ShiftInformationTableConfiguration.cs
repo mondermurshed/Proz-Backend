@@ -23,13 +23,14 @@ namespace Proz_WebApi.Configurations
                 .IsUnicode()
                 .IsRequired();
 
+            builder.HasOne(s => s.DepartmentNA)
+            .WithMany(d => d.ShiftInformationTableNA)
+            .HasForeignKey(s => s.Department_FK);
+
             builder.HasMany(s => s.BreaksTimeNA)
                 .WithOne(b => b.ShiftNA)
                 .HasForeignKey(b => b.Shift_FK);
 
-            builder.HasMany(s => s.EmployeeDepartmentsNA)
-                .WithOne(ed => ed.ShiftNA)
-                .HasForeignKey(ed => ed.Shift_FK);
 
         }
     }

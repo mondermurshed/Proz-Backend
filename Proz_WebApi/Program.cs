@@ -224,8 +224,13 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(option =>
 //----------------------------------------------------------------------------------------
      builder.Services.AddAuthorization(options => //you can get this Authorization system from Microsoft.AspNetCore.Authorization package, which is automatically included when you: Create an ASP.NET Core project or when you Install the Microsoft.AspNetCore.Identity package. No extra NuGet packages needed!
      {
-     // Policy using Identity roles
-     options.AddPolicy("Admin", policy =>
+         // Policy using Identity roles
+         options.AddPolicy("AdminOrHR", policy =>
+         {
+             policy.RequireRole(AppRoles_Desktop.Admin, AppRoles_Desktop.HRManager);
+         });
+
+         options.AddPolicy("Admin", policy =>
      {
          policy.RequireRole(AppRoles_Desktop.Admin);
         
@@ -234,24 +239,30 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(option =>
        
     
     options.AddPolicy("HRManager", policy =>
-        policy.RequireRole(AppRoles_Desktop.Admin, AppRoles_Desktop.HRManager));
+        policy.RequireRole(AppRoles_Desktop.HRManager));
 
     options.AddPolicy("DepartmentManager", policy =>
     {
-        policy.RequireRole(AppRoles_Desktop.Admin, AppRoles_Desktop.HRManager, AppRoles_Desktop.DepartmentManager);
+        policy.RequireRole(AppRoles_Desktop.DepartmentManager);
         //policy.RequireClaim("DepartmentApproved", "true");
     });
     options.AddPolicy("Employee", policy =>
     {
-        policy.RequireRole(AppRoles_Desktop.Admin, AppRoles_Desktop.HRManager, AppRoles_Desktop.DepartmentManager,AppRoles_Desktop.Employee);
+        policy.RequireRole(AppRoles_Desktop.Employee);
         
     });
     options.AddPolicy("User", policy =>
     {
-        policy.RequireRole(AppRoles_Desktop.Admin, AppRoles_Desktop.HRManager, AppRoles_Desktop.DepartmentManager, AppRoles_Desktop.Employee, AppRoles_Desktop.User);
+        policy.RequireRole(AppRoles_Desktop.User);
 
     });
-    options.AddPolicy("TrustedUser", policy =>
+
+     options.AddPolicy("AllUsers", policy =>
+     {
+         policy.RequireRole(AppRoles_Desktop.User, AppRoles_Desktop.Employee, AppRoles_Desktop.DepartmentManager, AppRoles_Desktop.HRManager, AppRoles_Desktop.Admin);
+
+     });
+         options.AddPolicy("TrustedUser", policy =>
     {
         policy.RequireRole("User", "Moderator");
         policy.RequireClaim("AccountAge", "6Months");
@@ -322,15 +333,17 @@ var app = builder.Build();
 //{
 //    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ExtendedIdentityRolesDesktop>>();
 //    //default hex colors, user = #21b559    employee = #2181b5   department manager = #2621b5    hr manager =  #9c21b5   admin = #b52121
-//    var roleName = AppRoles_Desktop.Admin;
-//    var roleColorCode = "#b52121";
-
-//    if (!await roleManager.RoleExistsAsync(roleName))
+//    //var roleName = AppRoles_Desktop.User;
+//    //var roleColorCode = "#b52121";
+//    var rolenames = new List<string>() { AppRoles_Desktop.User, AppRoles_Desktop.Employee, AppRoles_Desktop.DepartmentManager, AppRoles_Desktop.HRManager, AppRoles_Desktop.Admin };
+//    var roleColorValues = new List<string>() { "#21b559", "#2181b5", "#2621b5", "#9c21b5", "#b52121" };
+//    int count = 0;
+//    foreach (var rolename in rolenames)
 //    {
 //        var role = new ExtendedIdentityRolesDesktop
 //        {
-//            Name = roleName,
-//            RoleColorCode = roleColorCode
+//            Name = rolename,
+//            RoleColorCode = roleColorValues[count],
 //        };
 
 //        var result = await roleManager.CreateAsync(role);
@@ -342,7 +355,10 @@ var app = builder.Build();
 //                Console.WriteLine($"Role creation error: {error.Description}");
 //            }
 //        }
+//        count++;
 //    }
+
+
 //}
 
 if (app.Environment.IsDevelopment())

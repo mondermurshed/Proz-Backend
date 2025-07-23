@@ -12,8 +12,8 @@ using Proz_WebApi.Data;
 namespace Proz_WebApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext_Desktop))]
-    [Migration("20250712225034_StartPoint")]
-    partial class StartPoint
+    [Migration("20250722195657_allowingnullforgendercolumn")]
+    partial class allowingnullforgendercolumn
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -200,11 +200,9 @@ namespace Proz_WebApi.Migrations
 
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.Breaks_Time", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<TimeOnly>("BreakEnd")
                         .HasColumnType("time");
@@ -223,103 +221,14 @@ namespace Proz_WebApi.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(350)");
 
-                    b.Property<int>("Shift_FK")
-                        .HasColumnType("int");
+                    b.Property<Guid>("Shift_FK")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Shift_FK");
 
                     b.ToTable("BreaksTimeTable");
-                });
-
-            modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.CurrentAddress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CityName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("CountryName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("DepartmentNumber")
-                        .HasMaxLength(50)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("Describe_The_Location")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<double?>("Latitude_Coordinate")
-                        .HasColumnType("float");
-
-                    b.Property<double?>("Longitude_Coordinate")
-                        .HasColumnType("float");
-
-                    b.Property<Guid>("PersonalInformation_FK")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("StreetAddress")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonalInformation_FK")
-                        .IsUnique();
-
-                    b.ToTable("CurrentAddressTable");
-                });
-
-            modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.DepartmentContactMethods", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasDefaultValueSql("NEWSEQUENTIALID()");
-
-                    b.Property<string>("ContactDetail")
-                        .IsRequired()
-                        .HasMaxLength(320)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(320)");
-
-                    b.Property<string>("ContactMethod")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<Guid>("Department_FK")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Purpose")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Department_FK");
-
-                    b.ToTable("DepartmentContactMethodsTable");
                 });
 
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.Departments", b =>
@@ -403,9 +312,6 @@ namespace Proz_WebApi.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("float(18)");
 
-                    b.Property<int>("Shift_FK")
-                        .HasColumnType("int");
-
                     b.Property<DateOnly>("StartDate")
                         .HasColumnType("date");
 
@@ -414,8 +320,6 @@ namespace Proz_WebApi.Migrations
                     b.HasIndex("Department_FK");
 
                     b.HasIndex("Employee_FK");
-
-                    b.HasIndex("Shift_FK");
 
                     b.ToTable("EmployeeDepartmentsTable");
                 });
@@ -589,7 +493,7 @@ namespace Proz_WebApi.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Feedback_Types");
+                    b.ToTable("FeedbacksTypesTable");
                 });
 
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.Feedbacks", b =>
@@ -709,51 +613,36 @@ namespace Proz_WebApi.Migrations
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.Health_Information", b =>
+            modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.GettingStartedTable", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier")
+                        .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Allergies")
-                        .HasMaxLength(500)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("CountryCodeOfThePhone")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(5)");
-
-                    b.Property<string>("EmergencyContactName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("EmergencyContactPhone")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<string>("MedicalConditions")
-                        .HasMaxLength(500)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid>("PersonalInformation_FK")
+                    b.Property<Guid>("Admin_FK")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CompanyName")
+                        .HasMaxLength(100)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("CurrenyType")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(3)");
+
+                    b.Property<DateOnly>("SystemFirstRun")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PersonalInformation_FK")
+                    b.HasIndex("Admin_FK")
                         .IsUnique();
 
-                    b.ToTable("HealthInformationTable");
+                    b.ToTable("GettingStartedTable");
                 });
 
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.LeaveRequests", b =>
@@ -923,7 +812,7 @@ namespace Proz_WebApi.Migrations
 
                     b.HasIndex("Requester_Employee_FK");
 
-                    b.ToTable("LeaveRequestsHigherRole");
+                    b.ToTable("LeaveRequestsHigherRoleTable");
                 });
 
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.LoginHistory", b =>
@@ -1111,10 +1000,10 @@ namespace Proz_WebApi.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-                    b.Property<int>("Age")
+                    b.Property<int?>("Age")
                         .HasColumnType("int");
 
-                    b.Property<DateOnly>("DateOfBirth")
+                    b.Property<DateOnly?>("DateOfBirth")
                         .HasColumnType("date");
 
                     b.Property<string>("FullName")
@@ -1124,7 +1013,6 @@ namespace Proz_WebApi.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("Gender")
-                        .IsRequired()
                         .HasMaxLength(6)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(6)");
@@ -1132,7 +1020,7 @@ namespace Proz_WebApi.Migrations
                     b.Property<Guid>("IdentityUser_FK")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("LivingOnPrimaryPlace")
+                    b.Property<bool?>("LivingOnPrimaryPlace")
                         .HasColumnType("bit");
 
                     b.Property<string>("Nationality")
@@ -1146,42 +1034,6 @@ namespace Proz_WebApi.Migrations
                         .IsUnique();
 
                     b.ToTable("PersonalInformationTable");
-                });
-
-            modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.Personal_Phone_Numbers", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CountryNumber")
-                        .IsRequired()
-                        .HasMaxLength(5)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(5)");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<string>("NumberType")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<Guid>("PersonalInformation_FK")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonalInformation_FK");
-
-                    b.ToTable("PersonalPhoneNumbersTable");
                 });
 
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.RefreshTokenDesktop", b =>
@@ -1256,11 +1108,12 @@ namespace Proz_WebApi.Migrations
 
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.ShiftInformationTable", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Department_FK")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ShiftType")
                         .IsRequired()
@@ -1278,6 +1131,8 @@ namespace Proz_WebApi.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Department_FK");
 
                     b.ToTable("ShiftInformationTable");
                 });
@@ -1359,28 +1214,6 @@ namespace Proz_WebApi.Migrations
                     b.Navigation("ShiftNA");
                 });
 
-            modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.CurrentAddress", b =>
-                {
-                    b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Personal_Information", "PersonalInformationNA")
-                        .WithOne("CurrentAddressNA")
-                        .HasForeignKey("Proz_WebApi.Models.DesktopModels.DatabaseTables.CurrentAddress", "PersonalInformation_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PersonalInformationNA");
-                });
-
-            modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.DepartmentContactMethods", b =>
-                {
-                    b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Departments", "Department")
-                        .WithMany("DepartmentContactMethodsNA")
-                        .HasForeignKey("Department_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Department");
-                });
-
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.Departments", b =>
                 {
                     b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employees", "ManagerNA")
@@ -1424,17 +1257,9 @@ namespace Proz_WebApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.ShiftInformationTable", "ShiftNA")
-                        .WithMany("EmployeeDepartmentsNA")
-                        .HasForeignKey("Shift_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("DepartmentNA");
 
                     b.Navigation("EmployeeNA");
-
-                    b.Navigation("ShiftNA");
                 });
 
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employees", b =>
@@ -1505,15 +1330,15 @@ namespace Proz_WebApi.Migrations
                     b.Navigation("FeedbackNA");
                 });
 
-            modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.Health_Information", b =>
+            modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.GettingStartedTable", b =>
                 {
-                    b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Personal_Information", "PersonalInformationNA")
-                        .WithOne("HealthInformationNA")
-                        .HasForeignKey("Proz_WebApi.Models.DesktopModels.DatabaseTables.Health_Information", "PersonalInformation_FK")
+                    b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.ExtendedIdentityUsersDesktop", "AdminNA")
+                        .WithOne("GettingStartedTableNA")
+                        .HasForeignKey("Proz_WebApi.Models.DesktopModels.DatabaseTables.GettingStartedTable", "Admin_FK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PersonalInformationNA");
+                    b.Navigation("AdminNA");
                 });
 
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.LeaveRequests", b =>
@@ -1622,17 +1447,6 @@ namespace Proz_WebApi.Migrations
                     b.Navigation("IdentityUserNA");
                 });
 
-            modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.Personal_Phone_Numbers", b =>
-                {
-                    b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Personal_Information", "PersonalInformationNA")
-                        .WithMany("PhoneNumbersNA")
-                        .HasForeignKey("PersonalInformation_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PersonalInformationNA");
-                });
-
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.RefreshTokenDesktop", b =>
                 {
                     b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.ExtendedIdentityUsersDesktop", "UserNA")
@@ -1655,9 +1469,20 @@ namespace Proz_WebApi.Migrations
                     b.Navigation("EmployeeDepartmentNA");
                 });
 
+            modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.ShiftInformationTable", b =>
+                {
+                    b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Departments", "DepartmentNA")
+                        .WithMany("ShiftInformationTableNA")
+                        .HasForeignKey("Department_FK")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DepartmentNA");
+                });
+
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.Departments", b =>
                 {
-                    b.Navigation("DepartmentContactMethodsNA");
+                    b.Navigation("ShiftInformationTableNA");
 
                     b.Navigation("SubDepartmentsNA");
                 });
@@ -1713,6 +1538,8 @@ namespace Proz_WebApi.Migrations
                     b.Navigation("EmployeesNA")
                         .IsRequired();
 
+                    b.Navigation("GettingStartedTableNA");
+
                     b.Navigation("LoginHistroyNA");
 
                     b.Navigation("PersonalInformationNA")
@@ -1734,22 +1561,9 @@ namespace Proz_WebApi.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.Personal_Information", b =>
-                {
-                    b.Navigation("CurrentAddressNA")
-                        .IsRequired();
-
-                    b.Navigation("HealthInformationNA")
-                        .IsRequired();
-
-                    b.Navigation("PhoneNumbersNA");
-                });
-
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.ShiftInformationTable", b =>
                 {
                     b.Navigation("BreaksTimeNA");
-
-                    b.Navigation("EmployeeDepartmentsNA");
                 });
 #pragma warning restore 612, 618
         }

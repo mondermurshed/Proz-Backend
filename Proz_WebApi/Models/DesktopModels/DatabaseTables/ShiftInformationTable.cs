@@ -8,7 +8,7 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id {  get; set; }
+        public Guid Id {  get; set; }
         public TimeOnly Shift_Starts { get; set; }
         public TimeOnly Shift_Ends { get; set; }
         public int? TotalHours { get; set; }
@@ -16,7 +16,10 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
         [MaxLength(15)]
         [Unicode]
         public string ShiftType { get; set; }
+
+        public Guid Department_FK { get; set; }
+        public Departments DepartmentNA { get; set; }
         public ICollection<Breaks_Time> BreaksTimeNA { get; set; }
-        public ICollection<Employee_Departments> EmployeeDepartmentsNA { get; set; }
+
     }
 }

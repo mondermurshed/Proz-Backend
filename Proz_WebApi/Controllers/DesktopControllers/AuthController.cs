@@ -334,11 +334,11 @@ namespace Proz_WebApi.Controllers.DesktopControllers
         [HttpPost("ChangeUsername")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[AllowAnonymous] do NOT make this endpoint [Authorize] because the main goal of this endpoint (The refresh token) purpose is to renew an expired access token, so the endpoint must work even if the access token is invalid/expired.
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "AllUsers")]
         public async Task<ActionResult<string>> ChangeUserName([FromBody] ChangeUsernameDTO Request)
         {
             var currentUserId = User.FindFirst("TheCallerID")?.Value;
-            if (string.IsNullOrEmpty(currentUserId) ||Request.NewUsername==null ||Request.NewUsername==null)
+            if (string.IsNullOrEmpty(currentUserId) || Request.NewUsername == null || Request.NewUsername == null)
             {
 
                 return Unauthorized("The Requester is unknown or some null data was entered");
@@ -363,7 +363,7 @@ namespace Proz_WebApi.Controllers.DesktopControllers
         [HttpPost("ChangePassword")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        //[AllowAnonymous] do NOT make this endpoint [Authorize] because the main goal of this endpoint (The refresh token) purpose is to renew an expired access token, so the endpoint must work even if the access token is invalid/expired.
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Policy = "AllUsers")]
         public async Task<ActionResult<string>> ChangePassword([FromBody] ChangePasswordDTO Request)
         {
             var currentUserId = User.FindFirst("TheCallerID")?.Value;

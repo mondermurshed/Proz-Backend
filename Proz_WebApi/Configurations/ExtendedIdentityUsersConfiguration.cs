@@ -37,6 +37,11 @@ namespace Proz_WebApi.Configurations
             builder.HasOne(u => u.EmployeesNA)
             .WithOne(e => e.IdentityUserNA)
             .HasForeignKey<Employees>(e => e.IdentityUsers_FK);
+
+             builder.HasOne(u => u.GettingStartedTableNA)
+            .WithOne(e => e.AdminNA)
+            .HasForeignKey<GettingStartedTable>(e => e.Admin_FK);
+
         }
     }
 }
