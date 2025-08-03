@@ -11,17 +11,15 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; set; }
         [Precision(18, 2)]
-        public Double Salary { get; set; }
+        public Double? Salary { get; set; }
       
         [Precision(18, 2)]
         public double? Company_Bonus { get; set; }
         public DateOnly StartDate { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow); 
         public Guid Employee_FK { get; set; }
         public Employees EmployeeNA { get; set; }
-        public Guid Department_FK { get; set; }
+        public Guid? Department_FK { get; set; }
         public Departments DepartmentNA { get; set; }
-  
-        public ICollection<Audit_Logs> Audit_LogsNA { get; set; } = new List<Audit_Logs>();
         public Salary_Schedule SalaryScheduleNA { get;  set; }
         public ICollection<Payment_Records> PaymentRecordsNA { get; set; } = new List<Payment_Records>();
         public ICollection<Attendance_Recorder> AttendanceRecordersNA { get;set; } = new List<Attendance_Recorder>();

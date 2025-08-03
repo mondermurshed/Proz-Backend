@@ -23,6 +23,10 @@ using Proz_WebApi.Models.DesktopModels.DTO.Admin;
 using SimpleCryptography.Business.EncryptionServices;
 using StackExchange.Redis;
 using Zxcvbn;
+using EFCore.BulkExtensions;
+using Polly;
+using Proz_WebApi.Models.DesktopModels.DTO.Auth;
+
 
 namespace Proz_WebApi.Services.DesktopServices
 {
@@ -138,15 +142,25 @@ namespace Proz_WebApi.Services.DesktopServices
                     return finalresult;
                 }
                 string encryptedPassword = _aesEncryptionService.Encrypt(gettingstartedDTO.AdminPassword);
-                var userTempData = new UserRegisterationTemp
+                var userTempData = new GettingStartedStageOneTemp
                 {
-                    Username = normalizedName,
-                    Email = normalizedEmail,
-                    Password = encryptedPassword
+                    AdminUsername = normalizedName,
+                    AdminEmail = normalizedEmail,
+                    AdminPassword = encryptedPassword,
+                    Age=gettingstartedDTO.Age,
+                    Date_Of_Birth=gettingstartedDTO.Date_Of_Birth,
+                    Gender=gettingstartedDTO.Gender,
+                    PaymentFrequency = gettingstartedDTO.PaymentFrequency,
+                    Nationality =gettingstartedDTO.Nationality,
+                    Living_On_Primary_Place=gettingstartedDTO.Living_On_Primary_Place,
+                    CompanyName=gettingstartedDTO.CompanyName,
+                    Currency=gettingstartedDTO.Currency,
+                    FullName=gettingstartedDTO.FullName
+                   
                 };
                 try
                 {
-                    await _managingTempData.StoreUserRegistrationDataTemp(userTempData, normalizedEmail);
+                    await _managingTempData.StoreAdminRegistrationDataTemp(userTempData, normalizedEmail);
                 }
                 catch (Exception ex)
                 {
@@ -201,20 +215,20 @@ namespace Proz_WebApi.Services.DesktopServices
                         finalresult.Errors.Add("Invalid or expired verification code.");
                         return finalresult;
                     }
-                    var cache = await _managingTempData.GetUserRegistrationDataTemp(normalizedEmail);
+                    var cache = await _managingTempData.GetAdminRegistrationDataTemp(normalizedEmail);
                     if (cache == null)
                     {
                         finalresult.Succeeded = false;
                         finalresult.Errors.Add("Registration data expired. Please try again..");
                         return finalresult;
                     }
-                    string normalizeUserName = _emailNormalizer.NormalizeName(cache.Username); //we don't trust redis here so we are normalizing the username and not just taking the username from redis blindly (because an attacker that may use the server and may change some users's data, because if it did then strange data will enter the database for example username all upper case)
+                    string normalizeUserName = _emailNormalizer.NormalizeName(cache.AdminUsername); //we don't trust redis here so we are normalizing the username and not just taking the username from redis blindly (because an attacker that may use the server and may change some users's data, because if it did then strange data will enter the database for example username all upper case)
                     var user = new ExtendedIdentityUsersDesktop
                     {
                         UserName = normalizeUserName,
                         Email = normalizedEmail
                     };
-                    string decryptedPassword = _aesEncryptionService.Decrypt(cache.Password);
+                    string decryptedPassword = _aesEncryptionService.Decrypt(cache.AdminPassword);
                     var result = await _userManager.CreateAsync(user, decryptedPassword);  //UserManager and RoleManager automatically save changes when you call methods like CreateAsync or AddToRoleAsync. When you use _dbcontext directly(e.g., adding a refresh token), you must call SaveChangesAsync. This < must answer your question about why we don't put SaveChangesAsync in every time we interact with the database.
 
                     if (!result.Succeeded)
@@ -238,28 +252,33 @@ namespace Proz_WebApi.Services.DesktopServices
                     }
                     var employee = new Employees
                     {
+                        
                         IdentityUsers_FK = user.Id,
                     };
 
-                    _dbcontext.EmployeesTable.Add(employee);
+                   await _dbcontext.EmployeesTable.AddAsync(employee);
 
                     var systemRow = new GettingStartedTable
                     {
-                        CompanyName = gettingstartedDTO.CompanyName,
-                        CurrenyType = gettingstartedDTO.Currency,
+                        CompanyName = cache.CompanyName,
+                        CurrenyType = cache.Currency,
+                        PaymentFrquency = cache.PaymentFrequency,
                         Admin_FK = user.Id,
+                        
                     };
+                  await  _dbcontext.GettingStartedTable.AddAsync(systemRow);
                     await _dbcontext.PersonalInformationTable.AddAsync(new Personal_Information
                     {
-                        FullName = gettingstartedDTO.FullName,
-                        Age=Convert.ToInt32( gettingstartedDTO.Age),
-                        DateOfBirth=gettingstartedDTO.Date_Of_Birth,
-                        Gender=gettingstartedDTO.Gender,
-                        Nationality=gettingstartedDTO.Nationality,
-                        LivingOnPrimaryPlace = gettingstartedDTO.Living_On_Primary_Place,
+                        FullName = cache.FullName,
+                        Age=Convert.ToInt32( cache.Age),
+                        DateOfBirth=cache.Date_Of_Birth,
+                        Gender=cache.Gender,
+                        Nationality=cache.Nationality,
+                        LivingOnPrimaryPlace = cache.Living_On_Primary_Place,
+                        
                         IdentityUser_FK = user.Id
                     });
-                    _dbcontext.GettingStartedTable.Add(systemRow);
+                 
                     await _dbcontext.SaveChangesAsync();
                     scope.Complete();
                     finalresult.Succeeded = true;
@@ -290,6 +309,63 @@ namespace Proz_WebApi.Services.DesktopServices
 
 
         }
+
+
+
+
+
+        public async Task<FinalResult> InitializeSystemAsyncResendData(ResendVerificationCodeDTO resendcode)  //--------------------------------------------------
+        {
+            var finalResult = new FinalResult();
+            string? normalizedEmail = _emailNormalizer.NormalizeEmail(resendcode.Email);
+
+            if (normalizedEmail == null)
+            {
+                finalResult.Succeeded = false;
+                finalResult.Errors.Add("Please enter a valid email.");
+                return finalResult;
+            }
+
+
+
+            try
+            {
+                if (await _managingTempData.IsInCooldownAsync(normalizedEmail))
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Please wait few seconds from the moment you sent the previous code!");
+                    return finalResult;
+                }
+                var existingData = await _managingTempData.GetAdminRegistrationDataTemp(normalizedEmail);
+                if (existingData == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("No pending registration found for this email.");
+                    return finalResult;
+                }
+                string newCode = await _managingTempData.GenerateAndStoreCodeAsync(normalizedEmail);
+                await _managingTempData.StoreAdminRegistrationDataTemp(existingData, normalizedEmail);
+                if (!await _EmailSender.SendVerificationCodeAsync(normalizedEmail, newCode))
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Something went wrong while trying to send the email. Please try again later");
+                    return finalResult;
+                }
+                await _managingTempData.StartCooldownAsync(normalizedEmail);
+                finalResult.Succeeded = true;
+                finalResult.Messages.Add("Verification code has been resent to your email.");
+
+            }
+            catch (Exception ex)
+            {
+                finalResult.Succeeded = false;
+                finalResult.Errors.Add("An error occurred. Please try again later.");
+            }
+
+            return finalResult;
+        }
+
+
 
         //-------------------------------------------------------------------------------------------------------   
 
@@ -363,7 +439,7 @@ namespace Proz_WebApi.Services.DesktopServices
 
 
 
-      public async Task<FinalResult> UpdateRoles(string requesterId, UserInformationClass request)
+public async Task<FinalResult> UpdateRoles(string requesterId, UserInformationClass request)
 {
     var finalResult = new FinalResult();
 
@@ -378,7 +454,19 @@ namespace Proz_WebApi.Services.DesktopServices
             return finalResult;
         }
 
-        var requesterRoles = await _userManager.GetRolesAsync(requester);
+        Guid requesterID;
+        try
+        {
+            requesterID = await _dbcontext.Users.Where(c => c.Id == requester.Id).Select(c => c.EmployeesNA.Id).FirstOrDefaultAsync();
+        }
+       
+        catch
+        {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Invalid requester");
+            return finalResult;
+        }
+                var requesterRoles = await _userManager.GetRolesAsync(requester);
         if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
         {
             finalResult.Succeeded = false;
@@ -416,8 +504,64 @@ namespace Proz_WebApi.Services.DesktopServices
 
         using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
         {
-            // Remove all current roles
-            var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+             var employeerow = _dbcontext.EmployeesTable.Where(a => a.IdentityUsers_FK == user.Id).FirstOrDefault();
+             if (employeerow == null)
+            {
+            var employee = new Employees
+            {
+
+                IdentityUsers_FK = user.Id,
+
+            };
+
+            await _dbcontext.EmployeesTable.AddAsync(employee);
+            await _dbcontext.SaveChangesAsync();
+            employeerow = _dbcontext.EmployeesTable.Where(a => a.IdentityUsers_FK == user.Id).FirstOrDefault();
+                    }
+
+
+
+             var employee_departmentrow = _dbcontext.EmployeeDepartmentsTable.Where(a => a.Employee_FK == employeerow!.Id).FirstOrDefault();
+            if (employee_departmentrow == null && request.NewRoles!=AppRoles_Desktop.Admin)
+            {
+            var employeedepartment = new Employee_Departments
+            {
+                Employee_FK = employeerow.Id,
+
+              
+            };
+
+            await _dbcontext.EmployeeDepartmentsTable.AddAsync(employeedepartment);
+            await _dbcontext.SaveChangesAsync();
+           }
+            if(request.NewRoles == AppRoles_Desktop.Admin)
+            {
+              foreach(var record in _dbcontext.EmployeeDepartmentsTable.Where(e => e.Employee_FK == employeerow.Id).ToList())
+              {
+                  _dbcontext.EmployeeDepartmentsTable.Remove(record);
+              }
+                           
+            }
+
+               var countmanagertowhat = await _dbcontext.DepartmentsTable.Where(e => e.Manager_FK == user.Id).CountAsync();
+               if (request.NewRoles == AppRoles_Desktop.HRManager && countmanagertowhat>1)
+               {
+                   finalResult.Succeeded = false;
+                   finalResult.Errors.Add($"An HR Manager can only be manager at one department, please unassign it from all other extra departments");
+                   return finalResult;
+               }
+           
+               if ((request.NewRoles == AppRoles_Desktop.User || request.NewRoles == AppRoles_Desktop.Employee || request.NewRoles == AppRoles_Desktop.Admin) && await _dbcontext.DepartmentsTable.Where(e => e.Manager_FK == user.Id).AnyAsync())
+               {
+                   finalResult.Succeeded = false;
+                   finalResult.Errors.Add($"A person with the {request.NewRoles} role can't be a manager to any department in the system");
+                   return finalResult;
+               }
+
+
+                    // Remove all current roles
+                    var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
             if (!removeResult.Succeeded)
             {
                 finalResult.Succeeded = false;
@@ -433,19 +577,31 @@ namespace Proz_WebApi.Services.DesktopServices
                 finalResult.Errors.Add($"Failed to add new role: {string.Join(", ", addResult.Errors.Select(e => e.Description))}");
                 return finalResult;
             }
-
-            scope.Complete();
+                    string? targetName =await _dbcontext.Users.Where(u => u.Id == user.Id).Select(u => u.PersonalInformationNA.FullName).FirstOrDefaultAsync();
+                    if (targetName == null)
+                        targetName = "**No Name**";
+                    var log = new Audit_Logs
+                    {
+                        ActionType = "Updating",
+                        Notes = $"Update user role of the user '{targetName}' to '{request.NewRoles}'",
+                        PerformerAccount_FK = requesterID,
+                        TargetEntity_FK = employeerow.Id
+                    };
+                    await _dbcontext.AuditLogsTable.AddAsync(log);
+                    await _dbcontext.SaveChangesAsync();
+                    scope.Complete();
         }
 
-        finalResult.Succeeded = true;
-        finalResult.Messages.Add($"User {user.UserName} was successfully assigned to role '{request.NewRoles}'");
+                string user_fullname = await _dbcontext.Users.Include(u => u.PersonalInformationNA).Where(a => a.Id == request.UserId).Select(u => u.PersonalInformationNA.FullName).FirstOrDefaultAsync() ?? "Unknown User";
+                finalResult.Succeeded = true;
+        finalResult.Messages.Add($"User {user_fullname} was successfully assigned to role '{request.NewRoles}'");
         return finalResult;
     }
-    catch (Exception ex)
+  catch (Exception ex)
     {
         _loggerr.LogError(ex, "Error occurred during role update.");
         finalResult.Succeeded = false;
-        finalResult.Errors.Add("An error occurred while updating roles. No changes were made.");
+        finalResult.Errors.Add($"An error occurred while updating roles. No changes were made. {ex}");
         return finalResult;
     }
 }
@@ -469,7 +625,19 @@ namespace Proz_WebApi.Services.DesktopServices
                     finalresult.Errors.Add("The requester does not exist in the database!");
                     return finalresult;
                 }
-
+                Guid requesterID;
+                try
+                {
+                     requesterID = await _dbcontext.Users.Where(c => c.Id == currentAdmin.Id).Select(c => c.EmployeesNA.Id).FirstOrDefaultAsync();
+                }
+                
+                catch
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Add("Invalid requester");
+                    return finalresult;
+                }
+              
                 var requesterRoles = await _userManager.GetRolesAsync(currentAdmin);
                 if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
                 {
@@ -487,6 +655,17 @@ namespace Proz_WebApi.Services.DesktopServices
                     return finalresult;
                 }
 
+                Guid TargetID;
+                try
+                {
+                     TargetID = await _dbcontext.Users.Where(c => c.Id == userToDelete.Id).Select(c => c.EmployeesNA.Id).FirstOrDefaultAsync();
+                }
+                 catch
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Add("Invalid Target");
+                    return finalresult;
+                }
                 // Step 3: Prevent deletion of another Admin
                 var userRoles = await _userManager.GetRolesAsync(userToDelete);
                 if (userRoles.Contains(AppRoles_Desktop.Admin))
@@ -495,21 +674,51 @@ namespace Proz_WebApi.Services.DesktopServices
                     finalresult.Errors.Add("You are not allowed to delete another Admin.");
                     return finalresult;
                 }
-                string fullname= userToDelete.PersonalInformationNA?.FullName ?? "Unknown User";
+
+
+                //a
+                string user_fullname =await _dbcontext.Users.Include(u => u.PersonalInformationNA).Where(a => a.Id == userID).Select(u => u.PersonalInformationNA.FullName).FirstOrDefaultAsync() ?? "Unknown User";
 
                 // Step 4: Delete the user
-                var deleteResult = await _userManager.DeleteAsync(userToDelete);
-                if (deleteResult.Succeeded)
+                using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
                 {
-                    finalresult.Succeeded = true;
-                    finalresult.Messages.Add($"User {fullname} was successfully deleted.");
-                }
-                else
-                {
-                    finalresult.Succeeded = false;
-                    finalresult.Errors.Add($"Failed to delete user: {string.Join(", ", deleteResult.Errors.Select(e => e.Description))}");
-                }
+;
+                    var auditLogs = await _dbcontext.AuditLogsTable
+                    .Where(log => log.PerformerAccount_FK == TargetID)
+                    .ToListAsync();
 
+                    // Step 2: Modify them in memory
+                    foreach (var log1 in auditLogs)
+                    {
+                        log1.PerformerAccount_FK = null; // or set to default system user ID
+                    }
+
+                    await _dbcontext.BulkUpdateAsync(auditLogs);
+
+
+                    var deleteResult = await _userManager.DeleteAsync(userToDelete);
+             
+                    if (!deleteResult.Succeeded)
+                    {
+
+                        finalresult.Succeeded = false;
+                        finalresult.Errors.Add($"Failed to delete the user: {string.Join(", ", deleteResult.Errors.Select(e => e.Description))}");
+                        return finalresult;
+                    }
+                    var log = new Audit_Logs
+                    {
+                        ActionType = "Deleting",
+                        Notes = $"Deletes Account Of The User '{user_fullname}'",
+                        PerformerAccount_FK = requesterID,
+                        TargetEntity_FK = TargetID
+                    };
+                    await _dbcontext.AuditLogsTable.AddAsync(log);
+
+                    await _dbcontext.SaveChangesAsync();
+                    scope.Complete();
+                }
+                finalresult.Succeeded = true;
+                finalresult.Messages.Add($"User {user_fullname} was successfully deleted.");
                 return finalresult;
             }
             catch (Exception ex)
@@ -520,6 +729,1010 @@ namespace Proz_WebApi.Services.DesktopServices
                 finalresult.Errors.Add("An unexpected error occurred while trying to delete the account.");
                 return finalresult;
             }
+        }
+
+
+
+        public async Task<FinalResult> CreateANewfeedbackType(string requesterId, CreateAFeedbackTypeRequest request)
+        {
+            var finalResult = new FinalResult();
+
+            try
+            {
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Requester is invalid.");
+                    return finalResult;
+                }
+               
+
+
+                Guid requesterID;
+                try
+                {
+                  requesterID = await _dbcontext.Users.Where(c => c.Id == requester.Id).Select(c => c.EmployeesNA.Id).FirstOrDefaultAsync();
+                }
+
+                catch
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Invalid requester");
+                    return finalResult;
+                }
+
+                var requesterRoles = await _userManager.GetRolesAsync(requester);
+                if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Only Admins are allowed to Insert Feedback types.");
+                    return finalResult;
+                }
+                 int count= _dbcontext.FeedbacksTypesTable.Where(ft => ft.FeedbackType == request.feedbackTypeName).Count();
+                if(count != 0)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"Feedback type {request.feedbackTypeName} already exists.");
+                    return finalResult;
+                }
+
+                using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+                {
+                   
+                await _dbcontext.FeedbacksTypesTable.AddAsync(new Feedback_Types
+                {
+                    FeedbackType = request.feedbackTypeName,
+                });
+                    var log = new Audit_Logs
+                    {
+                        ActionType = "Creating",
+                        Notes = $"Creates Feedback Type '{request.feedbackTypeName}'",
+                        PerformerAccount_FK = requesterID,
+                        TargetEntity_FK = null
+                    };
+                    await _dbcontext.AuditLogsTable.AddAsync(log);
+
+                    await _dbcontext.SaveChangesAsync();
+                    scope.Complete();
+                }
+
+             
+                finalResult.Succeeded = true;
+                finalResult.Messages.Add($"Feedback {request.feedbackTypeName} was successfully inserted as a feedback type in the system.");
+                return finalResult;
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, "Error occurred during role update.");
+                finalResult.Succeeded = false;
+                finalResult.Errors.Add("Couldn't save the new feedback type, please wait and try again later.");
+                return finalResult;
+            }
+        }
+
+        public async Task<IEnumerable<ReturnAllFeedbackTypes>> GetFeedbackTypes(string requesterId)
+        {
+        
+
+            try
+            {
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+                    
+                    return null;
+                }
+
+                var requesterRoles = await _userManager.GetRolesAsync(requester);
+                if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                {
+                   
+                    return null;
+                }
+
+
+              
+                var result = await _dbcontext.FeedbacksTypesTable
+                .Select(x => new ReturnAllFeedbackTypes
+                {
+                    Id = x.id,
+                    FeedbackTypeName = x.FeedbackType
+                }).ToListAsync();
+
+
+                return result;
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, "Error occurred during fetching feedback types by an admin.");
+                return null;
+            }
+        }
+
+
+
+        public async Task<FinalResult> RemoveAFeedbackType(RemoveFeedbackTypeDTO request, string currentAdminId)
+        {
+            var finalresult = new FinalResult();
+
+            try
+            {
+                // Step 1: Validate the admin making the request
+                var currentAdmin = await _userManager.FindByIdAsync(currentAdminId);
+                if (currentAdmin == null)
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Add("The requester does not exist in the database!");
+                    return finalresult;
+                }
+              
+                Guid requesteridmanager;
+                try
+                {
+                     requesteridmanager = await _dbcontext.Users.Where(c => c.Id == currentAdmin.Id).Select(c => c.EmployeesNA.Id).FirstOrDefaultAsync();
+                }
+
+                catch
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Add("Invalid requester");
+                    return finalresult;
+                }
+                var requesterRoles = await _userManager.GetRolesAsync(currentAdmin);
+                if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Add("Only Admins are allowed to delete accounts.");
+                    return finalresult;
+                }
+
+                var feedbacktype = await _dbcontext.FeedbacksTypesTable.Where(ft => ft.id == request.FeedbackID).FirstOrDefaultAsync();
+                if (feedbacktype == null)
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Add("Couldn't find the feedback type");
+                    return finalresult;
+                }
+
+           
+
+                var count =await  _dbcontext.FeedbacksTable.Where(ft => ft.FeedbackType_FK == request.FeedbackID).CountAsync();
+
+                if (count != 0 && string.IsNullOrWhiteSpace(request.ReplaceWith))
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Add("The current feedback you wanted to delete is being used by other feedbacks records. \n we can't delete it but you can still replace it with something that has the similar meaning. \n Please insert in the textbox the thing you want to replace it with.");
+                    return finalresult;
+                }
+                else if (count==0)
+                {
+                    using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+                    {
+                        _dbcontext.FeedbacksTypesTable.Remove(feedbacktype);
+
+                        var log = new Audit_Logs
+                        {
+                            ActionType = "Deleting",
+                            Notes = $"Deletes Feedback Type '{feedbacktype.FeedbackType}'",
+                            PerformerAccount_FK = requesteridmanager,
+                            TargetEntity_FK = null
+                        };
+                        await _dbcontext.AuditLogsTable.AddAsync(log);
+
+
+                        await _dbcontext.SaveChangesAsync();
+                        finalresult.Succeeded = true;
+                        finalresult.Messages.Add($"Feedback Type was successfully deleted.");
+
+
+                        scope.Complete();
+                        return finalresult;
+
+                    
+
+                    }
+                }
+                else
+                {
+                    using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+                    {
+                        feedbacktype.FeedbackType = request.ReplaceWith;
+
+                        var log = new Audit_Logs
+                        {
+                            ActionType = "Updating",
+                            Notes = $"Replaces Feedback Type name from '{feedbacktype.FeedbackType}' to '{request.ReplaceWith}'",
+                            PerformerAccount_FK = requesteridmanager,
+                            TargetEntity_FK = null
+                        };
+                        await _dbcontext.AuditLogsTable.AddAsync(log);
+                        await _dbcontext.SaveChangesAsync();
+                        scope.Complete();
+                    finalresult.Succeeded = true;
+                    finalresult.Messages.Add($"Feedback Type was successfully replaced with {request.ReplaceWith}.");
+                    return finalresult;
+                    }
+                }
+              
+                // Step 4: Delete the user
+              
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, $"An error occurred while deleting the feedback with the GUID {request.FeedbackID}");
+
+                finalresult.Succeeded = false;
+                finalresult.Errors.Add("Couldn't delete the feedback type.");
+                return finalresult;
+            }
+        }
+
+
+
+        public async Task<IEnumerable<ReturnAllDepartmentManagers>> GetAllDepartmentManagers(string requesterID)
+        {
+            //var user =await _userManager.FindByEmailAsync(normalizedEmail);
+            var Requester = await _userManager.FindByIdAsync(requesterID.ToString());
+
+
+            var departmentManagers = await _dbcontext.UserRoles
+        .Where(ur => ur.RoleNA.Name == AppRoles_Desktop.DepartmentManager)
+        .Select(ur => new ReturnAllDepartmentManagers
+        {
+            UserId = ur.UserNA.EmployeesNA.Id,
+            FullName = ur.UserNA.PersonalInformationNA.FullName
+        })
+        .ToListAsync();
+
+
+
+            return departmentManagers;
+
+        }
+
+
+        public async Task<FinalResult> CreateANewDepartment(string requesterId, DepartmentCreatingRequest request)
+        {
+            var finalResult = new FinalResult();
+
+            try
+            {
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Requester is invalid.");
+                    return finalResult;
+                }
+
+
+           
+
+                Guid requesteridmanager;
+                try
+                {
+                     requesteridmanager = await _dbcontext.Users.Where(c => c.Id == requester.Id).Select(c => c.EmployeesNA.Id).FirstOrDefaultAsync();
+                }
+
+                catch
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Invalid requester");
+                    return finalResult;
+                }
+
+                var requesterRoles = await _userManager.GetRolesAsync(requester);
+                if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Only Admins are allowed to create a new department in the system.");
+                    return finalResult;
+                }
+                bool existingname =await _dbcontext.DepartmentsTable.Where(d=>d.DepartmentName==request.DepartmentName).AnyAsync();
+                if(existingname==true)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"There is already a department with the name '{request.DepartmentName}' inside the system.");
+                    return finalResult;
+                }
+                var employee = await _dbcontext.EmployeesTable
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == request.ManagerID);
+
+                if (employee == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Department manager doesn't located.");
+                    return finalResult;
+                }
+                var hasRole = await _dbcontext.EmployeesTable
+                .Where(e => e.Id == employee.Id)
+                .Select(e => e.IdentityUserNA)          // navigate to the user
+                .SelectMany(u => u.UserRolesNA)         // get user's roles
+                .AnyAsync(ur => ur.RoleNA.Name == AppRoles_Desktop.DepartmentManager);
+
+                if(hasRole==false)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"The user you are trying to assign as a manager to a department doee not has the {AppRoles_Desktop.DepartmentManager} role.");
+                    return finalResult;
+                }
+                using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    var departmentobject = new Departments
+                    {
+                        DepartmentName = request.DepartmentName,
+                        Manager_FK = request.ManagerID
+                    };
+                    await _dbcontext.AddAsync(departmentobject);
+                    var log = new Audit_Logs
+                    {
+                        ActionType = "Creating",
+                        Notes = $"Creates department '{request.DepartmentName}'",
+                        PerformerAccount_FK = requesteridmanager,
+                        TargetEntity_FK = employee.Id
+                    };
+                    await _dbcontext.AuditLogsTable.AddAsync(log);
+                    await _dbcontext.SaveChangesAsync();
+                    scope.Complete();
+                }
+                var departmentmanagerfullname = await _dbcontext.EmployeesTable.AsNoTracking().Where(e => e.Id == employee.Id)
+                    .Select(e => e.IdentityUserNA.PersonalInformationNA.FullName)
+                    .FirstOrDefaultAsync();
+
+
+                finalResult.Succeeded = true;
+                finalResult.Messages.Add($"Department with the name of {request.DepartmentName} was successfully created as a department in the system and the user {departmentmanagerfullname} as a manager to it.");
+                return finalResult;
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, "Error occurred during role update.");
+                finalResult.Succeeded = false;
+                finalResult.Errors.Add("We couldn't create the new department.");
+                return finalResult;
+            }
+        }
+
+
+       public async Task<IEnumerable<ReturnDepartmentsWithManagers>> GetAllDepartmentsAlongWithItsManagers(string requesterID)
+        {
+            //var user =await _userManager.FindByEmailAsync(normalizedEmail);
+           
+            var requester = await _userManager.FindByIdAsync(requesterID);
+            if (requester == null)
+            {
+
+                return null;
+            }
+
+            var requesterRoles = await _userManager.GetRolesAsync(requester);
+            if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+            {
+
+                return null;
+            }
+
+            var departmentManagers = await _dbcontext.DepartmentsTable
+           .Select(ur => new ReturnDepartmentsWithManagers
+           {
+             DepartmentName=ur.DepartmentName,
+               ManagerName = ur.ManagerNA != null && ur.ManagerNA.IdentityUserNA != null &&
+                  ur.ManagerNA.IdentityUserNA.PersonalInformationNA != null
+                  ? ur.ManagerNA.IdentityUserNA.PersonalInformationNA.FullName
+                  : "**Not Assigned To Any Manager**",
+               DepartmentID = ur.Id,
+               ManagerID = ur.ManagerNA != null ? ur.ManagerNA.Id : Guid.Empty
+           })
+           .ToListAsync();
+
+
+
+            return departmentManagers;
+
+        } 
+
+
+
+        public async Task<FinalResult> UnassignAManagerfromADepartment(string requesterId, UnassignAManagerFromADepartmentRequest request)
+        {
+            var finalResult = new FinalResult();
+
+            try
+            {
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Requester is invalid.");
+                    return finalResult;
+                }
+              
+                Guid requesteridmanager;
+                try
+                {
+                     requesteridmanager = await _dbcontext.Users.Where(c => c.Id == requester.Id).Select(c => c.EmployeesNA.Id).FirstOrDefaultAsync();
+                }
+
+                catch
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Invalid requester");
+                    return finalResult;
+                }
+
+                var requesterRoles = await _userManager.GetRolesAsync(requester);
+                if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Only Admins are allowed to create a new department in the system.");
+                    return finalResult;
+                }
+
+                var department = await _dbcontext.DepartmentsTable.Where(c=>c.Id==request.DepartmentID).FirstOrDefaultAsync();
+                if(department == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"Department was not found in the system.");
+                    return finalResult;
+                }
+                if(department.Manager_FK==null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"Department {department.DepartmentName} is already not having a manager assigned to it.");
+                    return finalResult;
+                }
+                var manager = await _dbcontext.EmployeesTable.Where(e=>e.Id==department.Manager_FK).FirstOrDefaultAsync();
+                if(manager==null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"Data was not located about the manager.");
+                    return finalResult;
+                }
+                string managername = await _dbcontext.EmployeesTable.AsNoTracking()
+               .Where(e => e.Id == department.Manager_FK)
+              .Select(e => e.IdentityUserNA.PersonalInformationNA.FullName)
+              .FirstOrDefaultAsync() ?? "Unknown Manager";
+                using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+                {
+                   department.Manager_FK = null; // Unassign the manager by setting the foreign key to null
+
+                    var log = new Audit_Logs
+                    {
+                        ActionType = "Updating",
+                        Notes = $"Unassigning the department manager '{managername} from '{department.DepartmentName}'",
+                        PerformerAccount_FK = requesteridmanager,
+                        TargetEntity_FK = manager.Id
+                    };
+                    await _dbcontext.AuditLogsTable.AddAsync(log);
+
+                    await _dbcontext.SaveChangesAsync();
+                    scope.Complete();
+                }
+               
+
+
+                finalResult.Succeeded = true;
+                finalResult.Messages.Add($"Department manager {managername} was successfully unassigned from the department {department.DepartmentName}.");
+                return finalResult;
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, "Error occurred during Unassigning a manager from a department.");
+                finalResult.Succeeded = false;
+                finalResult.Errors.Add("We couldn't unassign the manager from the department.");
+                return finalResult;
+            }
+        }
+
+
+        public async Task<FinalResultDeleteDepartment> RemoveADepartment(RemoveADepartmentRequest request, string currentAdminId)
+        {
+            var finalresult = new FinalResultDeleteDepartment();
+
+            try
+            {
+                // Step 1: Validate the admin making the request
+                var currentAdmin = await _userManager.FindByIdAsync(currentAdminId);
+                if (currentAdmin == null)
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Add("The requester does not exist in the database!");
+                    return finalresult;
+                }
+              
+                Guid currentAdminID;
+                try
+                {
+                    currentAdminID = await _dbcontext.Users.Where(c => c.Id == currentAdmin.Id).Select(c => c.EmployeesNA.Id).FirstOrDefaultAsync();
+                }
+
+                catch
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Add("Invalid requester");
+                    return finalresult;
+                }
+                var requestRoles = await _userManager.GetRolesAsync(currentAdmin);
+                if(!requestRoles.Contains(AppRoles_Desktop.Admin))
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Add("Only Admins are allowed to delete/remove a department from the system.");
+                    return finalresult;
+                }
+                var department = await _dbcontext.DepartmentsTable.Where(ft => ft.Id == request.DepartmentID).FirstOrDefaultAsync();
+                if (department == null)
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Add("Couldn't find the department in the system");
+                    return finalresult;
+                }
+
+                var count = await _dbcontext.EmployeeDepartmentsTable.Where(ft => ft.Department_FK == department.Id).CountAsync();
+
+                if (count != 0 && request.WithUnassignEmployeesFromItAgreement == false)
+                {
+                    finalresult.Succeeded = false;
+                    finalresult.Errors.Add("The department is already having employees inside it, it's a risk to delete it now. If you are sure that you want to delete it then enable force delete.");
+                    finalresult.NeedsApproval = true;
+                    return finalresult;
+                }
+                else if (count != 0 && request.WithUnassignEmployeesFromItAgreement == true)
+                {
+                    using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+                    {
+                        // Unassign employees from the department
+                        var employeeDepartments = await _dbcontext.EmployeeDepartmentsTable
+                            .Where(ed => ed.Department_FK == department.Id)
+                            .ToListAsync();
+                        foreach (var empDept in employeeDepartments)
+                        {
+                            empDept.Department_FK = null; // Unassign the department
+                        }
+                        _dbcontext.EmployeeDepartmentsTable.UpdateRange(employeeDepartments);
+                        _dbcontext.DepartmentsTable.Remove(department);
+
+                        var log = new Audit_Logs
+                        {
+                            ActionType = "Deleting",
+                            Notes = $"Hard deleted '{department.DepartmentName}' department",
+                            PerformerAccount_FK = currentAdminID,
+                            TargetEntity_FK = null
+                        };
+                        await _dbcontext.AuditLogsTable.AddAsync(log);
+                        await _dbcontext.SaveChangesAsync();
+                        scope.Complete();
+                        finalresult.Succeeded = true;
+                        finalresult.Messages.Add($"Department {department.DepartmentName} was successfully deleted along with unassigning its employees from it.");
+                        return finalresult;
+                    }
+                }
+               else
+                {
+                    using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+                    {
+                     
+                        _dbcontext.DepartmentsTable.Remove(department);
+                        var log = new Audit_Logs
+                        {
+                            ActionType = "Deleting",
+                            Notes = $"Soft deleted '{department.DepartmentName}' department",
+                            PerformerAccount_FK = currentAdminID,
+                            TargetEntity_FK = null
+                        };
+                        await _dbcontext.AuditLogsTable.AddAsync(log);
+                        await _dbcontext.SaveChangesAsync();
+                        scope.Complete();
+                        finalresult.Succeeded = true;
+                        finalresult.Messages.Add($"Department was successfully deleted.");
+
+
+                     
+                        return finalresult;
+
+
+
+                    }
+                }
+             
+
+                // Step 4: Delete the user
+
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, $"An error occurred while deleting the department with the GUID {request.DepartmentID}");
+
+                finalresult.Succeeded = false;
+                finalresult.Errors.Add("Couldn't delete the department from the system.");
+                return finalresult;
+            }
+        }
+
+        public async Task<IEnumerable<ReturnDepartmentsNames>> GetAllDepartments(string requesterID)
+        {
+          
+
+            var requester = await _userManager.FindByIdAsync(requesterID);
+            if (requester == null)
+            {
+
+                return null;
+            }
+
+            var requesterRoles = await _userManager.GetRolesAsync(requester);
+            if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+            {
+
+                return null;
+            }
+
+            var department = await _dbcontext.DepartmentsTable.Where(d => d.Manager_FK==null)
+           .Select(ur => new ReturnDepartmentsNames
+           {
+            DepartmentName=ur.DepartmentName,
+            Id=ur.Id
+           }).ToListAsync();
+
+
+
+
+
+
+
+            return department;
+
+        }
+
+
+        public async Task<FinalResult> AssignManagerToADepartment(string requesterId, AssignManagerToADepartmentRequest request)
+        {
+            var finalResult = new FinalResult();
+
+            try
+            {
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Requester is invalid.");
+                    return finalResult;
+                }
+             
+                Guid requesteridmanager;
+                try
+                {
+                     requesteridmanager = await _dbcontext.Users.Where(e => e.Id == requester.Id).Select(s => s.EmployeesNA.Id).FirstOrDefaultAsync();
+                }
+
+                catch
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Invalid requester");
+                    return finalResult;
+                }
+                var requesterRoles = await _userManager.GetRolesAsync(requester);
+                if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Only Admins are allowed to create a new department in the system.");
+                    return finalResult;
+                }
+
+                var department = await _dbcontext.DepartmentsTable.Where(c => c.Id == request.DepartmentID).FirstOrDefaultAsync();
+                if (department == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"Department was not found in the system.");
+                    return finalResult;
+                }
+                if (department.Manager_FK != null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"Department {department.DepartmentName} is already having a manager assigned to it.");
+                    return finalResult;
+                }
+                var Manager = await _dbcontext.EmployeesTable.Where(c => c.Id == request.ManagerID).FirstOrDefaultAsync();
+                if (Manager == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"Manager was not found in the system.");
+                    return finalResult;
+                }
+
+                string managername = await _dbcontext.EmployeesTable.AsNoTracking()
+               .Where(e => e.Id == Manager.Id)
+              .Select(e => e.IdentityUserNA.PersonalInformationNA.FullName)
+              .FirstOrDefaultAsync() ?? "Unknown Manager";
+                using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    department.Manager_FK=Manager.Id;
+                    var log = new Audit_Logs
+                    {
+                        ActionType = "Updating",
+                        Notes= $"Assigned a department manager '{managername}' to a department called {department.DepartmentName}",
+                        PerformerAccount_FK = requesteridmanager,
+                        TargetEntity_FK=Manager.Id
+                    };
+                    await _dbcontext.AuditLogsTable.AddAsync(log);
+                
+                        
+                    
+                    await _dbcontext.SaveChangesAsync();
+                    scope.Complete();
+                }
+
+
+
+                finalResult.Succeeded = true;
+                finalResult.Messages.Add($"Department manager '{managername}' was successfully assigned to the department '{department.DepartmentName}'.");
+                return finalResult;
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, "Error occurred during assigning a manager from to a department.");
+                finalResult.Succeeded = false;
+                finalResult.Errors.Add($"We couldn't assign the manager to the department.");
+                return finalResult;
+            }
+        }
+
+        public async Task<IEnumerable<ReturnLoginHistoryForMyselfResponse>> ReturnLoginHistoryOfMine(
+      string requesterID,
+      ReturnLoginHistoryForMyselfRequest request)
+        {
+            var requester = await _userManager.FindByIdAsync(requesterID);
+            if (requester == null)
+                return null;
+
+            var requesterRoles = await _userManager.GetRolesAsync(requester);
+            if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                return null;
+
+            var query = _dbcontext.LoginHistoryTable
+                .Where(d => d.ExtendedIdentityUsersDesktop_FK == requester.Id);
+
+            // Filter by year and month of LoggedAt
+            query = query.Where(d => d.LoggedAt.Year == request.Year && d.LoggedAt.Month == request.Month);
+
+            // Order by LoggedAt depending on ReturnItAs
+            query = request.ReturnItAs
+                ? query.OrderByDescending(d => d.LoggedAt)   // newest to oldest
+                : query.OrderBy(d => d.LoggedAt);            // oldest to newest
+
+            var LoginHistory = await query.Select(ur => new ReturnLoginHistoryForMyselfResponse
+            {
+                LoggedOn = ur.LoggedAt,
+                DeviceTokenHashed = ur.DeviceTokenhashed,
+                DeviceName = ur.DeviceName,
+            }).ToListAsync();
+
+            return LoginHistory;
+        }
+        public async Task<IEnumerable<ReturnLoginHistoryForManagerResponse>> ReturnLoginHistoryOfManager(
+    string requesterID,
+    ReturnLoginHistoryForManagerRequest request)
+        {
+            var requester = await _userManager.FindByIdAsync(requesterID);
+            if (requester == null)
+                return null;
+
+            var requesterRoles = await _userManager.GetRolesAsync(requester);
+            if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                return null;
+
+            var query = _dbcontext.LoginHistoryTable
+                .Where(d => d.ExtendedIdentityUsersDesktop_FK == request.ID);
+
+            // Filter by year and month of LoggedAt
+            query = query.Where(d => d.LoggedAt.Year == request.Year && d.LoggedAt.Month == request.Month);
+
+            // Order by LoggedAt depending on ReturnItAs
+            query = request.ReturnItAs
+                ? query.OrderByDescending(d => d.LoggedAt)   // newest to oldest
+                : query.OrderBy(d => d.LoggedAt);            // oldest to newest
+
+            var LoginHistory = await query.Select(ur => new ReturnLoginHistoryForManagerResponse
+            {
+                LoggedOn = ur.LoggedAt,
+                DeviceTokenHashed = ur.DeviceTokenhashed,
+                DeviceName = ur.DeviceName,
+            }).ToListAsync();
+
+            return LoginHistory;
+        }
+
+
+        public async Task<IEnumerable<ReturnAllManagers>> GetAllManagers(string requesterID)
+        {
+            //var user =await _userManager.FindByEmailAsync(normalizedEmail);
+
+            var requester = await _userManager.FindByIdAsync(requesterID);
+            if (requester == null)
+            {
+
+                return null;
+            }
+
+            var requesterRoles = await _userManager.GetRolesAsync(requester);
+            if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+            {
+
+                return null;
+            }
+
+            var Managers = await _dbcontext.UserRoles.Where(u => u.RoleNA.Name==AppRoles_Desktop.DepartmentManager || u.RoleNA.Name == AppRoles_Desktop.HRManager)
+           .Select(ur => new ReturnAllManagers
+           {
+              FullName = ur.UserNA.PersonalInformationNA.FullName,
+              ID=ur.UserNA.Id
+           })
+           .ToListAsync();
+
+
+
+            return Managers;
+
+        }
+
+        public async Task<IEnumerable<ReturnAllManagersAndAdmins>> GetAllManagersAndAdmins(string requesterID)
+        {
+            //var user =await _userManager.FindByEmailAsync(normalizedEmail);
+
+            var requester = await _userManager.FindByIdAsync(requesterID);
+            if (requester == null)
+            {
+
+                return null;
+            }
+
+            var requesterRoles = await _userManager.GetRolesAsync(requester);
+            if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+            {
+
+                return null;
+            }
+
+            var Managers = await _dbcontext.UserRoles.Where(u => u.RoleNA.Name == AppRoles_Desktop.DepartmentManager || u.RoleNA.Name == AppRoles_Desktop.HRManager || u.RoleNA.Name==AppRoles_Desktop.Admin)
+           .Select(ur => new ReturnAllManagersAndAdmins
+           {
+               FullName = ur.UserNA.PersonalInformationNA.FullName,
+               RoleName = ur.RoleNA.Name,
+               ID = ur.UserNA.Id
+           })
+           .ToListAsync();
+
+
+
+            return Managers;
+
+        }
+
+        public async Task<IEnumerable<GetLogsForAPersonResponse>> GetLogsForAPerson(string requesterID, GetLogsForAPersonRequest request)
+        {
+            //var user =await _userManager.FindByEmailAsync(normalizedEmail);
+
+            var requester = await _userManager.FindByIdAsync(requesterID);
+            if (requester == null)
+            {
+
+                return null;
+            }
+
+            var requesterRoles = await _userManager.GetRolesAsync(requester);
+            if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+            {
+
+                return null;
+            }
+            var employeeRecord= _dbcontext.EmployeesTable.Where(e=>e.IdentityUsers_FK == request.TargetID).FirstOrDefault();
+            if (employeeRecord == null)
+            {
+                return null;
+            }
+
+            var ManagersandAdmins = await _dbcontext.AuditLogsTable.Where(u => u.PerformerAccount_FK== employeeRecord.Id)
+           .Select(ur => new GetLogsForAPersonResponse
+           {
+            ActionType=ur.ActionType,
+            Performed_At=ur.Performed_At,
+            Notes= ur.Notes,
+            Targeted=ur.TargetEntityNA.IdentityUserNA.PersonalInformationNA.FullName ?? "**No Target**"
+           })
+           .ToListAsync();
+
+
+
+            return ManagersandAdmins;
+
+        }
+
+        public async Task<IEnumerable<ReturnEmployees>> GetAllEmployees(string requesterID)
+        {
+            //var user =await _userManager.FindByEmailAsync(normalizedEmail);
+
+            var requester = await _userManager.FindByIdAsync(requesterID);
+            if (requester == null)
+            {
+
+                return null;
+            }
+
+            var requesterRoles = await _userManager.GetRolesAsync(requester);
+            if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+            {
+
+                return null;
+            }
+
+            var Employees = await _dbcontext.UserRoles
+         .Where(ur => ur.RoleNA.Name == AppRoles_Desktop.Employee)
+         .Where(ur =>
+             ur.UserNA.EmployeesNA != null &&
+             (
+                 !ur.UserNA.EmployeesNA.EmployeeToDepatment.Any() || // no records at all
+                 ur.UserNA.EmployeesNA.EmployeeToDepatment.All(dep => dep.Department_FK == null) // all records have null department
+             )
+         )
+         .Select(ur => new ReturnEmployees
+         {
+             FullName = ur.UserNA.PersonalInformationNA.FullName,
+             ID = ur.UserNA.Id
+            
+         })
+         .ToListAsync();
+
+
+
+
+            return Employees;
+
+        }
+
+        public async Task<IEnumerable<ReturnDepartments>> GetDepartmentsForEmployees(string requesterID)
+        {
+
+
+            var requester = await _userManager.FindByIdAsync(requesterID);
+            if (requester == null)
+            {
+
+                return null;
+            }
+
+            var requesterRoles = await _userManager.GetRolesAsync(requester);
+            if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+            {
+
+                return null;
+            }
+
+            var department = await _dbcontext.DepartmentsTable
+           .Select(ur => new ReturnDepartments
+           {
+               DepartmentName = ur.DepartmentName,
+               DepartmentManager=ur.ManagerNA.IdentityUserNA.PersonalInformationNA.FullName,
+               Id = ur.Id
+           }).ToListAsync();
+
+
+
+
+
+
+
+            return department;
+
         }
 
 

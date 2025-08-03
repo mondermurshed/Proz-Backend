@@ -19,7 +19,13 @@ namespace Proz_WebApi.Configurations
 
             builder.HasOne(e => e.IdentityUserNA)
                 .WithOne(iu => iu.EmployeesNA)
-                .HasForeignKey<Employees>(e => e.IdentityUsers_FK);
+                .HasForeignKey<Employees>(e => e.IdentityUsers_FK)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(e => e.EmployeeToDepatment)
+            .WithOne(ed => ed.EmployeeNA)
+                .HasForeignKey(ed => ed.Employee_FK);
+              
 
             builder.HasMany(e => e.FeedbacksNA)
                 .WithOne(f => f.EmployeeNA)
@@ -29,16 +35,22 @@ namespace Proz_WebApi.Configurations
             builder.HasMany(e => e.FeedbackAnswerNA)
                 .WithOne(fa => fa.EmployeeNA)
                 .HasForeignKey(fa => fa.RespondentAccount_FK);
-               
+
+            builder.HasMany(e => e.LogsNA)
+                .WithOne(a => a.TargetEntityNA)
+                .HasForeignKey(a => a.TargetEntity_FK);
+
+
+            builder.HasMany(e => e.PerformedLogsNA)
+             .WithOne(a => a.PerformerAccountNA)
+             .HasForeignKey(a => a.PerformerAccount_FK);
 
             builder.HasMany(e => e.ManagerAtNA)
                 .WithOne(d => d.ManagerNA)
                 .HasForeignKey(d => d.Manager_FK)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(e => e.AuditLogsNA)
-                .WithOne(a => a.PerformerAccountNA)
-                .HasForeignKey(a => a.PerformerAccount_FK);
+         
 
             builder.HasMany(e => e.PerformanceRecorderNA)
                 .WithOne(p => p.ReviewerNA)

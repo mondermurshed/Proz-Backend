@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Diagnostics.Eventing.Reader;
 
 namespace Proz_WebApi.Helpers_Types
 {
@@ -61,5 +62,26 @@ namespace Proz_WebApi.Helpers_Types
         public string Strength {  get; set; }
         public string CrackTime {  get; set; }
         public List<string> Suggestions {  get; set; }
+    }
+
+
+    public class FinalResultDeleteDepartment
+    {
+        public FinalResultDeleteDepartment()
+        {
+            Errors = new List<string>();
+            Messages = new List<string>();
+        }
+
+        public bool Succeeded { get; set; }
+        public List<string> Errors { get; set; }
+        public List<string> Messages { get; set; }
+        public bool NeedsApproval { get; set; } = false;
+
+   
+
+
+
+
     }
 }

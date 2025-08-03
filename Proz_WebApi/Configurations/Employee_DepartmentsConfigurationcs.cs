@@ -27,8 +27,9 @@ namespace Proz_WebApi.Configurations
                 .HasColumnType("date");
 
             builder.HasOne(ed => ed.EmployeeNA)
-                .WithMany()
-                .HasForeignKey(ed => ed.Employee_FK);
+                .WithMany(ed=>ed.EmployeeToDepatment)
+                .HasForeignKey(ed => ed.Employee_FK)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(ed => ed.DepartmentNA)
                 .WithMany()
@@ -37,10 +38,6 @@ namespace Proz_WebApi.Configurations
             builder.HasOne(ed => ed.SalaryScheduleNA)
                 .WithOne()
                 .HasForeignKey<Salary_Schedule>(s => s.EmployeeDepartment_FK);
-
-            builder.HasMany(ed => ed.Audit_LogsNA)
-                .WithOne(a => a.TargetEntityNA)
-                .HasForeignKey(a => a.TargetEntity_FK);
 
             builder.HasMany(ed => ed.PaymentRecordsNA)
                 .WithOne(p => p.EmployeeDepartmentsNA)

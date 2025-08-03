@@ -27,10 +27,11 @@ namespace Proz_WebApi.Configurations
                 .IsUnicode();
 
             builder.HasOne(p => p.IdentityUserNA)
-                .WithOne(i => i.PersonalInformationNA)
-                .HasForeignKey<Personal_Information>(p => p.IdentityUser_FK);
+            .WithOne(i => i.PersonalInformationNA)
+            .HasForeignKey<Personal_Information>(p => p.IdentityUser_FK)
+            .OnDelete(DeleteBehavior.Cascade);
 
- 
+
         }
     }
 }

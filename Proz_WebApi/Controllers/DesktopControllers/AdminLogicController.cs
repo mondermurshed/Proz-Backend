@@ -8,6 +8,7 @@ using Proz_WebApi.Models.DesktopModels.Dto.Admin;
 using Proz_WebApi.Models.DesktopModels.Dto.Auth;
 using Proz_WebApi.Models.DesktopModels.DTO;
 using Proz_WebApi.Models.DesktopModels.DTO.Admin;
+using Proz_WebApi.Models.DesktopModels.DTO.Auth;
 using Proz_WebApi.Services.DesktopServices;
 
 namespace Proz_WebApi.Controllers.DesktopControllers
@@ -109,6 +110,35 @@ namespace Proz_WebApi.Controllers.DesktopControllers
             else
             {
                 return BadRequest(new
+                {
+                    Message = result.Messages,
+                    Error = result.Errors
+
+
+                });
+            }
+        }
+
+
+        [Route("ResendCodeAdmin")]
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<ActionResult<string>> ResendVerificationCodeAsync([FromBody] ResendVerificationCodeDTO resendcode)
+        {
+            var result = await _adminlogicservice.InitializeSystemAsyncResendData(resendcode);
+            if (result.Succeeded)
+            {
+
+                return Ok(new AuthResponseDTO
+                {
+                    Message = result.Messages,
+                    Error = null
+
+                });
+            }
+            else
+            {
+                return BadRequest(new AuthResponseDTO
                 {
                     Message = result.Messages,
                     Error = result.Errors
@@ -235,6 +265,475 @@ namespace Proz_WebApi.Controllers.DesktopControllers
 
         }
 
+
+        [HttpPost("Feedbacks/CreateFeedbackType")]
+        public async Task<IActionResult> CreateAFeedbackType([FromBody] CreateAFeedbackTypeRequest request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.CreateANewfeedbackType(currentUserId, request);
+
+            if (!result.Succeeded)
+            {
+
+                return BadRequest(new CreateAFeedbackTypeResponse
+                {
+                    Errors = result.Errors,
+                    Message = null
+
+                });
+
+            }
+            return Ok(new CreateAFeedbackTypeResponse
+            {
+                Errors = null,
+                Message = result.Messages
+
+            });
+        }
+
+        [HttpGet("Feedbacks/GetFeedbackTypes")]
+        public async Task<IActionResult> GetFeedbackTypes()
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.GetFeedbackTypes(currentUserId);
+
+            if (result==null || result.Count()==0)
+            {
+
+                return BadRequest(result);
+     
+
+            }
+            return Ok(result);
+   
+        }
+
+
+        [HttpDelete("Feedbacks/DeleteAFeedbackType")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> DeleteAFeedbackType([FromBody] RemoveFeedbackTypeDTO request)
+        {
+
+
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+            if (request.FeedbackID == null || string.IsNullOrEmpty(request.FeedbackID.ToString()))
+            {
+                return BadRequest("Please select a user to be deleted");
+            }
+
+            var result = await _adminlogicservice.RemoveAFeedbackType(request, currentUserId);
+
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(new RemoveFeedbackTypeResponse
+                {
+                    Message = null,
+                    Errors = result.Errors
+                });
+            }
+            return Ok(new RemoveFeedbackTypeResponse
+            {
+                Errors = null,
+                Message = result.Messages
+            });
+
+
+
+        }
+
+        [HttpGet("Users/GetAllDepartmentManagers")]
+        public async Task<IActionResult> GetDepartmentManagers()
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.GetAllDepartmentManagers(currentUserId);
+
+            if (result == null || result.Count() == 0)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
+        [HttpPost("Department/Create")]
+        public async Task<IActionResult> CreateANewDepartment([FromBody] DepartmentCreatingRequest request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.CreateANewDepartment(currentUserId, request);
+
+            if (!result.Succeeded)
+            {
+
+                return BadRequest(new CreateANewDepartmentResponse
+                {
+                    Errors = result.Errors,
+                    Message = null
+
+                });
+
+            }
+            return Ok(new CreateANewDepartmentResponse
+            {
+                Errors = null,
+                Message = result.Messages
+
+            });
+        }
+
+        [HttpGet("Users/GetAllDepartmentsWithItsManagers")]
+        public async Task<IActionResult> GetAllDepartmentsAlongWithItsManagers()
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.GetAllDepartmentsAlongWithItsManagers(currentUserId);
+
+            if (result == null || result.Count() == 0)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
+        [HttpPatch("Department/UnassigningManager")]
+        public async Task<IActionResult> UnassignManagerFromDepartment([FromBody] UnassignAManagerFromADepartmentRequest request)
+        {
+
+
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.UnassignAManagerfromADepartment(currentUserId, request);
+
+            if (!result.Succeeded)
+            {
+
+                return BadRequest(new UnassignAManagerFromADepartmentResponse
+                {
+                    Errors = result.Errors,
+                    Message = null
+
+                });
+
+            }
+            return Ok(new UnassignAManagerFromADepartmentResponse
+            {
+                Errors = null,
+                Message = result.Messages
+
+            });
+        }
+
+
+        [HttpDelete("Department/Delete")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<string>> DeleteADepartment([FromBody] RemoveADepartmentRequest request)
+        {
+
+
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.RemoveADepartment(request, currentUserId);
+
+
+            if (!result.Succeeded && result.NeedsApproval==true)
+            {
+                return BadRequest(new RemoveADepartmentResponse
+                {
+                    Message = null,
+                    Errors = result.Errors,
+                    NeedesAdminApproval = true
+                });
+            }
+            else if ((!result.Succeeded && result.NeedsApproval == false))
+            {
+                return BadRequest(new RemoveADepartmentResponse
+                {
+                    Message = null,
+                    Errors = result.Errors,
+                    NeedesAdminApproval = false
+                });
+            }
+
+            return Ok(new RemoveADepartmentResponse
+            {
+                Errors = null,
+                Message = result.Messages
+            });
+
+
+
+        }
+
+        [HttpGet("Department/Get")]
+        public async Task<IActionResult> GetDepartments()
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.GetAllDepartments(currentUserId);
+
+            if (result == null || result.Count() == 0)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
+        [HttpPatch("Department/AssigningManager")]
+        public async Task<IActionResult> AssignManagerTOTheDepartment([FromBody] AssignManagerToADepartmentRequest request)
+        {
+
+
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.AssignManagerToADepartment(currentUserId, request);
+
+            if (!result.Succeeded)
+            {
+
+                return BadRequest(new AssignManagerToADepartmentResponse
+                {
+                    Errors = result.Errors,
+                    Message = null
+
+                });
+
+            }
+            return Ok(new AssignManagerToADepartmentResponse
+            {
+                Errors = null,
+                Message = result.Messages
+
+            });
+        }
+
+        [HttpGet("Users/GetLoginHistory/My")]
+        public async Task<IActionResult> GetLoginHistoryOfMine(ReturnLoginHistoryForMyselfRequest request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.ReturnLoginHistoryOfMine(currentUserId, request);
+
+            if (result == null || result.Count() == 0)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
+        [HttpGet("Users/GetLoginHistory/Manager")]
+        public async Task<IActionResult> GetLoginHistoryOfManager(ReturnLoginHistoryForManagerRequest request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.ReturnLoginHistoryOfManager(currentUserId, request);
+
+            if (result == null || result.Count() == 0)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
+        [HttpGet("Users/AllManagers/Get")]
+        public async Task<IActionResult> GetAllManagers()
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.GetAllManagers(currentUserId);
+
+            if (result == null || result.Count() == 0)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
+
+        [HttpGet("Users/AllManagersAndAdmins/Get")]
+        public async Task<IActionResult> GetAllManagersAndAdmins()
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.GetAllManagersAndAdmins(currentUserId);
+
+            if (result == null || result.Count() == 0)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
+        [HttpGet("Users/Logs/Get")]
+        public async Task<IActionResult> GetLogs(GetLogsForAPersonRequest request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.GetLogsForAPerson(currentUserId,request);
+
+            if (result == null || result.Count() == 0)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
+        [HttpGet("Users/Employees/Get")]
+        public async Task<IActionResult> GetEmployees()
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.GetAllEmployees(currentUserId);
+
+            if (result == null || result.Count() == 0)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
+        [HttpGet("Department/GetAll")]
+        public async Task<IActionResult> GetAllDepartments()
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.GetDepartmentsForEmployees(currentUserId);
+
+            if (result == null || result.Count() == 0)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
 
 
     }

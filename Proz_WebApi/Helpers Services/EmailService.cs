@@ -14,6 +14,7 @@ using Polly.Retry;
 using Proz_WebApi.Helpers_Types;
 using Proz_WebApi.Models.DesktopModels.Dto.Auth;
 using System.Data.SqlTypes;
+using Proz_WebApi.Models.DesktopModels.DTO.Admin;
 
 namespace Proz_WebApi.Helpers_Services
 {
@@ -461,6 +462,12 @@ public class SesEmailSender
             var value = userdata;
            await _cache.SetAsync(key , value, TimeSpan.FromSeconds(90));
         }
+        public async Task StoreAdminRegistrationDataTemp(GettingStartedStageOneTemp userdata, string email)
+        {
+            var key = $"register:{email}";
+            var value = userdata;
+            await _cache.SetAsync(key, value, TimeSpan.FromSeconds(90));
+        }
         public async Task<UserRegisterationTemp?> GetUserRegistrationDataTemp(string email)
         {
             var key = $"register:{email}";
@@ -470,6 +477,16 @@ public class SesEmailSender
             else
             return null;
             
+        }
+        public async Task<GettingStartedStageOneTemp?> GetAdminRegistrationDataTemp(string email)
+        {
+            var key = $"register:{email}";
+            var value = await _cache.GetAsync<GettingStartedStageOneTemp>(key);
+            if (value.HasValue)
+                return value.Value;
+            else
+                return null;
+
         }
 
         public async Task<bool> IsInCooldownAsync(string email)

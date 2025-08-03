@@ -18,20 +18,26 @@ namespace Proz_WebApi.Configurations
             builder.Property(a => a.Performed_At)
                 .HasColumnType("datetime2");
 
+            builder.HasOne(a=>a.TargetEntityNA)
+                .WithMany(e => e.LogsNA)
+                .HasForeignKey(a => a.TargetEntity_FK)
+                .OnDelete(DeleteBehavior.SetNull);
+
+
+                     builder.HasOne(a => a.PerformerAccountNA)
+             .WithMany(e => e.PerformedLogsNA)
+             .HasForeignKey(a => a.PerformerAccount_FK)
+             .OnDelete(DeleteBehavior.Restrict);
+
+
             builder.Property(a => a.Notes)
                 .HasMaxLength(350)
                 .IsUnicode()
                 .IsRequired();
 
-            builder.HasOne(a => a.PerformerAccountNA)
-                .WithMany(e => e.AuditLogsNA)
-                .HasForeignKey(a => a.PerformerAccount_FK)
-                .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasOne(a => a.TargetEntityNA)
-                .WithMany(ed => ed.Audit_LogsNA)
-                .HasForeignKey(a => a.TargetEntity_FK)
-                .OnDelete(DeleteBehavior.Restrict);
+
+          
         }
     }
 }

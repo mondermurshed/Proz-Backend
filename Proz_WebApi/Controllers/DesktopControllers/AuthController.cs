@@ -268,17 +268,27 @@ namespace Proz_WebApi.Controllers.DesktopControllers
             var result = await _authservice.ResetPassword(resetpassword);
             if (result.Succeeded)
             {
-                return Ok(new
+                return Ok(new ResetPasswordResponse
                 {
-                    Message = result.Messages
+                    Messages = result.Messages,
+                    Errors = null,
+                    CrackTime = null,
+                    Suggestions = null,
+                    Strength=null,
+                    PasswordScore=null,
+                    
+
                 });
             }
             else if (!result.Succeeded && result.NewPasswordCause == true)
             {
-                return BadRequest(new
+                return BadRequest(new ResetPasswordResponse
                 {
-                    Error = result.Errors,
+                    Messages=null,
+                    Errors = result.Errors,
                     PasswordScore = result.Score,
+                    IsPasswordProblem=true,
+                    Strength = result.Strength,
                     CrackTime = result.CrackTime,
                     Suggestions = result.Suggestions
 
@@ -286,16 +296,17 @@ namespace Proz_WebApi.Controllers.DesktopControllers
             }
             else
             {
-                if (result.Messages == null)
-                    return BadRequest(new
-                    {
-                        Error = result.Errors
-                    });
-
-                return BadRequest(new
+                return BadRequest(new ResetPasswordResponse
                 {
-                    Message = result.Messages,
-                    Error = result.Errors
+                    Messages=null,
+                    Errors = result.Errors,
+                    IsPasswordProblem = false,
+                    PasswordScore=result.Score,
+                    Strength=result.Strength,
+                    CrackTime=result.CrackTime,
+                    Suggestions=result.Suggestions
+
+
                 });
             }
 
@@ -307,7 +318,7 @@ namespace Proz_WebApi.Controllers.DesktopControllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         //[AllowAnonymous] do NOT make this endpoint [Authorize] because the main goal of this endpoint (The refresh token) purpose is to renew an expired access token, so the endpoint must work even if the access token is invalid/expired.
-        public async Task<ActionResult<string>> RefreshAToken([FromBody] AccessAndRefreshTokenPassing refreshToken)
+        public async Task<ActionResult<string>> RefreshAToken([FromBody] DeviceTokenAndRefreshTokenPassing refreshToken)
         {
             var result = await _authservice.RefreshAToken(refreshToken);
             if (!result.Succeeded)
@@ -388,5 +399,17 @@ namespace Proz_WebApi.Controllers.DesktopControllers
                 Errors = null
             });
         }
+
+        [HttpPost("Logout")]
+        public async Task<IActionResult> Logout([FromBody] LogoutRequest request)
+        {
+            var result = await _authservice.LogoutUser(request);
+
+            if (!result.Succeeded)
+                return BadRequest();
+
+            return Ok();
+        }
+
     }
 }

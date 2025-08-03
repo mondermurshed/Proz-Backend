@@ -23,6 +23,10 @@ namespace Proz_WebApi.Configurations
             .IsUnicode().IsRequired();
 
 
+            builder.Property(l => l.PaymentFrquency)
+            .HasMaxLength(30)
+            .IsUnicode().IsRequired();
+
             builder.HasOne(u => u.AdminNA)
            .WithOne(e => e.GettingStartedTableNA)
            .HasForeignKey<GettingStartedTable>(e => e.Admin_FK);

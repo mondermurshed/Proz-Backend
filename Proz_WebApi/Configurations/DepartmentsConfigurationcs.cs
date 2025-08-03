@@ -11,7 +11,7 @@ namespace Proz_WebApi.Configurations
             builder.HasKey(d => d.Id);
             builder.Property(ed => ed.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
             builder.Property(d => d.DepartmentName)
-                .HasMaxLength(100)
+                .HasMaxLength(35)
                 .IsUnicode()
                 .IsRequired();
 

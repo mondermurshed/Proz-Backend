@@ -19,11 +19,14 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
         public string Status { get; set; } = "Active"; //(Active, Suspended)
         public Guid IdentityUsers_FK { get; set; }
         public ExtendedIdentityUsersDesktop IdentityUserNA { get; set; }
+        public ICollection<Employee_Departments> EmployeeToDepatment { get; set; } = new List<Employee_Departments>();
         public ICollection<Feedbacks> FeedbacksNA {  get; set; } = new List<Feedbacks>();
         public ICollection<Feedbacks_Answers> FeedbackAnswerNA { get; set; } = new List<Feedbacks_Answers>();
         public ICollection<Departments> ManagerAtNA { get; set; } = new List<Departments>();
-        public ICollection <Audit_Logs> AuditLogsNA { get; set; } = new List<Audit_Logs>(); 
+        public ICollection <Audit_Logs> PerformedLogsNA { get; set; } = new List<Audit_Logs>(); 
         public ICollection<Performance_Recorder> PerformanceRecorderNA { get; set; } = new List<Performance_Recorder>();
+        public ICollection<Audit_Logs> LogsNA { get; set; } = new List<Audit_Logs>();
+
         public ICollection<LeaveRequests> LeaveRequestsNA { get; set; } = new List<LeaveRequests>();
         public ICollection<LeaveRequests> DepartmentManagerLeaveRequestsDealsNA { get; set; } = new List<LeaveRequests>();
         public ICollection<LeaveRequests> ADHRLeaveRequestsDealsNA { get; set; } = new List<LeaveRequests>();

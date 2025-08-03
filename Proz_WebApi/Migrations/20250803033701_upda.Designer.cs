@@ -12,8 +12,8 @@ using Proz_WebApi.Data;
 namespace Proz_WebApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext_Desktop))]
-    [Migration("20250722195657_allowingnullforgendercolumn")]
-    partial class allowingnullforgendercolumn
+    [Migration("20250803033701_upda")]
+    partial class upda
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -183,10 +183,10 @@ namespace Proz_WebApi.Migrations
                     b.Property<DateTime>("Performed_At")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("PerformerAccount_FK")
+                    b.Property<Guid?>("PerformerAccount_FK")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("TargetEntity_FK")
+                    b.Property<Guid?>("TargetEntity_FK")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -238,17 +238,17 @@ namespace Proz_WebApi.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-                    b.Property<double>("DepartmentDefaultSalary")
+                    b.Property<double?>("DepartmentDefaultSalary")
                         .HasPrecision(18, 2)
                         .HasColumnType("float(18)");
 
                     b.Property<string>("DepartmentName")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(35)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(35)");
 
-                    b.Property<Guid>("Manager_FK")
+                    b.Property<Guid?>("Manager_FK")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("ParentDepartment_FK")
@@ -302,13 +302,13 @@ namespace Proz_WebApi.Migrations
                         .HasPrecision(18, 2)
                         .HasColumnType("float(18)");
 
-                    b.Property<Guid>("Department_FK")
+                    b.Property<Guid?>("Department_FK")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("Employee_FK")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<double>("Salary")
+                    b.Property<double?>("Salary")
                         .HasPrecision(18, 2)
                         .HasColumnType("float(18)");
 
@@ -487,9 +487,9 @@ namespace Proz_WebApi.Migrations
 
                     b.Property<string>("FeedbackType")
                         .IsRequired()
-                        .HasMaxLength(15)
+                        .HasMaxLength(30)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(15)");
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("id");
 
@@ -633,6 +633,12 @@ namespace Proz_WebApi.Migrations
                         .HasMaxLength(3)
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(3)");
+
+                    b.Property<string>("PaymentFrquency")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .IsUnicode(true)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<DateOnly>("SystemFirstRun")
                         .HasColumnType("date");
@@ -822,13 +828,14 @@ namespace Proz_WebApi.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
+                    b.Property<string>("DeviceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceTokenhashed")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("ExtendedIdentityUsersDesktop_FK")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("IpAddress")
-                        .HasMaxLength(39)
-                        .IsUnicode(true)
-                        .HasColumnType("nvarchar(39)");
 
                     b.Property<DateTime>("LoggedAt")
                         .HasColumnType("datetime2");
@@ -1045,6 +1052,13 @@ namespace Proz_WebApi.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DeviceName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DeviceTokenHash")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("ExpiresAt")
                         .HasColumnType("datetime2");
 
@@ -1187,16 +1201,14 @@ namespace Proz_WebApi.Migrations
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.Audit_Logs", b =>
                 {
                     b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employees", "PerformerAccountNA")
-                        .WithMany("AuditLogsNA")
+                        .WithMany("PerformedLogsNA")
                         .HasForeignKey("PerformerAccount_FK")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employee_Departments", "TargetEntityNA")
-                        .WithMany("Audit_LogsNA")
+                    b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employees", "TargetEntityNA")
+                        .WithMany("LogsNA")
                         .HasForeignKey("TargetEntity_FK")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("PerformerAccountNA");
 
@@ -1219,8 +1231,7 @@ namespace Proz_WebApi.Migrations
                     b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employees", "ManagerNA")
                         .WithMany("ManagerAtNA")
                         .HasForeignKey("Manager_FK")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Departments", "ParentDepartmentNA")
                         .WithMany("SubDepartmentsNA")
@@ -1247,12 +1258,10 @@ namespace Proz_WebApi.Migrations
                 {
                     b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Departments", "DepartmentNA")
                         .WithMany()
-                        .HasForeignKey("Department_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("Department_FK");
 
                     b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employees", "EmployeeNA")
-                        .WithMany()
+                        .WithMany("EmployeeToDepatment")
                         .HasForeignKey("Employee_FK")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1491,8 +1500,6 @@ namespace Proz_WebApi.Migrations
                 {
                     b.Navigation("AttendanceRecordersNA");
 
-                    b.Navigation("Audit_LogsNA");
-
                     b.Navigation("EmployeeSalaryHistoryNA");
 
                     b.Navigation("PaymentRecordsNA");
@@ -1507,9 +1514,9 @@ namespace Proz_WebApi.Migrations
                 {
                     b.Navigation("ADHRLeaveRequestsDealsNA");
 
-                    b.Navigation("AuditLogsNA");
-
                     b.Navigation("DepartmentManagerLeaveRequestsDealsNA");
+
+                    b.Navigation("EmployeeToDepatment");
 
                     b.Navigation("FeedbackAnswerNA");
 
@@ -1519,6 +1526,8 @@ namespace Proz_WebApi.Migrations
 
                     b.Navigation("LeaveRequestsNA");
 
+                    b.Navigation("LogsNA");
+
                     b.Navigation("ManagerAtNA");
 
                     b.Navigation("ManagerLeaveRequestsNA");
@@ -1526,6 +1535,8 @@ namespace Proz_WebApi.Migrations
                     b.Navigation("NotificationsNA");
 
                     b.Navigation("PerformanceRecorderNA");
+
+                    b.Navigation("PerformedLogsNA");
                 });
 
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.ExtendedIdentityRolesDesktop", b =>

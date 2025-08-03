@@ -30,6 +30,7 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using Microsoft.AspNetCore.Rewrite;
 using System.Transactions;
 using Proz_WebApi.Models.DesktopModels.DatabaseTables;
+using Microsoft.AspNetCore.Http;
 
 namespace Proz_WebApi.Services.DesktopServices
 {
@@ -117,7 +118,13 @@ namespace Proz_WebApi.Services.DesktopServices
             {
                 Username = normalizedName,
                 Email = normalizedEmail,
-                Password = encryptedPassword
+                Password = encryptedPassword,
+                FullName= userregister.FullName,
+                Date_Of_Birth = userregister.Date_Of_Birth,
+                Age= userregister.Age,
+                Gender=userregister.Gender,
+                Nationality=userregister.Nationality,
+                Living_On_Primary_Place=userregister.Living_On_Primary_Place
             };
             try
             {
@@ -203,11 +210,17 @@ namespace Proz_WebApi.Services.DesktopServices
                         finalresult.Errors.AddRange(roleResult.Errors.Select(e => e.Description));
                         return finalresult;
                     }
-                    
+                  
                     await _dbcontext.PersonalInformationTable.AddAsync(new Personal_Information
                     {
-                       FullName=userregister.FullName,
-                       IdentityUser_FK=user.Id
+                       FullName=cache.FullName,
+                       Age=Convert.ToInt32( cache.Age),
+                       DateOfBirth=cache.Date_Of_Birth,
+                       Gender=cache.Gender,
+                       Nationality=cache.Nationality,
+                       LivingOnPrimaryPlace=cache.Living_On_Primary_Place,
+                      
+                        IdentityUser_FK =user.Id
                     });
                     await _dbcontext.SaveChangesAsync();
                     scope.Complete();
@@ -338,14 +351,14 @@ namespace Proz_WebApi.Services.DesktopServices
             if (normalizedEmail == null)
             {
                 finalResult.Succeeded = false;
-                finalResult.Errors.Add("Please enter a valid email");
+                finalResult.Errors.Add("Your end didn't pass the email correctly to complete the process. Please make sure that you clicked on a correct/new token");
                 return finalResult;
             }
             var user = await _userManager.FindByEmailAsync(resetpassword.Email);
             if (user == null)
             {
                 finalResult.Succeeded = false;
-                finalResult.Errors.Add("No email like this was found. Please enter a valid/correct email");
+                finalResult.Errors.Add("No user with this email was found. Please try to request for a new reset-password process");
                 return finalResult;
             }
             var validation = PasswordChecker.ValidatePassword(
@@ -361,6 +374,7 @@ namespace Proz_WebApi.Services.DesktopServices
                 finalResult.Errors.Add(validation.Message);
                 finalResult.Score = validation.Score;
                 finalResult.CrackTime = validation.CrackTime;
+                finalResult.Strength = validation.Strength;
                 finalResult.Suggestions.AddRange(validation.Suggestions);
                 return finalResult;
             }
@@ -501,17 +515,38 @@ namespace Proz_WebApi.Services.DesktopServices
 
                     var accessToken = await GenerateJwtToken(user); //<added this one the first argument.
                     var (refreshtoken, hash) = GenerateRefreshToken(); //Because GenerateRefreshToken method returns two parameters then here we create two variables to take the two values that they are returned by this method
+
+                    string deviceTokenHash = HashDeviceToken(userlogin.DeviceToken);
+
+                    // Find old unexpired token for same user + same device
+                    var existing = await _dbcontext.RefreshTokensTable.FirstOrDefaultAsync(rt =>
+                        rt.UserFK == user.Id &&
+                        rt.DeviceTokenHash == deviceTokenHash &&
+                        rt.IsRevoked == false &&
+                        rt.ExpiresAt > DateTime.UtcNow);
+
+                    if (existing != null)
+                    {
+                        existing.IsRevoked = true; 
+                    }
+
+
+
                     await _dbcontext.RefreshTokensTable.AddAsync(new RefreshTokenDesktop
                     {
                         UserFK = user.Id,
                         TokenHash = hash,
+                        DeviceTokenHash = deviceTokenHash, 
+                        DeviceName = userlogin.DeviceName, 
                         ExpiresAt = DateTime.UtcNow.AddDays(3)
                     });
                     await _dbcontext.LoginHistoryTable.AddAsync(new LoginHistory
                     {
                         ExtendedIdentityUsersDesktop_FK = user.Id,
                         LoggedAt = DateTime.UtcNow,
-                        IpAddress = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+                        DeviceTokenhashed = deviceTokenHash,
+                        DeviceName= userlogin.DeviceName,
+
                     });
                     user.LastOnline = DateTime.UtcNow; //update the user's last online time to the current time
                     await _dbcontext.SaveChangesAsync();
@@ -530,7 +565,7 @@ namespace Proz_WebApi.Services.DesktopServices
         }
 
 
-        private async Task<string> GenerateJwtToken(ExtendedIdentityUsersDesktop user)
+        private async Task<string> GenerateJwtToken(ExtendedIdentityUsersDesktop user) //this method is to generate the access token along with all the settings needed for the user and its properties like id, name etc...
         {
             var tokenhandler = new JwtSecurityTokenHandler(); //Creates a tool that can create/read JWT tokens
             var key = Encoding.UTF8.GetBytes(_jwtoption.SigningKey); //your key that you have types in a bytes version.
@@ -570,7 +605,10 @@ namespace Proz_WebApi.Services.DesktopServices
             var token = tokenhandler.CreateToken(tokendescriptor); //Create the token using all the settings
             return tokenhandler.WriteToken(token); //Convert it to a string format that can be sent to clients and then return it
         }
-        private (string Token, string Hash) GenerateRefreshToken()
+
+
+
+        private (string Token, string Hash) GenerateRefreshToken() //this method is to generate the refresh token with its hash value
         {
             var randombytes = new byte[64];
             using var randomnumbergenerator = RandomNumberGenerator.Create();
@@ -583,21 +621,32 @@ namespace Proz_WebApi.Services.DesktopServices
             return (token, hash);
         }
 
-        public async Task<FinalResult> RefreshAToken(AccessAndRefreshTokenPassing request)
+        private string HashDeviceToken(string deviceToken) // this method is to take the device token and convert the hash value of that device token
+        {
+            using var sha256 = SHA256.Create();
+            var bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(deviceToken));
+            return Convert.ToBase64String(bytes);
+        }
+
+
+
+
+        public async Task<FinalResult> RefreshAToken(DeviceTokenAndRefreshTokenPassing request) //this is only happen when the user's computer wants new access + refresh tokens without log in 
         {
             using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
             {
-
+                var finalresult = new FinalResult();
                 // 1. Hash the incoming refresh token with SHA256
                 using var sha256 = SHA256.Create(); //go read the lines (the last lines maybe ?? idk go check them) of the GenerateRefreshToken method to understand these.
                 var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(request.RefreshToken));
                 var tokenHash = Convert.ToBase64String(hashBytes);
-                var finalresult = new FinalResult();
+             
                 // 2. Find matching token
                 var storedToken = await _dbcontext.RefreshTokensTable //This object will hold the whole refreshtokentable row (if it found or matched our requiremnts)
               .Include(rt => rt.UserNA) // Load user data (like if we found our desire row that match our 3 conditions (look the second code to understand what i mean) then we load the user that own this refreshtoken row.
               .FirstOrDefaultAsync(rt =>  //this will Searches for the first row in the database for a valid token matching 3 conditions:
                   rt.TokenHash == tokenHash && // 1- Match the user hash
+                  rt.DeviceTokenHash == HashDeviceToken(request.DeviceToken) &&
                   rt.ExpiresAt > DateTime.UtcNow && // 2- Not expired yet
                   !rt.IsRevoked); // 3- still wasn't revoked yet
 
@@ -627,6 +676,8 @@ namespace Proz_WebApi.Services.DesktopServices
                 {
                     UserFK = storedToken.UserNA.Id,
                     TokenHash = newHash,
+                    DeviceTokenHash = storedToken.DeviceTokenHash, // same device
+                    DeviceName = storedToken.DeviceName, // preserve device info
                     ExpiresAt = DateTime.UtcNow.AddDays(3)
                 });
 
@@ -637,7 +688,7 @@ namespace Proz_WebApi.Services.DesktopServices
                 return finalresult;
             }
         }
-
+     
 
         public async Task<FinalResult> ChangeUsernameAsync(string userId, ChangeUsernameDTO dto)
         {
@@ -719,7 +770,48 @@ namespace Proz_WebApi.Services.DesktopServices
             finalResult.Messages.Add("Password changed successfully.");
             return finalResult;
         }
-    
+
+        public async Task<FinalResult> LogoutUser(LogoutRequest request)
+        {
+            var result = new FinalResult();
+
+            try
+            {
+                using var sha256 = SHA256.Create();
+
+                var refreshTokenHash = Convert.ToBase64String(
+                    sha256.ComputeHash(Encoding.UTF8.GetBytes(request.RefreshToken)));
+
+                var deviceTokenHash = HashDeviceToken(request.DeviceToken);
+
+                var storedToken = await _dbcontext.RefreshTokensTable
+                    .FirstOrDefaultAsync(rt =>
+                        rt.TokenHash == refreshTokenHash &&
+                        rt.DeviceTokenHash == deviceTokenHash &&
+                        !rt.IsRevoked);
+
+                if (storedToken is null)
+                {
+                    result.Succeeded = false;
+                    result.Errors.Add("Refresh token not found or already revoked.");
+                    return result;
+                }
+
+                storedToken.IsRevoked = true;
+                await _dbcontext.SaveChangesAsync();
+
+                result.Succeeded = true;
+                return result;
+            }
+            catch
+            {
+                result.Succeeded = false;
+                result.Errors.Add("An error occurred while logging out.");
+                return result;
+            }
+        }
+
+
 
 
 

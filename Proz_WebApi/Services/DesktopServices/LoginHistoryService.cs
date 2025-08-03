@@ -33,7 +33,7 @@ namespace Proz_WebApi.Services.DesktopServices
                 .Select(h => new LoginHistoryDto
                 {
                     LoggedAt = h.LoggedAt,
-                    IpAddress = h.IpAddress
+                  
                 })
                 .ToListAsync();
         }

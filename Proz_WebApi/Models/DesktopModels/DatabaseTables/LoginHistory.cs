@@ -11,9 +11,8 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
       
         public Guid ID { get; set; } 
         public DateTime LoggedAt { get; set; } = DateTime.UtcNow;
-        [StringLength(39, MinimumLength = 15)]
-        [Unicode]
-        public string? IpAddress { get; set; }
+        public string? DeviceTokenhashed { get; set; }
+        public string? DeviceName { get; set; }
         public Guid ExtendedIdentityUsersDesktop_FK { get; set; } 
         public ExtendedIdentityUsersDesktop ExtendedIdentityUsersDesktopNA { get; set; }
     }

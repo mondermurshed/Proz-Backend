@@ -15,6 +15,11 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
         [Unicode]
         [Required]
         public string CurrenyType { get; set; } = "USD";
+
+        [Unicode]
+        [Required]
+        public string PaymentFrquency { get; set; } = "Every Month";
+
         [Required]
         public DateOnly SystemFirstRun { get; set; } = DateOnly.FromDateTime(DateTime.UtcNow);
         [Required]

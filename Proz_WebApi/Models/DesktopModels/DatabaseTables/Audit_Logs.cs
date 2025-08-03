@@ -18,9 +18,9 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
         [Unicode]
         [Required]
         public string Notes {  get; set; }
-        public Guid PerformerAccount_FK {  get; set; }
-        public Guid TargetEntity_FK {  get; set; }
+        public Guid? PerformerAccount_FK {  get; set; }
+        public Guid? TargetEntity_FK {  get; set; }
         public Employees PerformerAccountNA { get; set; }
-        public Employee_Departments TargetEntityNA { get; set; }
+        public Employees TargetEntityNA { get; set; }
     }
 }

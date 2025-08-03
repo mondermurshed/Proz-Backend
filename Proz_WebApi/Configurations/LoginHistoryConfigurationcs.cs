@@ -15,9 +15,7 @@ namespace Proz_WebApi.Configurations
             builder.Property(l => l.LoggedAt)
                 .HasColumnType("datetime2");
 
-            builder.Property(l => l.IpAddress)
-                .HasMaxLength(39)
-                .IsUnicode();
+        
 
             builder.HasOne(l => l.ExtendedIdentityUsersDesktopNA)
                 .WithMany(u => u.LoginHistroyNA)
