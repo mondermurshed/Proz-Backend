@@ -14,9 +14,7 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
         [Unicode]
         [Required]
         public string Answer { get; set; }
-
-        public bool IsSeen { get; set; } = false;
-         public DateTime LastUpdated {  get; set; } = DateTime.UtcNow;
+         public DateTime? LastUpdated {  get; set; } = DateTime.UtcNow;
         public Guid Feedback_FK { get; set; }
        
        public Feedbacks FeedbackNA { get; set; }

@@ -26,7 +26,7 @@ namespace Proz_WebApi.Configurations
 
             builder.HasOne(f => f.EmployeeNA)
                 .WithMany(e => e.FeedbacksNA)
-                .HasForeignKey(f => f.Employee_FK)
+                .HasForeignKey(f => f.RequesterEmployee_FK)
                  .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(f => f.FeedbacksAnswerNA)

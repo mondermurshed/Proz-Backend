@@ -18,21 +18,6 @@ namespace Proz_WebApi.Controllers.DesktopControllers
             _loginHistoryService=loginHistoryService;
         }
 
-        [HttpGet("Get/{userId}")]
-        public async Task<IActionResult> GetLoginHistory(Guid userId)
-        {
-            var requester = User.FindFirst("TheCallerID")?.Value;
-            if (string.IsNullOrEmpty(requester))
-            {
-
-                return Unauthorized("The Requester is unknown");
-            }
-            var result = await _loginHistoryService.GetRecentLoginHistory(userId);
-            if (result == null)
-            {
-                return NotFound();
-            }
-            return Ok(result);
-        }
+      
     }
 }

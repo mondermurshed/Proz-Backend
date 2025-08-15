@@ -27,7 +27,7 @@ namespace Proz_WebApi.Configurations
             builder.HasOne(a => a.FeedbackNA)
            .WithOne(f => f.FeedbacksAnswerNA)
            .HasForeignKey<Feedbacks_Answers>(a => a.Feedback_FK)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
 
         }
     }

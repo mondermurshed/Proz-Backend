@@ -501,7 +501,7 @@ namespace Proz_WebApi.Services.DesktopServices
                     {
                         finalresult.Succeeded = false;
 
-                        finalresult.Errors.Add("User is not located inside the database");
+                        finalresult.Errors.Add("Falied to log in, please try again.");
                         return finalresult;
                     }
 
@@ -509,7 +509,8 @@ namespace Proz_WebApi.Services.DesktopServices
                     {
                         finalresult.Succeeded = false;
 
-                        finalresult.Errors.Add("An account was found but the password is not correct");
+
+                        finalresult.Errors.Add("Falied to log in, please try again.");
                         return finalresult;
                     }
 

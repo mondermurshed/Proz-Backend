@@ -736,5 +736,165 @@ namespace Proz_WebApi.Controllers.DesktopControllers
         }
 
 
+        [HttpPatch("Users/AssigningEmployee")]
+        public async Task<IActionResult> AssignEmployeeTOTheDepartment([FromBody] AssignEmployeeToADepartmentRequest request)
+        {
+
+
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.AssignEmployeeToADepartment(currentUserId, request);
+
+            if (!result.Succeeded)
+            {
+
+                return BadRequest(new AssignEmployeeToADepartmentResponse
+                {
+                    Errors = result.Errors,
+                    Message = null
+
+                });
+
+            }
+            return Ok(new AssignEmployeeToADepartmentResponse
+            {
+                Errors = null,
+                Message = result.Messages
+
+            });
+        }
+
+        [HttpGet("Users/Employee/GetDepartmentName")]
+        public async Task<IActionResult> GetDepartmentNameEmployee(GetDepartmentOfEmployeeRequest request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.GetDepartmentOFAnEmployees(currentUserId, request);
+
+            if (result.GotDepartment == false)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
+
+        [HttpPatch("Users/UnassigningEmployee")]
+        public async Task<IActionResult> UnAssignEmployee([FromBody] UnassignEmployeeToADepartmentRequest request)
+        {
+
+
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.UnassignEmployeeFromADepartment(currentUserId, request);
+
+            if (!result.Succeeded)
+            {
+
+                return BadRequest(new UnassignEmployeeToADepartmentResponse
+                {
+                    Errors = result.Errors,
+                    Message = null
+
+                });
+
+            }
+            return Ok(new UnassignEmployeeToADepartmentResponse
+            {
+                Errors = null,
+                Message = result.Messages
+
+            });
+        }
+
+        [HttpPatch("Company/Name/Update")]
+   
+        public async Task<IActionResult> UpdateTheCompanyName(UpdateCompanyNameRequest request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.UpdateCompanyName(currentUserId,request );
+
+            if (result==null)
+            {
+
+                return BadRequest();
+
+
+            }
+            return Ok(result);
+
+        }
+
+        [HttpGet("System/Roles/Get")]
+        public async Task<IActionResult> GetSystemRoles()
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.GetAllSystemRoles(currentUserId);
+
+            if (result == null)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
+        [HttpPatch("System/Roles/Color/Update")]
+        public async Task<IActionResult> UpdateRoleColor(RoleColorChangeRequest request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _adminlogicservice.UpdateRoleColor(currentUserId,request);
+
+            if (result == null)
+            {
+
+                return BadRequest();
+
+
+            }
+            return Ok();
+
+        }
+
     }
 }

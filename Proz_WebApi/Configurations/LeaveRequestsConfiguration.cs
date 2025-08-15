@@ -60,17 +60,18 @@ namespace Proz_WebApi.Configurations
 
             builder.HasOne(l => l.EmployeeNA)
                 .WithMany(e => e.LeaveRequestsNA)
-                .HasForeignKey(l => l.Requester_Employee_FK);
+                .HasForeignKey(l => l.Requester_Employee_FK)
+                  .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(l => l.DepartmentManagerNA)
                 .WithMany(e => e.DepartmentManagerLeaveRequestsDealsNA)
                 .HasForeignKey(l => l.DepartmentManager_FK)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(l => l.HandlerEmployeeNA)
                 .WithMany(e => e.ADHRLeaveRequestsDealsNA)
                 .HasForeignKey(l => l.HandlerEmployee_FK)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

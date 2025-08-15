@@ -500,9 +500,6 @@ namespace Proz_WebApi.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWSEQUENTIALID()");
 
-                    b.Property<Guid>("Employee_FK")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("FeedbackDescription")
                         .IsRequired()
                         .HasMaxLength(1500)
@@ -521,17 +518,17 @@ namespace Proz_WebApi.Migrations
                     b.Property<bool>("IsCompleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsSeen")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime>("LastUpdated")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("RequesterEmployee_FK")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("id");
 
-                    b.HasIndex("Employee_FK");
-
                     b.HasIndex("FeedbackType_FK");
+
+                    b.HasIndex("RequesterEmployee_FK");
 
                     b.ToTable("FeedbacksTable");
                 });
@@ -552,10 +549,7 @@ namespace Proz_WebApi.Migrations
                     b.Property<Guid>("Feedback_FK")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsSeen")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("LastUpdated")
+                    b.Property<DateTime?>("LastUpdated")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid>("RespondentAccount_FK")
@@ -717,7 +711,7 @@ namespace Proz_WebApi.Migrations
                         .IsUnicode(true)
                         .HasColumnType("nvarchar(15)");
 
-                    b.Property<Guid>("Requester_Employee_FK")
+                    b.Property<Guid?>("Requester_Employee_FK")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly>("StartDate")
@@ -1300,16 +1294,16 @@ namespace Proz_WebApi.Migrations
 
             modelBuilder.Entity("Proz_WebApi.Models.DesktopModels.DatabaseTables.Feedbacks", b =>
                 {
-                    b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employees", "EmployeeNA")
-                        .WithMany("FeedbacksNA")
-                        .HasForeignKey("Employee_FK")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Feedback_Types", "FeedbackTypeNA")
                         .WithMany("FeedbacksNA")
                         .HasForeignKey("FeedbackType_FK")
                         .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employee_Departments", "EmployeeNA")
+                        .WithMany("FeedbacksNA")
+                        .HasForeignKey("RequesterEmployee_FK")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("EmployeeNA");
@@ -1322,7 +1316,7 @@ namespace Proz_WebApi.Migrations
                     b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Feedbacks", "FeedbackNA")
                         .WithOne("FeedbacksAnswerNA")
                         .HasForeignKey("Proz_WebApi.Models.DesktopModels.DatabaseTables.Feedbacks_Answers", "Feedback_FK")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employees", "EmployeeNA")
@@ -1352,18 +1346,17 @@ namespace Proz_WebApi.Migrations
                     b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employees", "DepartmentManagerNA")
                         .WithMany("DepartmentManagerLeaveRequestsDealsNA")
                         .HasForeignKey("DepartmentManager_FK")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employees", "HandlerEmployeeNA")
                         .WithMany("ADHRLeaveRequestsDealsNA")
                         .HasForeignKey("HandlerEmployee_FK")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employees", "EmployeeNA")
+                    b.HasOne("Proz_WebApi.Models.DesktopModels.DatabaseTables.Employee_Departments", "EmployeeNA")
                         .WithMany("LeaveRequestsNA")
                         .HasForeignKey("Requester_Employee_FK")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("DepartmentManagerNA");
 
@@ -1499,6 +1492,10 @@ namespace Proz_WebApi.Migrations
 
                     b.Navigation("EmployeeSalaryHistoryNA");
 
+                    b.Navigation("FeedbacksNA");
+
+                    b.Navigation("LeaveRequestsNA");
+
                     b.Navigation("PaymentRecordsNA");
 
                     b.Navigation("PerformanceRecordersNA");
@@ -1517,11 +1514,7 @@ namespace Proz_WebApi.Migrations
 
                     b.Navigation("FeedbackAnswerNA");
 
-                    b.Navigation("FeedbacksNA");
-
                     b.Navigation("HRManagerLeaveRequestsNA");
-
-                    b.Navigation("LeaveRequestsNA");
 
                     b.Navigation("LogsNA");
 

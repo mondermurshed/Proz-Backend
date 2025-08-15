@@ -257,11 +257,22 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(option =>
 
     });
 
-     options.AddPolicy("AllUsers", policy =>
+         options.AddPolicy("EDH", policy =>
+         {
+             policy.RequireRole(AppRoles_Desktop.Employee, AppRoles_Desktop.DepartmentManager, AppRoles_Desktop.HRManager);
+
+         });
+
+         options.AddPolicy("AllUsers", policy =>
      {
          policy.RequireRole(AppRoles_Desktop.User, AppRoles_Desktop.Employee, AppRoles_Desktop.DepartmentManager, AppRoles_Desktop.HRManager, AppRoles_Desktop.Admin);
 
      });
+         options.AddPolicy("AllExceptUsers", policy =>
+         {
+             policy.RequireRole(AppRoles_Desktop.Employee, AppRoles_Desktop.DepartmentManager, AppRoles_Desktop.HRManager, AppRoles_Desktop.Admin);
+
+         });
          options.AddPolicy("TrustedUser", policy =>
     {
         policy.RequireRole("User", "Moderator");

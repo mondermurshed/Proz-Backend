@@ -27,9 +27,7 @@ namespace Proz_WebApi.Configurations
                 .HasForeignKey(ed => ed.Employee_FK);
               
 
-            builder.HasMany(e => e.FeedbacksNA)
-                .WithOne(f => f.EmployeeNA)
-                .HasForeignKey(f => f.Employee_FK);
+           
 
 
             builder.HasMany(e => e.FeedbackAnswerNA)
@@ -56,9 +54,6 @@ namespace Proz_WebApi.Configurations
                 .WithOne(p => p.ReviewerNA)
                 .HasForeignKey(p => p.Reviewer_FK);
 
-            builder.HasMany(e => e.LeaveRequestsNA)
-                .WithOne(l => l.EmployeeNA)
-                .HasForeignKey(l => l.Requester_Employee_FK);
 
             builder.HasMany(e => e.DepartmentManagerLeaveRequestsDealsNA)
                 .WithOne(l => l.DepartmentManagerNA)

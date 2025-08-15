@@ -33,7 +33,7 @@ namespace Proz_WebApi.Validators.DesktopValidators
 .NotEmpty().WithMessage("Full name is empty!")
 .MinimumLength(8).WithMessage("Full name field should be atleast 6 characters!")
 .MaximumLength(25).WithMessage("Full name has reached the maximum number to be entered which is 100 characters")
-.Matches("^[a-zA-Z ]+$").WithMessage("Full name must contain only letters and spaces.");
+.Matches(@"^(?!.* {2,})[a-zA-Z ]+$").WithMessage("Full name must contain only letters and spaces (only one space between each word).");
 
             RuleFor(p => p.Age)
   .NotEmpty().WithErrorCode("Age is required.")
@@ -51,7 +51,7 @@ namespace Proz_WebApi.Validators.DesktopValidators
             RuleFor(p => p.Nationality)
             .MinimumLength(3).WithErrorCode("Nationality's value has to be 3 or more letters")
 .MaximumLength(25).WithErrorCode("Nationality's value has reached the maximum number to be entered which is 30 characters")
-.Matches("^[a-zA-Z ]+$").WithErrorCode("Nationality must be a text that contains only letters and spaces.")
+.Matches(@"^(?!.* {2,})[a-zA-Z ]+$").WithErrorCode("Nationality must be a text that contains only letters and spaces.")
      .When(x => !string.IsNullOrWhiteSpace(x.Nationality));
 
         }
@@ -104,7 +104,8 @@ namespace Proz_WebApi.Validators.DesktopValidators
             RuleFor(p => p.CompanyName)
                .NotEmpty().WithErrorCode("Company Name is empty!")
                .MinimumLength(2).WithErrorCode("Company Name should be atleast 2 characters!")
-               .MaximumLength(100).WithErrorCode("Company Name has reached the maximum number to be entered which is 100 characters");
+               .MaximumLength(100).WithErrorCode("Company Name has reached the maximum number to be entered which is 100 characters")
+               .Matches(@"^(?!.* {2,})[a-zA-Z][a-zA-Z0-9 ]*$").WithErrorCode("Company Name must start with a letter.");
 
             RuleFor(p => p.Currency)
        .NotEmpty().WithMessage("Currency's value is empty!")
@@ -127,7 +128,7 @@ namespace Proz_WebApi.Validators.DesktopValidators
          .NotEmpty().WithErrorCode("Full name is empty!")
 .MinimumLength(8).WithErrorCode("Full name field should be atleast 6 characters!")
 .MaximumLength(25).WithErrorCode("Full name has reached the maximum number to be entered which is 100 characters")
-.Matches("^[a-zA-Z ]+$").WithErrorCode("Full name must contain only letters and spaces.");
+.Matches(@"^(?!.* {2,})[a-zA-Z ]+$").WithErrorCode("Full name must contain only letters and spaces.");
 
             RuleFor(x => x.Gender)
        .NotEmpty().WithMessage("Gender is required.")
@@ -146,7 +147,7 @@ namespace Proz_WebApi.Validators.DesktopValidators
             RuleFor(p => p.Nationality)
             .MinimumLength(3).WithErrorCode("Nationality's value has to be 3 or more letters")
 .MaximumLength(25).WithErrorCode("Nationality's value has reached the maximum number to be entered which is 30 characters")
-.Matches("^[a-zA-Z ]+$").WithErrorCode("Nationality must be a text that contains only letters and spaces.")
+.Matches("^(?!.* {2,})[a-zA-Z ]+$").WithErrorCode("Nationality must be a text that contains only letters and spaces.")
      .When(x => !string.IsNullOrWhiteSpace(x.Nationality));
 
 

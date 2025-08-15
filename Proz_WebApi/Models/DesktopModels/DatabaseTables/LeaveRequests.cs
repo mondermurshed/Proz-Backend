@@ -15,7 +15,7 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
    
     public DateOnly StartDate { get; set; }
     public DateOnly EndDate { get; set; }
-    [StringLength(500, MinimumLength = 50)]
+    [StringLength(500, MinimumLength = 30)]
     [Unicode]
     [Required]
      public string Reason { get; set; }
@@ -44,8 +44,8 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
     [Unicode]
     public string? FinalStatus_Comment {  get; set; }
     public DateTime? Decision_At {  get; set; }
-    public Guid Requester_Employee_FK { get; set; }
-    public Employees EmployeeNA { get; set; }
+    public Guid? Requester_Employee_FK { get; set; }
+    public Employee_Departments EmployeeNA { get; set; }
     public Guid? DepartmentManager_FK {  get; set; } 
     public Employees DepartmentManagerNA { get; set; }
     public Guid? HandlerEmployee_FK { get; set; }

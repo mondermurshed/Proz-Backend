@@ -20,8 +20,14 @@ namespace Proz_WebApi.Configurations
             builder.Property(ed => ed.Company_Bonus)
                 .HasPrecision(18, 2);
 
-        
 
+            builder.HasMany(e => e.FeedbacksNA)
+               .WithOne(f => f.EmployeeNA)
+               .HasForeignKey(f => f.RequesterEmployee_FK);
+
+            builder.HasMany(e => e.LeaveRequestsNA)
+               .WithOne(l => l.EmployeeNA)
+               .HasForeignKey(l => l.Requester_Employee_FK);
 
             builder.Property(ed => ed.StartDate)
                 .HasColumnType("date");

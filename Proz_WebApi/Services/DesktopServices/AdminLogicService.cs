@@ -26,6 +26,7 @@ using Zxcvbn;
 using EFCore.BulkExtensions;
 using Polly;
 using Proz_WebApi.Models.DesktopModels.DTO.Auth;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 
 namespace Proz_WebApi.Services.DesktopServices
@@ -1606,7 +1607,9 @@ public async Task<FinalResult> UpdateRoles(string requesterId, UserInformationCl
             var Managers = await _dbcontext.UserRoles.Where(u => u.RoleNA.Name == AppRoles_Desktop.DepartmentManager || u.RoleNA.Name == AppRoles_Desktop.HRManager || u.RoleNA.Name==AppRoles_Desktop.Admin)
            .Select(ur => new ReturnAllManagersAndAdmins
            {
-               FullName = ur.UserNA.PersonalInformationNA.FullName,
+               FullName = ur.UserNA.Id == requester.Id
+            ? ur.UserNA.PersonalInformationNA.FullName + " (Self)"
+            : ur.UserNA.PersonalInformationNA.FullName,
                RoleName = ur.RoleNA.Name,
                ID = ur.UserNA.Id
            })
@@ -1641,7 +1644,7 @@ public async Task<FinalResult> UpdateRoles(string requesterId, UserInformationCl
                 return null;
             }
 
-            var ManagersandAdmins = await _dbcontext.AuditLogsTable.Where(u => u.PerformerAccount_FK== employeeRecord.Id)
+            var Logs = await _dbcontext.AuditLogsTable.Where(u => u.PerformerAccount_FK== employeeRecord.Id)
            .Select(ur => new GetLogsForAPersonResponse
            {
             ActionType=ur.ActionType,
@@ -1653,7 +1656,7 @@ public async Task<FinalResult> UpdateRoles(string requesterId, UserInformationCl
 
 
 
-            return ManagersandAdmins;
+            return Logs;
 
         }
 
@@ -1677,13 +1680,13 @@ public async Task<FinalResult> UpdateRoles(string requesterId, UserInformationCl
 
             var Employees = await _dbcontext.UserRoles
          .Where(ur => ur.RoleNA.Name == AppRoles_Desktop.Employee)
-         .Where(ur =>
-             ur.UserNA.EmployeesNA != null &&
-             (
-                 !ur.UserNA.EmployeesNA.EmployeeToDepatment.Any() || // no records at all
-                 ur.UserNA.EmployeesNA.EmployeeToDepatment.All(dep => dep.Department_FK == null) // all records have null department
-             )
-         )
+         //.Where(ur =>
+         //    ur.UserNA.EmployeesNA != null &&
+         //    (
+         //        !ur.UserNA.EmployeesNA.EmployeeToDepatment.Any() || // no records at all
+         //        ur.UserNA.EmployeesNA.EmployeeToDepatment.All(dep => dep.Department_FK == null) // all records have null department
+         //    )
+         //)
          .Select(ur => new ReturnEmployees
          {
              FullName = ur.UserNA.PersonalInformationNA.FullName,
@@ -1721,7 +1724,7 @@ public async Task<FinalResult> UpdateRoles(string requesterId, UserInformationCl
            .Select(ur => new ReturnDepartments
            {
                DepartmentName = ur.DepartmentName,
-               DepartmentManager=ur.ManagerNA.IdentityUserNA.PersonalInformationNA.FullName,
+               DepartmentManager=ur.ManagerNA.IdentityUserNA.PersonalInformationNA.FullName ?? "**Doesn't Have A Manager Yet**",
                Id = ur.Id
            }).ToListAsync();
 
@@ -1733,6 +1736,611 @@ public async Task<FinalResult> UpdateRoles(string requesterId, UserInformationCl
 
             return department;
 
+        }
+
+
+        public async Task<FinalResult> AssignEmployeeToADepartment(string requesterId, AssignEmployeeToADepartmentRequest request)
+        {
+            var finalResult = new FinalResult();
+
+            try
+            {
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Requester is invalid.");
+                    return finalResult;
+                }
+
+                Guid requesteridmanager;
+                try
+                {
+                    requesteridmanager = await _dbcontext.Users.Where(e => e.Id == requester.Id).Select(s => s.EmployeesNA.Id).FirstOrDefaultAsync();
+                }
+
+                catch
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Invalid requester");
+                    return finalResult;
+                }
+                var requesterRoles = await _userManager.GetRolesAsync(requester);
+                if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Only Admins are allowed to create a new department in the system.");
+                    return finalResult;
+                }
+
+                var department = await _dbcontext.DepartmentsTable.Where(c => c.Id == request.DepartmentID).FirstOrDefaultAsync();
+                if (department == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"Department was not found in the system.");
+                    return finalResult;
+                }
+               
+                var Employee = await _dbcontext.Users.Where(c => c.Id == request.EmployeeID)
+                    .Select(c=> new
+                    {
+                    ID = c.Id,
+                    EmployeeID=c.EmployeesNA.Id,
+                    FullName = c.PersonalInformationNA.FullName ?? "**No Name**",
+                  
+                    }
+                    
+                    
+                    ).FirstOrDefaultAsync();
+                
+                if (Employee == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"Employee was not found in the system.");
+                    return finalResult;
+                }
+
+                var record = await _dbcontext.EmployeeDepartmentsTable
+                   .Where(ed => ed.Employee_FK == Employee.EmployeeID && ed.Department_FK == department.Id)
+                   .FirstOrDefaultAsync();
+                if (record != null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"Employee is already assigned to this department.");
+                    return finalResult;
+                }
+
+                var isAssignedToDepartment = await _dbcontext.EmployeeDepartmentsTable
+                    .AnyAsync(ed => ed.Employee_FK == Employee.EmployeeID && ed.Department_FK != null);
+                if(isAssignedToDepartment==true)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"The employee is already assigned to another department.");
+                    return finalResult;
+                }
+
+               
+
+               
+                using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    var EmployeeDepartmentRecord = await _dbcontext.EmployeeDepartmentsTable.Where(ed => ed.Employee_FK == Employee.EmployeeID).FirstOrDefaultAsync();
+                    if (EmployeeDepartmentRecord != null)
+                    {
+                        EmployeeDepartmentRecord.Department_FK = department.Id;
+                    }
+                    else
+                    {
+                        var addemployeedepartment = new Employee_Departments
+                        {
+                            Employee_FK = Employee.EmployeeID,
+                            Department_FK = department.Id
+                        };
+                        await _dbcontext.EmployeeDepartmentsTable.AddAsync(addemployeedepartment);
+
+                    }
+                    var log = new Audit_Logs
+                    {
+                        ActionType = "Updating",
+                        Notes = $"Assigned an employee '{Employee.FullName}' to a department '{department.DepartmentName}'",
+                        PerformerAccount_FK = requesteridmanager,
+                        TargetEntity_FK = Employee.EmployeeID
+                    };
+                    await _dbcontext.AuditLogsTable.AddAsync(log);
+
+
+
+                    await _dbcontext.SaveChangesAsync();
+                    scope.Complete();
+                }
+
+
+
+                finalResult.Succeeded = true;
+                finalResult.Messages.Add($"The employee '{Employee.FullName}' was successfully assigned to the department '{department.DepartmentName}'.");
+                return finalResult;
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, "Error occurred during assigning an employee to a department.");
+                finalResult.Succeeded = false;
+                finalResult.Errors.Add($"We couldn't assign the employee to the department.");
+                return finalResult;
+            }
+        }
+
+
+        public async Task<GetDepartmentOfEmployeeResponse> GetDepartmentOFAnEmployees(string requesterID, GetDepartmentOfEmployeeRequest request)
+        {
+
+            GetDepartmentOfEmployeeResponse response = new GetDepartmentOfEmployeeResponse();
+            var requester = await _userManager.FindByIdAsync(requesterID);
+            if (requester == null)
+            {
+
+                return null;
+            }
+
+            var requesterRoles = await _userManager.GetRolesAsync(requester);
+            if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+            {
+
+                return null;
+            }
+
+            Guid TargetEmployee;
+            try
+            {
+                TargetEmployee = await _dbcontext.Users.Where(e => e.Id == request.EmployeeID).Select(s => s.EmployeesNA.Id).FirstOrDefaultAsync();
+            }
+
+            catch
+            {
+
+                response.DepartmentName = null;
+                response.GotDepartment = false;
+                return response;
+            }
+
+            var departmentInfo = await _dbcontext.EmployeeDepartmentsTable
+                .Where(c => c.Employee_FK == TargetEmployee && c.Department_FK != null)
+                .Select(ur => new GetDepartmentOfEmployeeResponse
+                {
+                    GotDepartment = true,
+                    DepartmentName = ur.DepartmentNA.DepartmentName ?? "**Doesn't got a name**",
+                    DepartmentID=ur.DepartmentNA.Id
+                })
+                .FirstOrDefaultAsync();
+
+            if (departmentInfo == null)
+            {
+                response.GotDepartment = false;
+                response.DepartmentName = null;
+                response.DepartmentID = Guid.Empty;
+            }
+            else
+            {
+                response.GotDepartment = true;
+                response.DepartmentName = departmentInfo.DepartmentName;
+                response.DepartmentID = departmentInfo.DepartmentID;
+            }
+
+            return response;
+
+
+
+
+
+
+
+        }
+
+
+        public async Task<FinalResult> UnassignEmployeeFromADepartment(string requesterId, UnassignEmployeeToADepartmentRequest request)
+        {
+            var finalResult = new FinalResult();
+
+            try
+            {
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Requester is invalid.");
+                    return finalResult;
+                }
+
+                Guid requesteridmanager;
+                try
+                {
+                    requesteridmanager = await _dbcontext.Users.Where(e => e.Id == requester.Id).Select(s => s.EmployeesNA.Id).FirstOrDefaultAsync();
+                }
+
+                catch
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Invalid requester");
+                    return finalResult;
+                }
+                var requesterRoles = await _userManager.GetRolesAsync(requester);
+                if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add("Only Admins are allowed to create a new department in the system.");
+                    return finalResult;
+                }
+
+                var department = await _dbcontext.DepartmentsTable.Where(c => c.Id == request.DepartmentID).FirstOrDefaultAsync();
+                if (department == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"Department was not found in the system.");
+                    return finalResult;
+                }
+
+                var Employee = await _dbcontext.Users.Where(c => c.Id == request.EmployeeID)
+                    .Select(c => new
+                    {
+                        ID = c.Id,
+                        EmployeeID = c.EmployeesNA.Id,
+                        FullName = c.PersonalInformationNA.FullName ?? "**No Name**",
+
+                    }
+
+
+                    ).FirstOrDefaultAsync();
+
+                if (Employee == null)
+                {
+                    finalResult.Succeeded = false;
+                    finalResult.Errors.Add($"Employee was not found in the system.");
+                    return finalResult;
+                }
+
+                //var isAssignedToDepartment = await _dbcontext.EmployeeDepartmentsTable
+                //    .AnyAsync(ed => ed.Employee_FK == Employee.EmployeeID && ed.Department_FK != null);
+                //if (isAssignedToDepartment == true)
+                //{
+                //    finalResult.Succeeded = false;
+                //    finalResult.Errors.Add($"The employee is already assigned to another department.");
+                //    return finalResult;
+                //}
+
+                //var record = _dbcontext.EmployeeDepartmentsTable
+                //    .Where(ed => ed.Employee_FK == Employee.EmployeeID && ed.Department_FK == department.Id)
+                //    .AnyAsync();
+                //if (record != null)
+                //{
+                //    finalResult.Succeeded = false;
+                //    finalResult.Errors.Add($"Employee is already assigned to this department.");
+                //    return finalResult;
+                //}
+
+
+                using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    var EmployeeDepartmentRecord = await _dbcontext.EmployeeDepartmentsTable.Where(ed => ed.Employee_FK == Employee.EmployeeID && ed.Department_FK==request.DepartmentID).FirstOrDefaultAsync();
+                    if (EmployeeDepartmentRecord == null)
+                    {
+                        finalResult.Succeeded = false;
+                        finalResult.Errors.Add($"The employee is not assigned to this department.");
+                        return finalResult;
+                    }
+                    else
+                    {
+                        EmployeeDepartmentRecord.Department_FK = null;
+                   
+
+                    }
+                    var log = new Audit_Logs
+                    {
+                        ActionType = "Updating",
+                        Notes = $"Unassigned an employee '{Employee.FullName}' from a department '{department.DepartmentName}'",
+                        PerformerAccount_FK = requesteridmanager,
+                        TargetEntity_FK = Employee.EmployeeID
+                    };
+                    await _dbcontext.AuditLogsTable.AddAsync(log);
+
+
+
+                    await _dbcontext.SaveChangesAsync();
+                    scope.Complete();
+                }
+
+
+
+                finalResult.Succeeded = true;
+                finalResult.Messages.Add($"The employee '{Employee.FullName}' was successfully Unassigned from the department '{department.DepartmentName}'.");
+                return finalResult;
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, "Error occurred during Unassigning an employee to a department.");
+                finalResult.Succeeded = false;
+                finalResult.Errors.Add($"We couldn't Unassign the employee from the department.");
+                return finalResult;
+            }
+        }
+
+        public async Task<GetCompanyName> GetCompanyName(string requesterId)
+        {
+
+
+            try
+            {
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+
+                    return null;
+                }
+
+                //var requesterRoles = await _userManager.GetRolesAsync(requester);
+                //if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                //{
+
+                //    return null;
+                //}
+
+
+
+                var result = await _dbcontext.GettingStartedTable
+                .Select(x => new GetCompanyName
+                {
+                    CompanyName=x.CompanyName ?? "**No Name Defined**"
+                }).FirstOrDefaultAsync();
+
+
+                return result;
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, "Error while getting the company name.");
+                return null;
+            }
+        }
+
+
+        public async Task<PersonalInformationReturning> GetAllPersonalData(string requesterId)
+        {
+
+
+            try
+            {
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+
+                    return null;
+                }
+
+                //var requesterRoles = await _userManager.GetRolesAsync(requester);
+                //if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                //{
+
+                //    return null;
+                //}
+
+
+
+                var result = await _dbcontext.UserRoles.Where(r=>r.UserNA.Id==requester.Id)
+                .Select(x => new PersonalInformationReturning
+                {
+                    FullName = x.UserNA.PersonalInformationNA.FullName ?? "**No Name Defined**",
+                    Age=x.UserNA.PersonalInformationNA.Age,
+                    Gender=x.UserNA.PersonalInformationNA.Gender,
+                    Date_Of_Birth=x.UserNA.PersonalInformationNA.DateOfBirth,
+                    Living_On_Primary_Place=x.UserNA.PersonalInformationNA.LivingOnPrimaryPlace==true ? "Yes" : "No",
+                    Nationality=x.UserNA.PersonalInformationNA.Nationality!="" ?  x.UserNA.PersonalInformationNA.Nationality : "**No Nationality Defined**",
+                    RoleName=x.RoleNA.Name,
+                    RoleColor=x.RoleNA.RoleColorCode,
+                    AccountStatus=x.UserNA.EmployeesNA.Status,
+                    AccountCreatedDate = x.UserNA.CreatedAt,
+                    HireDate=x.UserNA.EmployeesNA.HireDate,
+                    AccountAgeInDays = DateOnly.FromDateTime(DateTime.Now).DayNumber - x.UserNA.CreatedAt.DayNumber
+
+
+                }).FirstOrDefaultAsync();
+
+
+                return result;
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, "Error while getting the company name.");
+                return null;
+            }
+        }
+
+        public async Task<ReturnUserRole> GetRole(string requesterId)
+        {
+            ReturnUserRole result = new ReturnUserRole();
+
+            try
+            {
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+
+                    return null;
+                }
+
+
+
+                var role = await _dbcontext.UserRoles.Where(r => r.UserNA.Id == requester.Id)
+                .Select(x => new ReturnUserRole
+                {
+                   RoleName=x.RoleNA.Name ?? ""
+                }).FirstOrDefaultAsync();
+
+                if(role==null)
+                {
+                    return null;
+                }
+                else
+                {
+                    result.RoleName = role.RoleName;
+                }
+                return result;
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, "Error while getting the company name.");
+                return null;
+            }
+        }
+
+        public async Task<UpdateCompanyNameResponse> UpdateCompanyName(string requesterId, UpdateCompanyNameRequest request)
+        {
+
+
+            try
+            {
+                var result = new UpdateCompanyNameResponse();
+
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+
+                    return null;
+                }
+
+                var requesterRoles = await _userManager.GetRolesAsync(requester);
+                if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                {
+
+                    return null;
+                }
+                string changeTo = request.CompanyName.Trim();
+
+
+                int affectedRows = await _dbcontext.GettingStartedTable.ExecuteUpdateAsync(c => c.SetProperty(x => x.CompanyName, changeTo));
+
+                if (affectedRows > 0)
+                {
+                    result.NewCompanyName = changeTo;
+                    return result;
+                }
+                else
+                {
+                    return null;
+                }
+               
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, "Error while getting the company name.");
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<ReturnSystemRoles>> GetAllSystemRoles(string requesterID)
+        {
+
+
+            var requester = await _userManager.FindByIdAsync(requesterID);
+            if (requester == null)
+            {
+
+                return null;
+            }
+
+            var requesterRoles = await _userManager.GetRolesAsync(requester);
+            if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+            {
+
+                return null;
+            }
+
+            var Roles = await _dbcontext.Roles
+           .Select(ur => new ReturnSystemRoles
+           {
+             RoleName=ur.Name,
+             RoleColorCode = ur.RoleColorCode,
+             RoleID=ur.Id,
+           }).ToListAsync();
+
+          if(Roles.Count==0)
+            {
+                return null;
+            }
+
+
+
+
+
+            return Roles;
+
+        }
+
+        public async Task<object> UpdateRoleColor(string requesterId, RoleColorChangeRequest request)
+        {
+
+
+            try
+            {
+             
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+
+                    return null;
+                }
+
+                var requesterRoles = await _userManager.GetRolesAsync(requester);
+                if (!requesterRoles.Contains(AppRoles_Desktop.Admin))
+                {
+
+                    return null;
+                }
+             
+
+
+                int affectedRows = await _dbcontext.Roles.Where(c=>c.Id==request.ID).ExecuteUpdateAsync(c => c.SetProperty(x => x.RoleColorCode, request.ColorCode));
+
+                if (affectedRows > 0)
+                {
+
+                    return new object();
+                }
+                else
+                {
+                    return null;
+                }
+
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                _loggerr.LogError(ex, "Error while getting the company name.");
+                return null;
+            }
         }
 
 

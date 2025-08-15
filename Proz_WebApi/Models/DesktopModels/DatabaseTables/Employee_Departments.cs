@@ -21,6 +21,9 @@ namespace Proz_WebApi.Models.DesktopModels.DatabaseTables
         public Guid? Department_FK { get; set; }
         public Departments DepartmentNA { get; set; }
         public Salary_Schedule SalaryScheduleNA { get;  set; }
+
+        public ICollection<Feedbacks> FeedbacksNA { get; set; } = new List<Feedbacks>();
+        public ICollection<LeaveRequests> LeaveRequestsNA { get; set; } = new List<LeaveRequests>();
         public ICollection<Payment_Records> PaymentRecordsNA { get; set; } = new List<Payment_Records>();
         public ICollection<Attendance_Recorder> AttendanceRecordersNA { get;set; } = new List<Attendance_Recorder>();
         public ICollection<Performance_Recorder> PerformanceRecordersNA { get; set; } = new List<Performance_Recorder>();
