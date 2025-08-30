@@ -1,7 +1,9 @@
 ﻿using System.Transactions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Proz_WebApi.Data;
+using Proz_WebApi.Helpers_Services.SignleR_Logic;
 using Proz_WebApi.Helpers_Types;
 using Proz_WebApi.Models.DesktopModels.DatabaseTables;
 using Proz_WebApi.Models.DesktopModels.DTO.Admin;
@@ -15,13 +17,15 @@ namespace Proz_WebApi.Services.DesktopServices
         private readonly RoleManager<ExtendedIdentityRolesDesktop> _roleManager;
         private readonly ApplicationDbContext_Desktop _dbcontext;
         private readonly ILogger<AdminLogicService> _logger;
-
-        public EmployeeLogicService(UserManager<ExtendedIdentityUsersDesktop> userManager, RoleManager<ExtendedIdentityRolesDesktop> roleManager, ApplicationDbContext_Desktop dbcontext, ILogger<AdminLogicService> loggerr)
+        private readonly IHubContext<MainHub> _hub;
+        public EmployeeLogicService(UserManager<ExtendedIdentityUsersDesktop> userManager, RoleManager<ExtendedIdentityRolesDesktop> roleManager
+            , ApplicationDbContext_Desktop dbcontext, ILogger<AdminLogicService> loggerr, IHubContext<MainHub> hub)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _dbcontext = dbcontext;
             _logger = loggerr;
+            _hub = hub;
         }
 
 
@@ -88,7 +92,7 @@ namespace Proz_WebApi.Services.DesktopServices
 
                 Guid EmployeeID;
                 Guid SenderID;
-               
+                Guid? departmentmanager;
                 try
                 {
 
@@ -103,7 +107,7 @@ namespace Proz_WebApi.Services.DesktopServices
                         finalResult.Errors.Add("Employee is not inside a department.");
                         return finalResult;
                     }
-                    Guid? departmentmanager = await _dbcontext.DepartmentsTable.Where(c => c.Id == department).Select(c => c.Manager_FK).FirstOrDefaultAsync();
+                     departmentmanager = await _dbcontext.DepartmentsTable.Where(c => c.Id == department).Select(c => c.Manager_FK).FirstOrDefaultAsync();
                     if (departmentmanager == null)
                     {
                         finalResult.Succeeded = false;
@@ -112,8 +116,9 @@ namespace Proz_WebApi.Services.DesktopServices
                     }
 
                     SenderID = await _dbcontext.EmployeeDepartmentsTable.Where(c => c.Employee_FK == EmployeeID && c.Department_FK==department).Select(c => c.Id).FirstOrDefaultAsync();
-                  
-                 
+
+
+
 
                 }
       
@@ -133,10 +138,19 @@ namespace Proz_WebApi.Services.DesktopServices
                     return finalResult;
                 }
 
-
+                Notifications? notification;
+                Guid manageriduser= await _dbcontext.EmployeesTable.Where(c => c.Id == departmentmanager)
+                 .Select(s => s.IdentityUserNA.Id).FirstOrDefaultAsync();
                 using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
                 {
-
+                    var employeename = await _dbcontext.Users.Where(c => c.Id == requester.Id)
+                    .Select(c => c.PersonalInformationNA.FullName).FirstOrDefaultAsync();
+                    if (string.IsNullOrEmpty(employeename))                                   //<<this is new thing!
+                    {
+                        finalResult.Succeeded = false;
+                        finalResult.Errors.Add("Employee name is not valid.");
+                        return finalResult;
+                    }
                     await _dbcontext.FeedbacksTable.AddAsync(new Feedbacks
                     {
                         FeedbackTitle = request.FeedbackTitle,
@@ -147,14 +161,26 @@ namespace Proz_WebApi.Services.DesktopServices
                         
 
                     });
+                    var feedbackTypeName = await _dbcontext.FeedbacksTypesTable.Where(f=>f.id == request.FeedbackType)
+                        .Select(f => f.FeedbackType).FirstOrDefaultAsync();
+                    notification = new Notifications()
+                   {
+                       Title = "New Feedback Request",
+                       Message = $"{employeename} has requested a feedback of a type {feedbackTypeName}.",
+                       Created_At = DateTime.UtcNow,
+                       Type = "Feedback",
+                       Priority = "Low",
+                       Target_FK = (Guid)departmentmanager,
+                   };
+                    await _dbcontext.NotificationsTable.AddAsync(notification);
                    
-                 
+                  
 
                     await _dbcontext.SaveChangesAsync();
                     scope.Complete();
                 }
 
-
+                await _hub.Clients.User(manageriduser.ToString()).SendAsync("NewNotification", notification);
                 finalResult.Succeeded = true;
                 finalResult.Messages.Add($"Your Feedback request was successfully sent to your manager, wait for an answer.");
                 return finalResult;
@@ -366,8 +392,25 @@ namespace Proz_WebApi.Services.DesktopServices
                     return finalResult;
                 }
 
+                var requesterInformation = await _dbcontext.EmployeeDepartmentsTable.Where(c => c.Id == SenderID)
+                 .Select(s => new
+                 {
+                     employeename = s.EmployeeNA.IdentityUserNA.PersonalInformationNA.FullName,
+                     department = s.DepartmentNA.DepartmentName,
+                     managerID = s.DepartmentNA.Manager_FK,
+                     managerIDUser = s.DepartmentNA.ManagerNA.IdentityUserNA.Id
+                 }).FirstOrDefaultAsync();
+                Notifications? notification;
                 using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
                 {
+                 
+                   
+                    if(requesterInformation==null)
+                    {
+                        finalResult.Succeeded = false;
+                        finalResult.Errors.Add("Requester information is not valid.");
+                        return finalResult;
+                    }
 
                     await _dbcontext.LeaveRequestsTable.AddAsync(new LeaveRequests
                     {
@@ -379,12 +422,25 @@ namespace Proz_WebApi.Services.DesktopServices
 
                     });
 
+                    notification = new Notifications
+                    {
+                        Title = "New Leave Request",
+                        Message = $"{requesterInformation.employeename} has requested a leave request from your '{requesterInformation.department}' department.",
+                        Created_At = DateTime.UtcNow,
+                        Type = "Leave Request",
+                        Priority = "Medium",
+                        Target_FK = (Guid)requesterInformation.managerID,
+                    };
+               
 
+                    await _dbcontext.NotificationsTable.AddAsync(notification);
 
-                    await _dbcontext.SaveChangesAsync();
+                  
+                  await _dbcontext.SaveChangesAsync();
                     scope.Complete();
                 }
-
+              
+                await _hub.Clients.User(requesterInformation.managerIDUser.ToString()).SendAsync("NewNotification", notification);
 
                 finalResult.Succeeded = true;
                 finalResult.Messages.Add($"Your Leave request was successfully sent to your manager, wait for an answer.");
@@ -540,6 +596,147 @@ namespace Proz_WebApi.Services.DesktopServices
                 finalresult.Error = "Couldn't remove your leave request.";
                 finalresult.Success = false;
                 return finalresult;
+            }
+        }
+
+
+        public async Task<AgreeOnLeaveRequestDecisionResponse> AgreeOnLeaveRequestRules(string requesterId, AgreeOnLeaveRequestDecisionRequest request)
+        {
+            var finalResult = new AgreeOnLeaveRequestDecisionResponse();
+
+            try
+            {
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+                    finalResult.Success = false;
+                    finalResult.Error = "invalid Requester.";
+                    return finalResult;
+                }
+
+
+             
+
+                var requesterRoles = await _userManager.GetRolesAsync(requester);
+                if (!requesterRoles.Contains(AppRoles_Desktop.Employee))
+                {
+                    finalResult.Success = false;
+                    finalResult.Error = "invalid Requester.";
+                    return finalResult;
+                }
+
+                var LeaveRequest = await _dbcontext.LeaveRequestsTable.Where(x => x.Id == request.LeaveRequestID).FirstOrDefaultAsync();
+                if(LeaveRequest == null)
+                {
+                    finalResult.Success = false;
+                    finalResult.Error = "Leave Request is not located.";
+                    return finalResult;
+                }
+
+                using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+                {
+                    if (LeaveRequest.Completed==true || LeaveRequest.HasSanctions==false || LeaveRequest.DMStatus=="Waiting")
+                    {
+                        finalResult.Success = false;
+                        finalResult.Error = "Leave Request is already completed or it doesn't require from you to agree about anything.";
+                        return finalResult;
+                    }   
+                    LeaveRequest.AgreedOn = request.Agreed;
+                    LeaveRequest.Completed = true;
+                    LeaveRequest.Decision_At = DateTime.UtcNow;
+                    LeaveRequest.RequesterStatus = "Done";
+                    if (request.Agreed == true)
+                    {
+                 
+                        LeaveRequest.FinalStatus = "Accepted";
+                    }
+                    else
+                    {
+                        LeaveRequest.FinalStatus = "Rejected";
+                    }
+
+
+                        await _dbcontext.SaveChangesAsync();
+                    scope.Complete();
+                }
+
+
+                finalResult.Success = true;
+                finalResult.Message = "Your Leave request was successfully sent to your manager, wait for an answer.";
+                return finalResult;
+            }
+            catch (Exception ex)
+            {
+
+                finalResult.Success = false;
+                finalResult.Error = "Couldn't send the Leave request, please wait and try again later.";
+                return finalResult;
+            }
+        }
+
+
+
+        public async Task<IEnumerable<ReturnPerformanceRecordsResponse>> GetMyPerformanceRecords(string requesterId, ReturnPerformanceRecordsListRequest request)
+        {
+
+
+            try
+            {
+                // Get the admin making the request
+                var requester = await _userManager.FindByIdAsync(requesterId);
+                if (requester == null)
+                {
+
+                    return null;
+                }
+
+                var requesterRoles = await _userManager.GetRolesAsync(requester);
+                if (!requesterRoles.Contains(AppRoles_Desktop.Employee))
+                {
+
+                    return null;
+                }
+
+                Guid? employeeid = await _dbcontext.Users.Where(c => c.Id == requester.Id).Select(c => c.EmployeesNA.Id).FirstOrDefaultAsync();
+                if (employeeid == null)
+                {
+                    return null;
+                }
+                Guid? row = await _dbcontext.EmployeeDepartmentsTable.Where(x => x.Employee_FK == employeeid).Select(x => x.Id).FirstOrDefaultAsync();
+                if (row == null)
+                {
+                    return null;
+                }
+
+                var result = await _dbcontext.PerformanceRecorderTable.Where(x => x.EmployeeDepartment_FK == row && x.CreatedAt.Month==request.Month)
+                .Select(x => new ReturnPerformanceRecordsResponse
+                {
+                    CreatedAt = x.CreatedAt,
+                    
+                    PerformanceRating = x.PerformanceRating,
+                    ReviewerComment = x.ReviewerComment ?? "**No Comment**",
+                    Reviewer = x.ReviewerNA != null &&
+                     x.ReviewerNA.IdentityUserNA != null &&
+                     x.ReviewerNA.IdentityUserNA.PersonalInformationNA != null &&
+                     !string.IsNullOrEmpty(x.ReviewerNA.IdentityUserNA.PersonalInformationNA.FullName)
+                     ? x.ReviewerNA.IdentityUserNA.PersonalInformationNA.FullName
+                     : "**Reviewer has no name**"
+
+
+                }).ToListAsync();
+
+
+                return result;
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                return null;
             }
         }
 

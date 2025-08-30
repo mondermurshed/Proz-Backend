@@ -27,6 +27,8 @@ using EFCore.BulkExtensions;
 using Polly;
 using Proz_WebApi.Models.DesktopModels.DTO.Auth;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.AspNetCore.SignalR;
+using Proz_WebApi.Helpers_Services.SignleR_Logic;
 
 
 namespace Proz_WebApi.Services.DesktopServices
@@ -46,11 +48,12 @@ namespace Proz_WebApi.Services.DesktopServices
         private readonly VerificationCodeService _managingTempData;
         private readonly AesEncryptionService _aesEncryptionService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
-       public AdminLogicService(UserManager<ExtendedIdentityUsersDesktop> userManager, RoleManager<ExtendedIdentityRolesDesktop> roleManager,
+        private readonly IHubContext<MainHub> _hub;
+        public AdminLogicService(UserManager<ExtendedIdentityUsersDesktop> userManager, RoleManager<ExtendedIdentityRolesDesktop> roleManager,
             JWTOptions jwtoption, ApplicationDbContext_Desktop dbcontext, ILogger<AuthService> loggerr, IEasyCachingProviderFactory easyCachingFactory,
             EmailNormalizer emailNormalizer, DomainVerifier domainVerifier, VerificationCodeService managingTempData
-            , SesEmailSender EmailSender, AesEncryptionService aesEncryptionService, IHttpContextAccessor httpContextAccessor)
+            , SesEmailSender EmailSender, AesEncryptionService aesEncryptionService, IHttpContextAccessor httpContextAccessor
+           , IHubContext<MainHub> hub)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -64,6 +67,7 @@ namespace Proz_WebApi.Services.DesktopServices
             _managingTempData = managingTempData;
             _aesEncryptionService = aesEncryptionService;
             _httpContextAccessor = httpContextAccessor;
+            _hub = hub;
         }
         public async Task<FinalResult> InitializeSystemAsyncStepOne(GettingStartedStageOneDTO gettingstartedDTO)
         {
@@ -595,8 +599,14 @@ public async Task<FinalResult> UpdateRoles(string requesterId, UserInformationCl
 
                 string user_fullname = await _dbcontext.Users.Include(u => u.PersonalInformationNA).Where(a => a.Id == request.UserId).Select(u => u.PersonalInformationNA.FullName).FirstOrDefaultAsync() ?? "Unknown User";
                 finalResult.Succeeded = true;
-        finalResult.Messages.Add($"User {user_fullname} was successfully assigned to role '{request.NewRoles}'");
-        return finalResult;
+                finalResult.Messages.Add($"User {user_fullname} was successfully assigned to role '{request.NewRoles}'");
+                // Corrected code for the RoleChangedEvent instantiation
+                var roleChangedEvent = new RoleChangedEvent
+                {
+                    RoleName = request.NewRoles
+                };
+                     await _hub.Clients.User(user.Id.ToString()).SendAsync("RoleChanged", roleChangedEvent);
+                return finalResult;
     }
   catch (Exception ex)
     {

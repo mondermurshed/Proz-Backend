@@ -167,7 +167,17 @@ namespace Proz_WebApi.Services.DesktopServices
                     resultfinal.Success = false;
                     return resultfinal;
                 }
-                feedback.IsCompleted = true;
+                    var employee = await _dbcontext.EmployeeDepartmentsTable.Where(c => c.Id == feedback.RequesterEmployee_FK)
+                    .Select(c => new
+                    {
+                        ID = c.EmployeeNA.IdentityUserNA.Id,
+                        EmployeeID = c.EmployeeNA.Id,
+                        FullName = c.EmployeeNA.IdentityUserNA.PersonalInformationNA.FullName ?? "**No Name**",
+
+                    }
+                    ).FirstOrDefaultAsync();
+
+                    feedback.IsCompleted = true;
                 _dbcontext.Update(feedback);
 
                 var feedbackanswer = new Feedbacks_Answers
@@ -177,7 +187,17 @@ namespace Proz_WebApi.Services.DesktopServices
                RespondentAccount_FK = managerid.Value,
               
            };
-                await _dbcontext.AddAsync(feedbackanswer);
+
+                    var log = new Audit_Logs
+                    {
+                        ActionType = "Creating",
+                        Notes = $"Answered a feedback request for the employee '{employee.FullName}'",
+                        PerformerAccount_FK = managerid,
+                        TargetEntity_FK = employee.EmployeeID
+                    };
+                    await _dbcontext.AuditLogsTable.AddAsync(log);
+
+                    await _dbcontext.AddAsync(feedbackanswer);
                    
                 await _dbcontext.SaveChangesAsync();
                  scope.Complete();
@@ -326,7 +346,39 @@ namespace Proz_WebApi.Services.DesktopServices
                     }
                     _dbcontext.Update(LeaveRequest);
 
-                
+                    var employee = await _dbcontext.EmployeeDepartmentsTable.Where(c => c.Id == LeaveRequest.Requester_Employee_FK)
+                    .Select(c => new
+                    {
+                        ID = c.EmployeeNA.IdentityUserNA.Id,
+                        EmployeeID = c.EmployeeNA.Id,
+                        FullName = c.EmployeeNA.IdentityUserNA.PersonalInformationNA.FullName ?? "**No Name**",
+                    
+                    }
+                    ).FirstOrDefaultAsync();
+                    if (request.Accept==true)
+                    {
+                        var log = new Audit_Logs
+                        {
+                            ActionType = "Creating",
+                            Notes = $"Accepted a leave request of the employee '{employee.FullName}'",
+                            PerformerAccount_FK = managerid,
+                            TargetEntity_FK = employee.EmployeeID
+                        };
+                        await _dbcontext.AuditLogsTable.AddAsync(log);
+                    }
+                    else
+                    {
+                        var log = new Audit_Logs
+                        {
+                            ActionType = "Creating",
+                            Notes = $"Rejected a leave request of the employee '{employee.FullName}'",
+                            PerformerAccount_FK = managerid,
+                            TargetEntity_FK = employee.EmployeeID
+                        };
+                        await _dbcontext.AuditLogsTable.AddAsync(log);
+                    }
+
+
 
                     await _dbcontext.SaveChangesAsync();
                     scope.Complete();
@@ -406,6 +458,177 @@ namespace Proz_WebApi.Services.DesktopServices
             else
                 return LeaveRequests;
 
+        }
+
+
+        public async Task<IEnumerable<ReturnPerformanceRecordsResponse>> ReturnEmployeesWithIDsDepartment(string requesterID, ReturnPerformanceRecordsRequest request)
+        {
+            var requester = await _userManager.FindByIdAsync(requesterID);
+            if (requester == null)
+                return null;
+
+            var requesterRoles = await _userManager.GetRolesAsync(requester);
+            if (!requesterRoles.Contains(AppRoles_Desktop.DepartmentManager))
+                return null;
+
+
+            Guid? managerid = await _dbcontext.EmployeesTable.Where(c => c.IdentityUsers_FK == requester.Id).Select(c => c.Id).FirstOrDefaultAsync();
+            if (managerid == null)
+                return null;
+
+            var Employees = await _dbcontext.EmployeeDepartmentsTable.Where(c => c.Department_FK == request.DepartmentID).Select(ur => new ReturnPerformanceRecordsResponse
+            {
+                EmployeeID = ur.Id,
+                EmployeeName = ur.EmployeeNA.IdentityUserNA.PersonalInformationNA.FullName
+
+            }).ToListAsync();
+            //var Employees = await _dbcontext.PerformanceRecorderTable.Where(c => c.EmployeeDepartmentNA.Department_FK==request.DepartmentID).Select(ur => new ReturnPerformanceRecordsResponse
+            //{
+            //    PerformanceRecordID = ur.Id,
+            //    EmployeeName = ur.EmployeeDepartmentNA.EmployeeNA.IdentityUserNA.PersonalInformationNA.FullName,
+            //    PerformanceRating=ur.PerformanceRating,
+            //    PerformanceComment=ur.ReviewerComment
+
+            //}).ToListAsync();
+
+            if (Employees == null || Employees.Count == 0)
+                return null;
+            else
+                return Employees;
+
+        }
+
+
+        public async Task<SubmitPerformanceAnswerResponse> CreateAnAnswerForPerformance(string requesterID, SubmitPerformanceAnswerRequest request)
+        {
+            var resultfinal = new SubmitPerformanceAnswerResponse();
+            try
+            {
+
+
+                var requester = await _userManager.FindByIdAsync(requesterID);
+                if (requester == null)
+                {
+                    resultfinal.Error = "The Requester is unknown";
+                    resultfinal.Success = false;
+                    return resultfinal;
+                }
+
+                var requesterRoles = await _userManager.GetRolesAsync(requester);
+                if (!requesterRoles.Contains(AppRoles_Desktop.DepartmentManager))
+                {
+                    resultfinal.Error = "The Requester is not allowed for calling this service";
+                    resultfinal.Success = false;
+                    return resultfinal;
+                }
+
+
+                Guid? managerid = await _dbcontext.EmployeesTable.Where(c => c.IdentityUsers_FK == requester.Id).Select(c => c.Id).FirstOrDefaultAsync();
+                if (managerid == null)
+                {
+                    resultfinal.Error = "The Requester is not allowed for calling this service";
+                    resultfinal.Success = false;
+                    return resultfinal;
+                }
+                bool cc = false;
+                string performanceRatingName = "Unknown";
+                switch (request.Ratting)
+                {
+                    case -1:
+                        performanceRatingName = "Bad";
+                        break;
+                    case 0:
+                        performanceRatingName = "Default";
+                        break;
+                    case 1:
+                        performanceRatingName = "Excellent";
+                        break;
+                }
+                using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
+                {
+                  
+                    var hasPerformance = await _dbcontext.PerformanceRecorderTable.Where(c => c.EmployeeDepartment_FK == request.EmployeeID).FirstOrDefaultAsync();
+                    if (hasPerformance != null)
+                    {
+                        if(hasPerformance.ReviewerComment==request.Comment && hasPerformance.PerformanceRating == request.Ratting)
+                        {
+                            resultfinal.Error = "You have already submitted this performance record.";
+                            resultfinal.Success = false;
+                            return resultfinal;
+                        }
+                        hasPerformance.PerformanceRating = request.Ratting;
+                        hasPerformance.ReviewerComment = request.Comment;
+                        cc = false;
+                        _dbcontext.Update(hasPerformance);
+                        var employee = await _dbcontext.EmployeeDepartmentsTable.Where(c => c.Id == hasPerformance.EmployeeDepartment_FK)
+                   .Select(c => new
+                   {
+                       ID = c.EmployeeNA.IdentityUserNA.Id,
+                       EmployeeID = c.EmployeeNA.Id,
+                       FullName = c.EmployeeNA.IdentityUserNA.PersonalInformationNA.FullName ?? "**No Name**",
+
+                   }
+                   ).FirstOrDefaultAsync();
+
+                        var log = new Audit_Logs
+                        {
+                            ActionType = "Updating",
+                            Notes = $"setting the performance record of the employee '{employee.FullName}' to '{performanceRatingName}'",
+                            PerformerAccount_FK = managerid,
+                            TargetEntity_FK = employee.EmployeeID
+                        };
+                        await _dbcontext.AuditLogsTable.AddAsync(log);
+                    }
+                    else
+                    {
+                        cc = true;
+                        var performance = new Performance_Recorder
+                        {
+                            EmployeeDepartment_FK = request.EmployeeID,
+                            Reviewer_FK = (Guid)managerid,
+                            
+                            PerformanceRating = request.Ratting,
+                            ReviewerComment = request.Comment,
+                           
+                            
+                        };
+                       await _dbcontext.AddAsync(performance);
+                        var employee = await _dbcontext.EmployeeDepartmentsTable.Where(c => c.Id == hasPerformance.EmployeeDepartment_FK)
+                .Select(c => new
+                {
+                    ID = c.EmployeeNA.IdentityUserNA.Id,
+                    EmployeeID = c.EmployeeNA.Id,
+                    FullName = c.EmployeeNA.IdentityUserNA.PersonalInformationNA.FullName ?? "**No Name**",
+
+                }
+                ).FirstOrDefaultAsync();
+
+                        var log = new Audit_Logs
+                        {
+                            ActionType = "Updating",
+                            Notes = $"setting the performance record of the employee '{employee.FullName}' to '{performanceRatingName}'",
+                            PerformerAccount_FK = managerid,
+                            TargetEntity_FK = employee.EmployeeID
+                        };
+                        await _dbcontext.AuditLogsTable.AddAsync(log);
+                    }
+                    
+                  
+                
+                    await _dbcontext.SaveChangesAsync();
+                    scope.Complete();
+                }
+                resultfinal.Success = true;
+                resultfinal.Messagee = cc ? "The performance record has been added successfully." : "The performance record has been updated successfully.";
+                return resultfinal;
+
+            }
+            catch
+            {
+                resultfinal.Error = "An error occurred while processing your request. Please try again later.";
+                resultfinal.Success = false;
+                return resultfinal;
+            }
         }
 
     }

@@ -323,22 +323,12 @@ namespace Proz_WebApi.Controllers.DesktopControllers
             var result = await _authservice.RefreshAToken(refreshToken);
             if (!result.Succeeded)
             {
-                return Unauthorized(new LoginResultDTO
-                { 
-                    Token=null,
-                    RefreshToken = null,
-                    Errors= result.Errors
-                
-                });
+                return Unauthorized(result);
+             
             }
-            string YourNewAccessToken = result.AccessToken;
-            string YourNewRefreshToken = result.RefreshToken;
-            return Ok(new LoginResultDTO
-            {
-             Token = YourNewAccessToken,
-             RefreshToken = YourNewRefreshToken,
-             Errors = null
-            });
+
+            return Ok(result);
+           
         }
 
 

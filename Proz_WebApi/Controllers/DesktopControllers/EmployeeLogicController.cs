@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Proz_WebApi.Models.DesktopModels.Dto.Admin;
 using Proz_WebApi.Models.DesktopModels.DTO.Admin;
+using Proz_WebApi.Models.DesktopModels.DTO.DepartmentManager;
 using Proz_WebApi.Models.DesktopModels.DTO.Employee;
 using Proz_WebApi.Services.DesktopServices;
 
@@ -197,6 +198,55 @@ namespace Proz_WebApi.Controllers.DesktopControllers
 
             }
             return Ok(result);
+
+        }
+
+
+        [HttpPost("LeaveRequest/AddFinalAnswer")]
+        public async Task<IActionResult> AddLeaveRequestAnswer(AgreeOnLeaveRequestDecisionRequest request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _employeeLogicService.AgreeOnLeaveRequestRules(currentUserId, request);
+
+            if (result.Success == false)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
+        [HttpGet("PerformanceRecords/Get")]
+        public async Task<IActionResult> GetMyPerformanceRecords(ReturnPerformanceRecordsListRequest request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _employeeLogicService.GetMyPerformanceRecords(currentUserId,request);
+
+            if (result == null || !result.Any())
+            {
+
+                return BadRequest();
+
+            }
+            return Ok(result);
+
+
+
 
         }
     }

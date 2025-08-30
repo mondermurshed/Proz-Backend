@@ -31,6 +31,7 @@ using Microsoft.AspNetCore.Rewrite;
 using System.Transactions;
 using Proz_WebApi.Models.DesktopModels.DatabaseTables;
 using Microsoft.AspNetCore.Http;
+using Proz_WebApi.Models.DesktopModels.DTO;
 
 namespace Proz_WebApi.Services.DesktopServices
 {
@@ -632,11 +633,11 @@ namespace Proz_WebApi.Services.DesktopServices
 
 
 
-        public async Task<FinalResult> RefreshAToken(DeviceTokenAndRefreshTokenPassing request) //this is only happen when the user's computer wants new access + refresh tokens without log in 
+        public async Task<LoginResultDTO> RefreshAToken(DeviceTokenAndRefreshTokenPassing request) //this is only happen when the user's computer wants new access + refresh tokens without log in 
         {
             using (var scope = new TransactionScope(TransactionScopeOption.RequiresNew, TransactionScopeAsyncFlowOption.Enabled))
             {
-                var finalresult = new FinalResult();
+                var finalresult = new LoginResultDTO();
                 // 1. Hash the incoming refresh token with SHA256
                 using var sha256 = SHA256.Create(); //go read the lines (the last lines maybe ?? idk go check them) of the GenerateRefreshToken method to understand these.
                 var hashBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(request.RefreshToken));
@@ -657,6 +658,7 @@ namespace Proz_WebApi.Services.DesktopServices
                 {
                     finalresult.Succeeded = false;
                     finalresult.Errors.Clear();
+
                     finalresult.Errors.Add("Unable to send a valid access token to the user, please re signing again");
                     return finalresult;
                 }
@@ -684,7 +686,10 @@ namespace Proz_WebApi.Services.DesktopServices
 
                 await _dbcontext.SaveChangesAsync();
                 finalresult.Succeeded = true;
-                finalresult.AuthSuccess(newAccessToken, newRefreshToken);
+                finalresult.RefreshToken = newRefreshToken;
+                finalresult.Token = newAccessToken;
+                finalresult.ExpiredInSeconds = (int)(DateTime.UtcNow.AddDays(3) - DateTime.UtcNow).TotalSeconds;
+                finalresult.Errors = null;
                 scope.Complete();
                 return finalresult;
             }

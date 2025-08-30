@@ -188,6 +188,52 @@ namespace Proz_WebApi.Controllers.DesktopControllers
 
         }
 
+        [HttpGet("Employees/Get")]
+        public async Task<IActionResult> GetMyEmployees(ReturnPerformanceRecordsRequest request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _departmentManagerLogicService.ReturnEmployeesWithIDsDepartment(currentUserId, request);
+
+            if (result == null || result.Count() == 0)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
+        [HttpPost("Performance/SendPerformance")]
+        public async Task<IActionResult> MakeAPerformance(SubmitPerformanceAnswerRequest request)
+        {
+            var currentUserId = User.FindFirst("TheCallerID")?.Value;
+            if (string.IsNullOrEmpty(currentUserId))
+            {
+
+                return Unauthorized("The Requester is unknown");
+            }
+
+            var result = await _departmentManagerLogicService.CreateAnAnswerForPerformance(currentUserId, request);
+
+            if (result.Success == false)
+            {
+
+                return BadRequest(result);
+
+
+            }
+            return Ok(result);
+
+        }
+
 
     }
 }

@@ -36,6 +36,8 @@ using Proz_WebApi.Models.DesktopModels.DatabaseTables;
 
 using StackExchange.Redis;
 using System.Reflection.Metadata;
+using Microsoft.AspNetCore.SignalR;
+using Proz_WebApi.Helpers_Services.SignleR_Logic;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +65,8 @@ builder.Services.AddSingleton(JWTOptions); //this is to register the actual serv
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<AdminLogicService>();
 builder.Services.AddScoped<DepartmentManagerLogicService>();
+builder.Services.AddScoped<HRLogicService>();
+
 builder.Services.AddScoped<EmployeeLogicService>();
 //builder.Services.AddSingleton<ILookupNormalizer, EmailNormalizer>();
 builder.Services.AddScoped<EmailNormalizer>();
@@ -108,12 +112,41 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero, //noramlly when a JWT token expiration time ends then the token will still work (because it's valid still) because of this clockskew, by default it's 5m means that even if it's expired at 12AM then it can still be used at maximum period of 12:05AM. We set this to zero so when it's expired it will not be used no more. 
          RequireExpirationTime = true //this will add another layer of security and allow ONLY the valid tokens that their expirationTime wasn't finished yes (this makes it required)
     };
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            // If the token is provided as a query string parameter named "access_token" (common for SignalR JS clients)
+            var accessToken = context.Request.Query["access_token"].FirstOrDefault();
+            var path = context.HttpContext.Request.Path;
+            // If this is the path of your hub, use the token from query string
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs/role"))
+            {
+                context.Token = accessToken;
+            }
+            return Task.CompletedTask;
+        }
+    };
 });
+
+
+//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSignalR();
+builder.Services.AddSingleton<IUserIdProvider, SubOrNameIdUserIdProvider>();
+//for SignalR logic
+//----------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------
+
+
+
+
 
 //for Jwt Configuration
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
-
 builder.Services.AddControllers()
     .AddFluentValidation(fv =>
     {
@@ -297,25 +330,31 @@ builder.Services.AddEasyCaching(options =>
 //For easy caching configuration.
 //----------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowResetPage", policy =>
+//    {
+//        policy.WithOrigins("https://reset.prozsupport.xyz") //this will make anyone in public who has the URL in his browser https://reset.prozsupport.xyz to request any endpoint in this application
+//              .AllowAnyHeader()
+//              .AllowAnyMethod();
+//    });
+//    options.AddPolicy("AllowAPICalls", policy =>
+//    {
+//        policy.WithOrigins("https://api.prozsupport.xyz") //this will make anyone in public who has the URL in his browser https://reset.prozsupport.xyz to request any endpoint in this application
+//              .AllowAnyHeader()
+//              .AllowAnyMethod();
+//    });
+//});
+
+
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowResetPage", policy =>
+    options.AddPolicy("AllowAll", builder =>
     {
-        policy.WithOrigins("https://reset.prozsupport.xyz") //this will make anyone in public who has the URL in his browser https://reset.prozsupport.xyz to request any endpoint in this application
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
-    options.AddPolicy("AllowAPICalls", policy =>
-    {
-        policy.WithOrigins("https://api.prozsupport.xyz") //this will make anyone in public who has the URL in his browser https://reset.prozsupport.xyz to request any endpoint in this application
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
     });
 });
-
-
-
-
 
 
 
@@ -328,7 +367,7 @@ builder.Services.AddCors(options =>
 
 
 
-var app = builder.Build();
+
 
 
 
@@ -371,7 +410,7 @@ var app = builder.Build();
 
 
 //}
-
+var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -380,18 +419,20 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors("AllowResetPage");
-app.UseCors("AllowAPICalls");
+app.UseCors("AllowAll");
 app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
 app.Use(async (context, next) =>
 {
     Console.WriteLine($"Incoming request: {context.Request.Method} {context.Request.Path}");
     await next();
 });
+app.MapControllers();
+
+
+app.MapHub<MainHub>("/hubs/Main")/*.RequireAuthorization()*/;
+
 app.Run();
 
 
